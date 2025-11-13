@@ -1,0 +1,8 @@
+# 忽略 Eleventy 构建输出文件夹
+_site/
+
+# 忽略 Node.js 依赖包
+node_modules/
+
+# 忽略 npm 调试日志
+npm-debug.log*

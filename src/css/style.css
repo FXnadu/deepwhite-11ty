@@ -1,0 +1,352 @@
+/* --- 1. 设计系统：CSS 变量 --- */
+:root {
+    --color-background: #ffffff;
+    --color-text: #333333;
+    --color-text-strong: #000000;
+    --color-text-subtle: #555555;
+    --color-meta: #888888;
+    --color-border: #eeeeee;
+    --color-link-underline: #bbbbbb;
+    --color-code-bg: #f7f7f7;
+    --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
+    --container-width: 760px;
+}
+
+/* --- 2. 全局与排版重置 --- */
+html {
+    scroll-behavior: smooth;
+}
+body {
+    font-family: var(--font-family-sans);
+    background-color: var(--color-background);
+    color: var(--color-text);
+    line-height: 1.7;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+
+/* --- 3. 核心布局容器 --- */
+.container {
+    max-width: var(--container-width);
+    margin: 0 auto;
+    padding: 40px 20px;
+}
+
+/* --- 4. 链接与交互样式 --- */
+a {
+    color: var(--color-text);
+    text-decoration: none;
+    border-bottom: 1px solid var(--color-link-underline);
+    transition: color 0.2s, border-color 0.2s;
+}
+a:hover {
+    color: var(--color-text-strong);
+    border-bottom-color: var(--color-text-strong);
+}
+a:focus-visible {
+    outline: 2px solid var(--color-text-subtle);
+    outline-offset: 2px;
+}
+
+/* --- 5. 通用组件：头部、尾部 --- */
+.site-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 40px;
+    border-bottom: 1px solid var(--color-border);
+    margin-bottom: 50px;
+}
+.site-title {
+    font-size: 26px;
+    font-weight: 400;
+    margin: 0;
+    letter-spacing: 0.05em;
+    text-transform: lowercase;
+    font-variant-numeric: oldstyle-nums;
+}
+.site-title a {
+    color: var(--color-text-strong);
+    border-bottom: none;
+    transition: color 0.3s ease, letter-spacing 0.3s ease;
+    display: inline-block;
+    position: relative;
+}
+.site-title a:hover {
+    color: var(--color-text);
+    letter-spacing: 0.08em;
+}
+.site-title a::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background-color: var(--color-text);
+    transition: width 0.3s ease;
+}
+.site-title a:hover::after {
+    width: 100%;
+}
+.site-nav a {
+    margin-left: 20px;
+    color: var(--color-text-subtle);
+    font-size: 16px;
+    border-bottom: none;
+}
+.site-nav a:hover,
+.site-nav a:focus-visible {
+    color: var(--color-text-strong);
+    outline: none;
+}
+.site-footer {
+    text-align: center;
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid var(--color-border);
+    color: #999999;
+    font-size: 14px;
+}
+.site-footer a {
+    color: #777777;
+    border-bottom-color: #cccccc;
+}
+
+/* --- 6. 首页：文章列表 --- */
+.post-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+.post-item {
+    margin-bottom: 50px;
+}
+.post-title {
+    font-size: 26px;
+    font-weight: 500;
+    margin-top: 0;
+    margin-bottom: 8px;
+}
+.post-title a {
+    color: var(--color-text);
+    border-bottom: none;
+}
+.post-title a:hover {
+    border-bottom: 1px solid var(--color-text);
+}
+.post-meta {
+    font-size: 14px;
+    color: var(--color-meta);
+    margin-bottom: 10px;
+}
+.post-excerpt {
+    font-size: 17px;
+    margin-bottom: 15px;
+}
+.read-more {
+    display: inline-block;
+    margin-top: 15px;
+    font-size: 0.9em;
+    color: #111111;
+    text-decoration: none;
+    border: 1px solid var(--color-text);
+    padding: 8px 15px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+.read-more:hover {
+    background-color: var(--color-text-strong);
+    color: var(--color-background);
+    border-color: var(--color-text-strong);
+}
+
+/* --- 7. 文章页与通用页面样式 --- */
+.post-full-header, .page-header {
+    text-align: center;
+    margin-bottom: 50px;
+}
+.post-full-title, .page-title {
+    font-size: 40px;
+    font-weight: 600;
+    color: var(--color-text-strong);
+    margin-top: 0;
+    margin-bottom: 15px;
+    line-height: 1.3;
+}
+.post-full-meta {
+    font-size: 14px;
+    color: var(--color-meta);
+}
+.post-content, .page-content {
+    font-size: 18px;
+    line-height: 1.8;
+}
+.post-content h2, .page-content h2,
+.post-content h3, .page-content h3 {
+    color: var(--color-text-strong);
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    border-bottom: 1px solid var(--color-border);
+    padding-bottom: 0.3em;
+}
+.post-content h2, .page-content h2 { font-size: 1.5em; }
+.post-content h3, .page-content h3 { font-size: 1.2em; }
+.post-content blockquote, .page-content blockquote {
+    margin: 2em auto;
+    padding: 0 1.5em;
+    color: #666666;
+    border-left: 3px solid var(--color-border);
+}
+.post-content pre, .page-content pre {
+    background-color: var(--color-code-bg);
+    padding: 1em;
+    overflow-x: auto;
+    font-family: var(--font-family-mono);
+    font-size: 0.9em;
+    border-radius: 4px;
+}
+.post-content code, .page-content code {
+     font-family: inherit;
+}
+.post-content ul, .page-content ul,
+.post-content ol, .page-content ol {
+    padding-left: 1.5em;
+}
+
+/* --- 8. 图片系统 --- */
+.post-content figure, .page-content figure {
+    margin: 3em auto;
+    max-width: 640px; /* 默认图片尺寸 */
+}
+.post-content figure.full-width, .page-content figure.full-width {
+    max-width: 100%; /* 全宽图片 */
+}
+.post-content img, .page-content img {
+    max-width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto;
+    border-radius: 4px;
+}
+.post-content figcaption, .page-content figcaption {
+    font-size: 14px;
+    color: var(--color-meta);
+    text-align: center;
+    margin-top: 0.8em;
+}
+
+/* --- 9. “关于我”页面专属布局 --- */
+.about-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 3em;
+    font-size: 18px;
+    line-height: 1.8;
+}
+.about-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+.about-bio {
+    /* 像素完美对齐 */
+    transform: translateY(-5px); 
+}
+.about-bio p {
+    margin-top: 0;
+}
+
+/* --- 10. 文章导航 --- */
+.post-nav {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 60px;
+    padding-top: 30px;
+    border-top: 1px solid var(--color-border);
+    font-size: 16px;
+}
+.post-nav a {
+    border-bottom: none;
+    color: var(--color-text-subtle);
+}
+
+/* src/css/style.css */
+
+/* --- NEW: Floating Action Buttons --- */
+.floating-actions {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 100;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    /* 默认隐藏 */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: opacity 0.3s, visibility 0.3s, transform 0.3s;
+}
+
+/* 当按钮可见时的状态 */
+.floating-actions.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.action-btn {
+    width: 44px;
+    height: 44px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 50%; /* 圆形按钮 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+    transition: background-color 0.2s, border-color 0.2s;
+}
+
+.action-btn:hover {
+    background-color: var(--color-code-bg);
+    border-color: var(--color-text-subtle);
+}
+
+.action-btn svg {
+    width: 20px;
+    height: 20px;
+    stroke: var(--color-text-subtle);
+}
+
+
+/* --- 11. 响应式设计 --- */
+@media (max-width: 600px) {
+    .container { padding: 20px 15px; }
+    .site-header { flex-direction: column; align-items: flex-start; margin-bottom: 30px; }
+    .site-title { margin-bottom: 10px; }
+    .site-nav { margin-left: -5px; }
+    .site-nav a { margin: 0 10px 0 0; }
+    
+    .post-title { font-size: 22px; }
+    .post-excerpt { font-size: 16px; }
+
+    .post-full-title, .page-title { font-size: 30px; }
+    .post-content, .page-content { font-size: 17px; }
+
+    .about-intro {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    .about-bio {
+        transform: translateY(0); /* 取消微调 */
+    }
+}
+
