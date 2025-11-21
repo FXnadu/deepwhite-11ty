@@ -34,6 +34,12 @@ module.exports = function (eleventyConfig) {
     return postsByYear;
   });
 
+  // --- 3. 新增：创建首页推荐文章集合 ---
+  eleventyConfig.addCollection("featured", (collectionApi) => {
+    // 获取所有带有 "featured" 标签的文章，按日期倒序排列
+    return collectionApi.getFilteredByTags("post", "featured").reverse();
+  });
+
   // 告诉 Eleventy 监听 CSS 文件的变化
   eleventyConfig.addWatchTarget("./src/css/");
 

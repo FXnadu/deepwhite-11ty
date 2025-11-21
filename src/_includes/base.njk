@@ -6,7 +6,35 @@
     <title>{{ title }} - [DEEPWHITE]</title>
     <link rel="stylesheet" href="/css/style.css">
     <link rel="icon" href="/img/deepwhitelogo.png" type="image/png" sizes="192x192">
-    {#- 这是一个“插槽”，用于加载页面专属的 CSS -#}
+    {#- Mermaid 图表支持 -#}
+    <script type="module">
+        import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.esm.min.mjs';
+        mermaid.initialize({ 
+            startOnLoad: false,
+            theme: 'default',
+            securityLevel: 'loose'
+        });
+        
+        // 等待 DOM 加载完成后初始化 Mermaid
+        document.addEventListener('DOMContentLoaded', () => {
+            // 查找所有代码块，如果是 mermaid 类型，转换为 mermaid div
+            const codeBlocks = document.querySelectorAll('pre code');
+            codeBlocks.forEach((code) => {
+                const lang = code.className.match(/language-(\w+)/);
+                if (lang && lang[1] === 'mermaid') {
+                    const pre = code.parentElement;
+                    const mermaidDiv = document.createElement('div');
+                    mermaidDiv.className = 'mermaid';
+                    mermaidDiv.textContent = code.textContent;
+                    pre.parentNode.replaceChild(mermaidDiv, pre);
+                }
+            });
+            
+            // 初始化 Mermaid
+            mermaid.run();
+        });
+    </script>
+    {#- 这是一个"插槽"，用于加载页面专属的 CSS -#}
     {% if extraCss %}
     <link rel="stylesheet" href="{{ extraCss }}">
     {% endif %}
@@ -66,6 +94,312 @@
                     });
                 }
             }
+
+            // === 文章目录导航栏功能 ===
+            (function() {
+                const postContent = document.querySelector('.post-content');
+                const tocContainer = document.getElementById('post-toc');
+                const tocList = document.getElementById('toc-list');
+                
+                if (!postContent || !tocContainer || !tocList) {
+                    return; // 不是文章页面，退出
+                }
+
+                // 获取所有标题（包括 h1, h2, h3）
+                const headings = postContent.querySelectorAll('h1, h2, h3');
+                const h2Headings = postContent.querySelectorAll('h2');
+                
+                // 如果 h2 标题少于等于3个，不显示导航栏
+                if (h2Headings.length <= 3) {
+                    return;
+                }
+
+                // 为每个标题添加 ID（如果还没有）
+                headings.forEach((heading, index) => {
+                    if (!heading.id) {
+                        // 使用标题文本生成 ID，处理中文和特殊字符
+                        let id = heading.textContent.trim()
+                            .toLowerCase()
+                            .replace(/[^\w\u4e00-\u9fa5]+/g, '-')
+                            .replace(/^-+|-+$/g, '');
+                        
+                        // 如果 ID 为空或已存在，添加索引
+                        if (!id || document.getElementById(id)) {
+                            id = `heading-${index}`;
+                        }
+                        heading.id = id;
+                    }
+                });
+
+                // 生成目录结构
+                let currentH1Item = null;
+                let currentH2Item = null;
+                
+                headings.forEach((heading) => {
+                    if (heading.tagName === 'H1') {
+                        // 创建 h1 目录项（顶级标题）
+                        const li = document.createElement('li');
+                        li.classList.add('toc-h1'); // 添加类名以便样式区分
+                        const a = document.createElement('a');
+                        a.href = `#${heading.id}`;
+                        a.textContent = heading.textContent.trim();
+                        li.appendChild(a);
+                        tocList.appendChild(li);
+                        currentH1Item = li;
+                        currentH2Item = null; // h1 出现时重置 h2
+                    } else if (heading.tagName === 'H2') {
+                        // 创建 h2 目录项
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = `#${heading.id}`;
+                        a.textContent = heading.textContent.trim();
+                        li.appendChild(a);
+                        tocList.appendChild(li);
+                        currentH2Item = li;
+                    } else if (heading.tagName === 'H3' && currentH2Item) {
+                        // 创建 h3 目录项（嵌套在最近的 h2 下）
+                        let h3List = currentH2Item.querySelector('ul');
+                        if (!h3List) {
+                            h3List = document.createElement('ul');
+                            currentH2Item.appendChild(h3List);
+                        }
+                        const li = document.createElement('li');
+                        const a = document.createElement('a');
+                        a.href = `#${heading.id}`;
+                        a.textContent = heading.textContent.trim();
+                        li.appendChild(a);
+                        h3List.appendChild(li);
+                    }
+                });
+
+                // 显示导航栏和切换按钮
+                tocContainer.classList.add('visible');
+                const toggleBtn = document.getElementById('toc-toggle-btn');
+                const floatingToggleBtn = document.getElementById('toc-toggle-btn-floating');
+                
+                // 从 localStorage 读取用户偏好
+                const savedState = localStorage.getItem('toc-visible');
+                const isVisible = savedState === null ? true : savedState === 'true'; // 默认显示
+                
+                // 记录导航栏的永久状态（非预览状态）
+                let isPermanentlyVisible = isVisible;
+                
+                // 切换显示/隐藏的函数（永久切换）
+                function toggleToc() {
+                    isPermanentlyVisible = !isPermanentlyVisible;
+                    
+                    if (isPermanentlyVisible) {
+                        // 显示导航栏（固定显示，完全透明），隐藏悬浮按钮
+                        tocContainer.classList.remove('hidden');
+                        tocContainer.classList.add('visible');
+                        tocContainer.classList.remove('preview'); // 固定显示时移除预览样式
+                        if (floatingToggleBtn) {
+                            floatingToggleBtn.classList.remove('visible');
+                        }
+                        localStorage.setItem('toc-visible', 'true');
+                    } else {
+                        // 隐藏导航栏，显示悬浮按钮
+                        tocContainer.classList.add('hidden');
+                        tocContainer.classList.remove('visible');
+                        tocContainer.classList.remove('preview');
+                        if (floatingToggleBtn) {
+                            floatingToggleBtn.classList.add('visible');
+                        }
+                        localStorage.setItem('toc-visible', 'false');
+                    }
+                }
+                
+                // 显示预览（临时显示，半透明样式）
+                function showPreview() {
+                    if (!isPermanentlyVisible && tocContainer.classList.contains('hidden')) {
+                        tocContainer.classList.add('preview');
+                    } else if (isPermanentlyVisible && tocContainer.classList.contains('visible')) {
+                        // 当固定显示时，悬停也显示预览样式
+                        tocContainer.classList.add('preview');
+                    }
+                }
+                
+                // 隐藏预览的定时器
+                let hidePreviewTimeout = null;
+                
+                // 隐藏预览（如果原本是隐藏状态，或固定显示时移除外观）
+                function hidePreview() {
+                    // 清除之前的定时器
+                    if (hidePreviewTimeout) {
+                        clearTimeout(hidePreviewTimeout);
+                    }
+                    // 延迟隐藏，给鼠标移动到导航栏的时间
+                    hidePreviewTimeout = setTimeout(() => {
+                        // 检查鼠标是否在按钮或导航栏上（使用 :hover 伪类）
+                        const isOverButton = floatingToggleBtn && floatingToggleBtn.matches(':hover');
+                        const isOverToc = tocContainer.matches(':hover');
+                        
+                        if (!isOverButton && !isOverToc) {
+                            if (!isPermanentlyVisible) {
+                                // 如果原本是隐藏状态，移除预览
+                                tocContainer.classList.remove('preview');
+                            } else {
+                                // 如果固定显示，移除预览样式（回到完全透明）
+                                tocContainer.classList.remove('preview');
+                            }
+                        }
+                    }, 150);
+                }
+                
+                // 取消隐藏预览
+                function cancelHidePreview() {
+                    if (hidePreviewTimeout) {
+                        clearTimeout(hidePreviewTimeout);
+                        hidePreviewTimeout = null;
+                    }
+                }
+                
+                // 初始化状态
+                if (!isVisible) {
+                    tocContainer.classList.add('hidden');
+                    tocContainer.classList.remove('visible');
+                    tocContainer.classList.remove('preview');
+                    if (floatingToggleBtn) {
+                        floatingToggleBtn.classList.add('visible');
+                    }
+                } else {
+                    // 固定显示时，确保是完全透明状态（无 preview 类）
+                    tocContainer.classList.remove('preview');
+                }
+                
+                // 绑定事件
+                if (toggleBtn) {
+                    toggleBtn.addEventListener('click', toggleToc);
+                }
+                if (floatingToggleBtn) {
+                    // 点击切换永久状态
+                    floatingToggleBtn.addEventListener('click', toggleToc);
+                    
+                    // 悬停显示预览
+                    floatingToggleBtn.addEventListener('mouseenter', () => {
+                        cancelHidePreview();
+                        showPreview();
+                    });
+                    floatingToggleBtn.addEventListener('mouseleave', hidePreview);
+                }
+                
+                // 导航栏悬停时显示预览样式
+                tocContainer.addEventListener('mouseenter', () => {
+                    cancelHidePreview();
+                    showPreview(); // 无论是固定显示还是隐藏状态，悬停都显示预览样式
+                });
+                
+                tocContainer.addEventListener('mouseleave', hidePreview);
+
+                // 滚动高亮当前章节
+                function updateActiveHeading() {
+                    const scrollPosition = window.scrollY + 100; // 偏移量，提前高亮
+                    let currentHeading = null;
+                    
+                    // 从下往上找第一个位置小于滚动位置的标题
+                    for (let i = headings.length - 1; i >= 0; i--) {
+                        const heading = headings[i];
+                        const rect = heading.getBoundingClientRect();
+                        const top = rect.top + window.scrollY;
+                        
+                        if (top <= scrollPosition) {
+                            currentHeading = heading;
+                            break;
+                        }
+                    }
+                    
+                    // 更新活动状态
+                    tocList.querySelectorAll('a').forEach(link => {
+                        link.classList.remove('active');
+                    });
+                    
+                    if (currentHeading) {
+                        const activeLink = tocList.querySelector(`a[href="#${currentHeading.id}"]`);
+                        if (activeLink) {
+                            activeLink.classList.add('active');
+                            
+                            // 滚动导航栏使活动项完全可见
+                            // 获取可滚动的容器（.toc-list）
+                            const scrollableContainer = tocList;
+                            
+                            // 获取链接的父元素（li），因为可能包含嵌套的 ul
+                            const linkListItem = activeLink.closest('li');
+                            if (!linkListItem) return;
+                            
+                            // 使用 getBoundingClientRect 获取准确位置
+                            const containerRect = scrollableContainer.getBoundingClientRect();
+                            const linkRect = linkListItem.getBoundingClientRect();
+                            
+                            // 计算链接相对于滚动容器的位置
+                            const linkTop = linkRect.top - containerRect.top + scrollableContainer.scrollTop;
+                            const linkHeight = linkListItem.offsetHeight;
+                            const linkBottom = linkTop + linkHeight;
+                            const containerHeight = scrollableContainer.clientHeight;
+                            const currentScrollTop = scrollableContainer.scrollTop;
+                            
+                            // 增加足够的边距，确保多行标题完全可见
+                            const padding = 30; // 增加边距到 30px
+                            const visibleTop = currentScrollTop;
+                            const visibleBottom = currentScrollTop + containerHeight;
+                            
+                            // 检查链接是否完全可见（包括边距）
+                            const isFullyVisible = (linkTop >= visibleTop + padding) && (linkBottom <= visibleBottom - padding);
+                            
+                            if (!isFullyVisible) {
+                                // 如果链接不完全可见，滚动到合适位置
+                                let targetScrollTop;
+                                
+                                if (linkTop < visibleTop + padding) {
+                                    // 链接在可视区域上方，滚动使链接显示在顶部（留足够边距）
+                                    targetScrollTop = Math.max(0, linkTop - padding);
+                                } else if (linkBottom > visibleBottom - padding) {
+                                    // 链接在可视区域下方，滚动使链接显示在底部（留足够边距）
+                                    targetScrollTop = Math.max(0, linkBottom - containerHeight + padding);
+                                } else {
+                                    // 链接部分可见，居中显示
+                                    targetScrollTop = linkTop - (containerHeight - linkHeight) / 2;
+                                }
+                                
+                                scrollableContainer.scrollTo({
+                                    top: Math.max(0, targetScrollTop),
+                                    behavior: 'smooth'
+                                });
+                            }
+                        }
+                    }
+                }
+
+                // 监听滚动事件（使用节流优化性能）
+                let ticking = false;
+                window.addEventListener('scroll', () => {
+                    if (!ticking) {
+                        window.requestAnimationFrame(() => {
+                            updateActiveHeading();
+                            ticking = false;
+                        });
+                        ticking = true;
+                    }
+                });
+
+                // 初始更新
+                updateActiveHeading();
+
+                // 平滑滚动到锚点
+                tocList.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        const targetId = link.getAttribute('href').substring(1);
+                        const targetElement = document.getElementById(targetId);
+                        if (targetElement) {
+                            const offsetTop = targetElement.getBoundingClientRect().top + window.scrollY - 20;
+                            window.scrollTo({
+                                top: offsetTop,
+                                behavior: 'smooth'
+                            });
+                        }
+                    });
+                });
+            })();
         </script>
         {% endif %}
         {# === End: Floating Actions Block === #}

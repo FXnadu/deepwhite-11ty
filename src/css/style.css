@@ -8,7 +8,7 @@
     --color-border: #eeeeee;
     --color-link-underline: #bbbbbb;
     --color-code-bg: #f7f7f7;
-    --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+    --font-family-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Source Han Sans SC", "Noto Sans CJK SC", "WenQuanYi Micro Hei", "WenQuanYi Zen Hei", sans-serif;
     --font-family-mono: "SFMono-Regular", Consolas, "Liberation Mono", Menlo, Courier, monospace;
     --container-width: 760px;
 }
@@ -123,13 +123,13 @@ a:focus-visible {
     margin: 0;
 }
 .post-item {
-    margin-bottom: 50px;
+    margin-bottom: 38px;
 }
 .post-title {
-    font-size: 26px;
+    font-size: 24px;
     font-weight: 500;
     margin-top: 0;
-    margin-bottom: 8px;
+    margin-bottom: 6px;
 }
 .post-title a {
     color: var(--color-text);
@@ -139,13 +139,17 @@ a:focus-visible {
     border-bottom: 1px solid var(--color-text);
 }
 .post-meta {
-    font-size: 14px;
+    font-size: 13px;
     color: var(--color-meta);
-    margin-bottom: 10px;
+    margin-bottom: 6px;
+    margin-top: -2px;
+    opacity: 0.7;
+    line-height: 1.4;
 }
 .post-excerpt {
-    font-size: 17px;
-    margin-bottom: 15px;
+    font-size: 16px;
+    margin-bottom: 12px;
+    line-height: 1.6;
 }
 .read-more {
     display: inline-block;
@@ -210,6 +214,19 @@ a:focus-visible {
 }
 .post-content code, .page-content code {
      font-family: inherit;
+}
+/* Mermaid 图表样式 */
+.post-content .mermaid, .page-content .mermaid {
+    margin: 2em auto;
+    text-align: center;
+    background-color: var(--color-background);
+    padding: 1.5em;
+    border-radius: 4px;
+}
+.post-content pre.language-mermaid, .page-content pre.language-mermaid {
+    background-color: transparent;
+    padding: 0;
+    border: none;
 }
 .post-content ul, .page-content ul,
 .post-content ol, .page-content ol {
@@ -325,8 +342,240 @@ a:focus-visible {
     stroke: var(--color-text-subtle);
 }
 
+/* --- 文章目录导航栏（悬浮） --- */
+/* 导航栏标题栏 - 固定在顶部 */
+.toc-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 20px 8px 20px;
+    border-bottom: none;
+    flex-shrink: 0;
+    background-color: transparent;
+    border-radius: 0;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    transition: border-bottom 0.3s ease, background-color 0.3s ease;
+}
+
+/* 预览状态下的标题栏 */
+.post-toc-floating.preview .toc-header {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+    background-color: rgba(255, 255, 255, 0.5);
+    border-radius: 8px 8px 0 0;
+}
+
+/* 切换按钮（在导航栏内部） */
+.toc-toggle-btn {
+    width: 24px;
+    height: 24px;
+    background: none;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    padding: 0;
+    transition: opacity 0.2s;
+    opacity: 0.6;
+}
+
+.toc-toggle-btn:hover {
+    opacity: 1;
+}
+
+.toc-toggle-btn svg {
+    stroke: var(--color-text-subtle);
+    width: 16px;
+    height: 16px;
+}
+
+/* 悬浮的切换按钮（当导航栏隐藏时显示） */
+.toc-toggle-btn-floating {
+    position: fixed;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 36px;
+    height: 36px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    z-index: 100;
+    transition: background-color 0.2s, border-color 0.2s, opacity 0.3s, visibility 0.3s;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+}
+
+.toc-toggle-btn-floating.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+.toc-toggle-btn-floating:hover {
+    background-color: var(--color-code-bg);
+    border-color: var(--color-text-subtle);
+}
+
+.toc-toggle-btn-floating svg {
+    stroke: var(--color-text-subtle);
+    width: 18px;
+    height: 18px;
+}
+
+.post-toc-floating {
+    position: fixed;
+    top: 50%;
+    right: 15px;
+    transform: translateY(-50%);
+    width: 260px;
+    max-height: 65vh;
+    display: flex;
+    flex-direction: column;
+    background-color: transparent;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border: none;
+    border-radius: 0;
+    box-shadow: none;
+    font-size: 14px;
+    line-height: 1.6;
+    z-index: 99;
+    
+    /* 默认完全显示 */
+    opacity: 1;
+    visibility: visible;
+    transition: background-color 0.3s ease, backdrop-filter 0.3s ease, border 0.3s ease, box-shadow 0.3s ease, opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    pointer-events: auto;
+}
+
+/* 悬停预览状态：显示半透明毛玻璃样式 */
+.post-toc-floating.preview {
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.post-toc-floating.visible {
+    /* 显示状态 */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%);
+}
+
+.post-toc-floating.hidden {
+    /* 隐藏状态 */
+    opacity: 0;
+    visibility: hidden;
+    transform: translateX(20px) translateY(-50%);
+    pointer-events: none;
+}
+
+.post-toc-floating.hidden.preview {
+    /* 预览状态：鼠标悬停在按钮上时显示 */
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(-50%);
+    pointer-events: auto;
+    /* 预览状态也应用半透明样式 */
+    background-color: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid rgba(0, 0, 0, 0.05);
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+}
+
+.toc-title {
+    font-weight: 600;
+    color: var(--color-text-strong);
+    font-size: 15px;
+    margin: 0;
+}
+
+.toc-list {
+    list-style: none;
+    padding: 0 20px 20px 20px;
+    margin: 0;
+    overflow-y: auto;
+    flex: 1;
+    min-height: 0;
+}
+
+.toc-list li {
+    margin-bottom: 8px;
+}
+
+.toc-list a {
+    color: var(--color-text-subtle);
+    border-bottom: none;
+    display: block;
+    padding: 4px 0;
+    transition: color 0.2s;
+    text-decoration: none;
+}
+
+.toc-list a:hover {
+    color: var(--color-text-strong);
+}
+
+.toc-list a.active {
+    color: var(--color-text-strong);
+    font-weight: 500;
+}
+
+/* h1 标题样式（顶级标题） */
+.toc-list > li.toc-h1 > a {
+    font-weight: 600;
+    padding-left: 0;
+    font-size: 15px;
+    color: var(--color-text-strong);
+}
+
+/* h2 标题样式 */
+.toc-list > li > a {
+    font-weight: 500;
+    padding-left: 0;
+}
+
+/* h3 标题样式（嵌套） */
+.toc-list > li > ul {
+    list-style: none;
+    padding-left: 12px;
+    margin-top: 4px;
+    margin-bottom: 8px;
+}
+
+.toc-list > li > ul > li > a {
+    font-weight: 400;
+    font-size: 13px;
+    color: var(--color-meta);
+}
+
+.toc-list > li > ul > li > a:hover,
+.toc-list > li > ul > li > a.active {
+    color: var(--color-text-subtle);
+}
 
 /* --- 11. 响应式设计 --- */
+@media (max-width: 1200px) {
+    /* 在较小屏幕上隐藏导航栏 */
+    .post-toc-floating {
+        display: none !important;
+    }
+}
+
 @media (max-width: 600px) {
     .container { padding: 20px 15px; }
     .site-header { flex-direction: column; align-items: flex-start; margin-bottom: 30px; }

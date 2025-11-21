@@ -2,15 +2,15 @@
 layout: "base.njk"
 title: "首页"
 pagination:
-  data: collections.post
-  size: 3
+  data: collections.featured
+  size: 6
   alias: posts
 ---
 <ul class="post-list">
     {%- for post in posts -%}
     <li class="post-item">
         <h2 class="post-title"><a href="{{ post.url }}">{{ post.data.title }}</a></h2>
-        <p class="post-meta">发布于 {{ post.date | readableDate }}</p>
+        <p class="post-meta"> {{ post.date | readableDate }}</p>
         <p class="post-excerpt">{{ post.data.excerpt }}</p> {#- 摘要需要您在文章的 front matter 中定义 -#}
         <a href="{{ post.url }}" class="read-more">阅读全文 &rarr;</a>
     </li>
@@ -18,3 +18,4 @@ pagination:
 </ul>
 
 {#- TODO: 未来添加分页导航链接 -#}
+

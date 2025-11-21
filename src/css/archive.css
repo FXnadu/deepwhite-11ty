@@ -2,16 +2,17 @@
 
 /* --- 1. 归档页总容器 --- */
 .archive-container {
-    margin-top: 3em;
-    /* 与页面标题拉开距离 */
+    margin-top: 1.4em;
+    margin-bottom: 1.2em;
+    /* 顶部距离稍微大于搜索框底部到 br 线的距离 */
 }
 
 
 /* --- 2. 按年份分组的区块 --- */
 .archive-year-group {
     position: relative;
-    padding-top: 2em;
-    padding-bottom: 2em;
+    padding-top: 1.2em;
+    padding-bottom: 1.2em;
     border-top: 1px solid var(--color-border);
     /* 用上边框作为年份之间的分隔 */
 }
@@ -19,19 +20,19 @@
 
 /* --- 3. 年份标题的新样式 --- */
 .archive-year-title {
-    font-size: 1em;
-    /* 不再使用巨大字号 */
+    font-size: 0.85em;
+    /* 稍微增大字号，更优雅 */
     font-weight: 600;
     color: var(--color-text-subtle);
     /* 使用更柔和的颜色 */
     text-transform: uppercase;
     /* 大写 */
-    letter-spacing: 1px;
-    /* 增加字间距 */
+    letter-spacing: 1.5px;
+    /* 增加字间距，更优雅 */
 
-    /* 关键：使用绝对定位，创建经典的“轴线”版式 */
+    /* 关键：使用绝对定位，创建经典的"轴线"版式 */
     position: absolute;
-    top: 2em;
+    top: 1.2em;
     left: -150px;
     /* 将年份标题拉到主内容区之外 */
     width: 120px;
@@ -50,9 +51,9 @@
     display: grid;
     grid-template-columns: 100px 1fr;
     /* 创建 日期 | 标题 的网格布局 */
-    gap: 16px;
+    gap: 20px;
     align-items: baseline;
-    padding: 12px 0;
+    padding: 8px 0;
     border-radius: 4px;
     transition: background-color 0.2s;
 }
@@ -67,6 +68,8 @@
 .archive-post-date {
     color: var(--color-meta);
     font-size: 0.9em;
+    opacity: 0.7;
+    letter-spacing: 0.02em;
 }
 
 .archive-post-title {
@@ -76,6 +79,8 @@
 .archive-post-title a {
     color: var(--color-text);
     font-weight: 500;
+    font-size: 1em;
+    line-height: 1.5;
     border-bottom: none;
     position: relative;
     display: inline;
@@ -84,7 +89,7 @@
     text-decoration: underline;
     text-decoration-color: transparent;
     text-decoration-thickness: 1.5px;
-    text-underline-offset: 2px;
+    text-underline-offset: 3px;
     text-decoration-skip-ink: none;
     transition: color 0.3s ease, text-decoration-color 0.3s ease;
 }
@@ -97,18 +102,28 @@
 
 
 /* --- 6. 搜索功能的新布局与样式 --- */
-.page-header {
+/* 覆盖 style.css 中的 .page-header 样式 - 使用更具体的选择器确保优先级 */
+main .page-header {
     border-bottom: 1px solid var(--color-border);
-    padding-bottom: 2em;
+    padding-top: 0.8em;
+    padding-bottom: 1.2em;
     margin-bottom: 0;
+    margin-top: 0;
+    text-align: center; /* 保留 style.css 的 text-align */
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-.page-title {
-    margin-bottom: 1.2em;
+/* 覆盖 style.css 中的 .page-title 样式 */
+main .page-header .page-title {
+    font-size: 28px;
+    margin-bottom: 0.8em;
+    margin-top: 0;
+    line-height: 1.2;
+    font-weight: 600;
+    color: var(--color-text-strong);
 }
 
 /* 将搜索框放在标题下方，作为一个独立的功能区域 */
@@ -538,8 +553,8 @@
     }
 
     .archive-year-group {
-        padding-top: 1.5em;
-        padding-bottom: 1.5em;
+        padding-top: 1em;
+        padding-bottom: 1em;
     }
 
     /* 在窄屏幕上调整搜索框 */
@@ -555,10 +570,95 @@
     }
 
     .page-header {
-        padding-bottom: 1.5em;
+        padding-bottom: 1em;
     }
 
     .page-title {
-        margin-bottom: 1em;
+        margin-bottom: 0.7em;
+    }
+}
+
+/* --- 8. 年份导航滚轮 --- */
+.year-navigator {
+    position: fixed;
+    right: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 50;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.year-navigator.visible {
+    opacity: 1;
+}
+
+.year-navigator-track {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    max-height: 60vh;
+    overflow-y: auto;
+    overflow-x: visible; /* 允许横向溢出，避免按钮被裁剪 */
+    padding: 10px 4px; /* 左右增加 padding，给按钮留出空间 */
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-border) transparent;
+}
+
+.year-navigator-track::-webkit-scrollbar {
+    width: 4px;
+}
+
+.year-navigator-track::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.year-navigator-track::-webkit-scrollbar-thumb {
+    background: var(--color-border);
+    border-radius: 2px;
+}
+
+.year-navigator-track::-webkit-scrollbar-thumb:hover {
+    background: var(--color-text-subtle);
+}
+
+.year-nav-item {
+    display: block;
+    padding: 6px 12px;
+    font-size: 0.75em;
+    font-weight: 500;
+    color: var(--color-text-subtle);
+    text-decoration: none;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+    text-align: center;
+    min-width: 50px;
+    letter-spacing: 0.5px;
+    border: 1px solid transparent;
+    margin: 0 2px; /* 给左右留出空间，避免放大时超出 */
+}
+
+.year-nav-item:hover {
+    color: var(--color-text);
+    background-color: var(--color-code-bg);
+    border-color: var(--color-border);
+    transform: translateX(-2px); /* 使用位移代替缩放，更优雅 */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 添加阴影增强视觉反馈 */
+}
+
+.year-nav-item.active {
+    color: var(--color-text-strong);
+    background-color: var(--color-code-bg);
+    border-color: var(--color-text-subtle);
+    font-weight: 600;
+}
+
+/* 响应式：在小屏幕上隐藏年份导航 */
+@media (max-width: 1200px) {
+    .year-navigator {
+        display: none;
     }
 }
