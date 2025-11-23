@@ -615,7 +615,7 @@ showFloatingActions: true
                         const urlPath = href.replace(/\/$/, '').split('/').pop();
                         if (urlPath && urlPath !== 'index.html') {
                             // 如果 excerpt 开头看起来像标题，使用它
-                            const firstSentence = excerptText.split[/[。！？\n]/](0);
+                            const firstSentence = excerptText.split(/[。！？\n]/)[0];
                             if (firstSentence && firstSentence.length < 50 && !firstSentence.includes('...')) {
                                 newTitle = firstSentence.trim();
                             } else {
