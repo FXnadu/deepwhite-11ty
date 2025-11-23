@@ -55,6 +55,9 @@ module.exports = function (eleventyConfig) {
     },
     markdownTemplateEngine: "njk",
     htmlTemplateEngine: "njk",
+    // 配置路径前缀，支持 GitHub Pages 子路径
+    // 如果仓库名是 deepwhite-11ty，GitHub Pages URL 会是 https://username.github.io/deepwhite-11ty/
+    pathPrefix: process.env.BASE_URL || "/",
   };
 
 

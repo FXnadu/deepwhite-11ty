@@ -5,9 +5,144 @@ extraCss: "/css/archive.css"
 showFloatingActions: true
 ---
 {# --- Pagefind Search Assets --- #}
-<link href="/pagefind/pagefind-ui.css" rel="stylesheet">
-
-<script src="/pagefind/pagefind-ui.js"></script>
+<script>
+    // 自动检测 base URL（支持 GitHub Pages 子路径）
+    (function() {
+        // 获取当前页面的 base URL
+        // 例如：如果 URL 是 https://username.github.io/repo-name/archive/
+        // basePath 应该是 '/repo-name/'
+        let basePath = '/';
+        
+        // 方法1: 从 <base> 标签获取（如果存在）
+        const baseTag = document.querySelector('base');
+        if (baseTag && baseTag.href) {
+            try {
+                const baseUrl = new URL(baseTag.href);
+                const basePathname = baseUrl.pathname;
+                if (basePathname && basePathname !== '/') {
+                    // 确保以 / 结尾
+                    basePath = basePathname.endsWith('/') ? basePathname : basePathname + '/';
+                }
+            } catch (e) {
+                // 解析失败，继续使用其他方法
+            }
+        }
+        
+        // 方法2: 从当前路径推断（如果方法1失败）
+        // 在 GitHub Pages 上，如果 URL 是 https://username.github.io/repo-name/archive/
+        // 第一个路径段通常是仓库名
+        if (basePath === '/') {
+            const pathname = window.location.pathname;
+            const pathSegments = pathname.split('/').filter(seg => seg);
+            
+            // 常见的内容路径（不是仓库名）
+            const commonPaths = ['archive', 'about', 'posts', 'css', 'img', 'pagefind', 'index.html'];
+            
+            // 检查是否是 GitHub Pages（hostname 包含 github.io）
+            const isGitHubPages = window.location.hostname.includes('github.io');
+            
+            if (pathSegments.length > 0) {
+                const firstSegment = pathSegments[0];
+                // 在 GitHub Pages 上，第一个段很可能是仓库名
+                // 在本地，第一个段通常是页面路径
+                if (isGitHubPages) {
+                    // GitHub Pages: 如果第一个段不是常见路径，很可能是仓库名
+                    if (!commonPaths.includes(firstSegment) && 
+                        !firstSegment.includes('.') && // 排除文件名
+                        firstSegment.length > 0) {
+                        basePath = '/' + firstSegment + '/';
+                    }
+                } else {
+                    // 本地环境: 更保守的检测
+                    if (!commonPaths.includes(firstSegment) && 
+                        !firstSegment.includes('.') && 
+                        firstSegment.length > 0 &&
+                        pathSegments.length > 1) { // 本地环境需要多个段才可能是子路径
+                        basePath = '/' + firstSegment + '/';
+                    }
+                }
+            }
+        }
+        
+        // 方法3: 从 document.baseURI 推断（如果前两种方法都失败）
+        if (basePath === '/') {
+            try {
+                const baseURI = document.baseURI || window.location.origin + window.location.pathname;
+                const url = new URL(baseURI);
+                const urlPath = url.pathname;
+                // 如果路径是 /repo-name/xxx，提取 /repo-name/
+                const match = urlPath.match(/^\/([^\/]+)\//);
+                if (match && match[1] !== '' && match[1] !== 'index.html') {
+                    const possibleRepoName = match[1];
+                    const commonPaths = ['archive', 'about', 'posts', 'css', 'img', 'pagefind'];
+                    if (!commonPaths.includes(possibleRepoName)) {
+                        basePath = '/' + possibleRepoName + '/';
+                    }
+                }
+            } catch (e) {
+                // 如果解析失败，使用默认值 '/'
+            }
+        }
+        
+        // 确保 basePath 格式正确（以 / 开头和结尾）
+        if (!basePath.startsWith('/')) {
+            basePath = '/' + basePath;
+        }
+        if (!basePath.endsWith('/')) {
+            basePath = basePath + '/';
+        }
+        
+        // 方法4: 验证 basePath（通过检查 pagefind 目录是否存在）
+        // 这是一个异步验证，但我们可以先使用检测到的 basePath
+        // 如果加载失败，错误处理会显示提示
+        
+        // 存储 basePath 供后续使用
+        window.pagefindBasePath = basePath;
+        
+        // 调试信息（在控制台显示，帮助排查问题）
+        console.log('[Pagefind] BasePath detected:', basePath);
+        console.log('[Pagefind] Current URL:', window.location.href);
+        console.log('[Pagefind] Pathname:', window.location.pathname);
+        
+        // 加载 CSS
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = basePath + 'pagefind/pagefind-ui.css';
+        document.head.appendChild(link);
+        
+        // 动态加载 Pagefind UI 脚本，并检测加载状态
+        const script = document.createElement('script');
+        script.src = basePath + 'pagefind/pagefind-ui.js';
+        script.async = true;
+        
+        // 标记脚本加载状态
+        window.pagefindUILoaded = false;
+        window.pagefindUILoadError = false;
+        
+        script.onload = function() {
+            // 延迟检查，确保脚本完全执行
+            setTimeout(() => {
+                if (typeof PagefindUI !== 'undefined') {
+                    window.pagefindUILoaded = true;
+                    // 触发自定义事件，通知脚本已加载
+                    window.dispatchEvent(new CustomEvent('pagefindUILoaded'));
+                } else {
+                    // 脚本加载了但 PagefindUI 未定义，可能是脚本内容有问题
+                    window.pagefindUILoadError = true;
+                    window.dispatchEvent(new CustomEvent('pagefindUILoadError'));
+                }
+            }, 100);
+        };
+        
+        script.onerror = function() {
+            window.pagefindUILoadError = true;
+            // 触发自定义事件，通知脚本加载失败
+            window.dispatchEvent(new CustomEvent('pagefindUILoadError'));
+        };
+        
+        document.head.appendChild(script);
+    })();
+</script>
 
 <header class="page-header">
     <h1 class="page-title">文章归档</h1>
@@ -65,108 +200,170 @@ showFloatingActions: true
     window.addEventListener('DOMContentLoaded', (event) => {
         const searchContainer = document.querySelector('#search');
         
-        // 检查 Pagefind 资源是否加载
-        const checkPagefindResources = () => {
-            // 检查 CSS 和 JS 是否加载
-            const pagefindCSS = document.querySelector('link[href*="pagefind-ui.css"]');
-            const pagefindJS = document.querySelector('script[src*="pagefind-ui.js"]');
-            
-            if (!pagefindCSS || !pagefindJS) {
-                // 资源未加载，显示错误消息
-                if (searchContainer) {
-                    searchContainer.innerHTML = `
-                        <div style="padding: 1em; text-align: center; color: var(--color-text, #333);">
-                            <p style="margin: 0.5em 0;">⚠️ 搜索功能暂时不可用</p>
-                            <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
-                                请确保部署时运行了 <code>npm run build</code> 命令
-                            </p>
-                        </div>
-                    `;
+        // 显示错误消息的辅助函数
+        const showError = (message) => {
+            if (searchContainer) {
+                searchContainer.innerHTML = `
+                    <div style="padding: 1em; text-align: center; color: var(--color-text, #333);">
+                        <p style="margin: 0.5em 0;">⚠️ 搜索功能暂时不可用</p>
+                        <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
+                            ${message}
+                        </p>
+                    </div>
+                `;
+            }
+        };
+
+        // 防止重复初始化的标志
+        let pagefindInitialized = false;
+
+        // 初始化 Pagefind 的函数
+        const initPagefind = () => {
+            // 如果已经初始化过，直接返回
+            if (pagefindInitialized) {
+                return true;
+            }
+
+            // 检查容器是否已经有搜索框（防止重复初始化）
+            if (searchContainer && searchContainer.querySelector('.pagefind-ui__form')) {
+                pagefindInitialized = true;
+                return true;
+            }
+
+            // 检查 PagefindUI 是否可用
+            if (typeof PagefindUI === 'undefined') {
+                // 如果脚本加载失败，显示错误
+                if (window.pagefindUILoadError) {
+                    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                    const errorMsg = isDev 
+                        ? 'Pagefind 脚本未加载。在开发环境中，请先运行 <code>npm run build</code> 生成搜索索引文件，然后刷新页面。'
+                        : 'Pagefind 脚本未加载，请检查部署配置。确保部署时运行了 <code>npm run build</code> 命令';
+                    showError(errorMsg);
+                    return false;
+                }
+                // 如果脚本还在加载中，稍后重试
+                return false;
+            }
+
+            // 初始化 Pagefind，但不自动绑定搜索
+            try {
+                // PagefindUI 会自动从加载脚本的位置推断索引文件的位置
+                // 由于我们已经正确设置了脚本路径（包含 basePath），
+                // PagefindUI 应该能够自动找到索引文件
+                const searchUI = new PagefindUI({
+                    element: "#search",
+                    showSubResults: true,
+                    translations: {
+                        placeholder: "搜索..."
+                    }
+                });
+
+                // 标记为已初始化
+                pagefindInitialized = true;
+
+                // 捕获 Pagefind 初始化错误
+                if (searchUI && typeof searchUI.then === 'function') {
+                    searchUI.catch((error) => {
+                        // 静默处理 disconnected 错误
+                        if (error && error.message && !error.message.includes('disconnected')) {
+                            console.warn('Pagefind initialization error:', error);
+                            // 显示友好的错误消息
+                            if (searchContainer) {
+                                const errorMsg = searchContainer.querySelector('.pagefind-ui__message') || 
+                                               document.createElement('div');
+                                errorMsg.className = 'pagefind-ui__message';
+                                errorMsg.style.display = 'block';
+                                errorMsg.style.padding = '1em';
+                                errorMsg.style.textAlign = 'center';
+                                errorMsg.innerHTML = `
+                                    <p style="margin: 0.5em 0;">⚠️ 搜索功能初始化失败</p>
+                                    <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
+                                        请确保部署时运行了构建命令
+                                    </p>
+                                `;
+                                if (!searchContainer.contains(errorMsg)) {
+                                    searchContainer.appendChild(errorMsg);
+                                }
+                            }
+                        }
+                    });
+                }
+                return true; // 初始化成功
+            } catch (error) {
+                // 静默处理初始化错误
+                if (error && error.message && !error.message.includes('disconnected')) {
+                    console.warn('Failed to initialize Pagefind:', error);
+                    // 显示友好的错误消息
+                    showError(`初始化失败: ${error.message}`);
                 }
                 return false;
             }
-            return true;
         };
 
-        // 延迟检查，给资源加载时间
-        setTimeout(() => {
-            if (!checkPagefindResources()) {
-                return; // 资源未加载，退出初始化
-            }
-        }, 100);
-
-        // 初始化 Pagefind，但不自动绑定搜索
-        try {
-            // 检查 PagefindUI 是否可用
-            if (typeof PagefindUI === 'undefined') {
-                // PagefindUI 未定义，可能是脚本未加载
-                setTimeout(() => {
-                    if (typeof PagefindUI === 'undefined' && searchContainer) {
-                        searchContainer.innerHTML = `
-                            <div style="padding: 1em; text-align: center; color: var(--color-text, #333);">
-                                <p style="margin: 0.5em 0;">⚠️ 搜索功能暂时不可用</p>
-                                <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
-                                    Pagefind 脚本未加载，请检查部署配置
-                                </p>
-                            </div>
-                        `;
-                    }
-                }, 1000);
+        // 等待脚本加载并初始化
+        const waitAndInit = () => {
+            // 如果脚本已加载，直接初始化
+            if (window.pagefindUILoaded && typeof PagefindUI !== 'undefined') {
+                initPagefind();
                 return;
             }
 
-            const searchUI = new PagefindUI({
-                element: "#search",
-                showSubResults: true,
-                translations: {
-                    placeholder: "搜索..."
-                }
-            });
+            // 如果脚本加载失败，显示错误
+            if (window.pagefindUILoadError) {
+                const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const errorMsg = isDev 
+                    ? 'Pagefind 脚本未加载。在开发环境中，请先运行 <code>npm run build</code> 生成搜索索引文件，然后刷新页面。'
+                    : 'Pagefind 脚本未加载，请检查部署配置。确保部署时运行了 <code>npm run build</code> 命令';
+                showError(errorMsg);
+                return;
+            }
 
-            // 捕获 Pagefind 初始化错误
-            if (searchUI && typeof searchUI.then === 'function') {
-                searchUI.catch((error) => {
-                    // 静默处理 disconnected 错误
-                    if (error && error.message && !error.message.includes('disconnected')) {
-                        console.warn('Pagefind initialization error:', error);
-                        // 显示友好的错误消息
-                        if (searchContainer) {
-                            const errorMsg = searchContainer.querySelector('.pagefind-ui__message') || 
-                                           document.createElement('div');
-                            errorMsg.className = 'pagefind-ui__message';
-                            errorMsg.style.display = 'block';
-                            errorMsg.style.padding = '1em';
-                            errorMsg.style.textAlign = 'center';
-                            errorMsg.innerHTML = `
-                                <p style="margin: 0.5em 0;">⚠️ 搜索功能初始化失败</p>
-                                <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
-                                    请确保部署时运行了构建命令
-                                </p>
-                            `;
-                            if (!searchContainer.contains(errorMsg)) {
-                                searchContainer.appendChild(errorMsg);
-                            }
-                        }
-                    }
-                });
-            }
-        } catch (error) {
-            // 静默处理初始化错误
-            if (error && error.message && !error.message.includes('disconnected')) {
-                console.warn('Failed to initialize Pagefind:', error);
-                // 显示友好的错误消息
-                if (searchContainer) {
-                    searchContainer.innerHTML = `
-                        <div style="padding: 1em; text-align: center; color: var(--color-text, #333);">
-                            <p style="margin: 0.5em 0;">⚠️ 搜索功能初始化失败</p>
-                            <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
-                                错误: ${error.message}
-                            </p>
-                        </div>
-                    `;
+            // 等待脚本加载完成
+            let retryCount = 0;
+            const maxRetries = 30; // 最多等待 3 秒（30 * 100ms）
+            
+            const checkAndInit = () => {
+                if (window.pagefindUILoaded && typeof PagefindUI !== 'undefined') {
+                    initPagefind();
+                } else if (window.pagefindUILoadError) {
+                    // 检查是否是开发环境
+                    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                    const errorMsg = isDev 
+                        ? 'Pagefind 脚本未加载。在开发环境中，请先运行 <code>npm run build</code> 生成搜索索引文件，然后刷新页面。'
+                        : 'Pagefind 脚本未加载，请检查部署配置。确保部署时运行了 <code>npm run build</code> 命令';
+                    showError(errorMsg);
+                } else if (retryCount < maxRetries) {
+                    retryCount++;
+                    setTimeout(checkAndInit, 100);
+                } else {
+                    // 超时，显示错误
+                    const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                    const errorMsg = isDev
+                        ? 'Pagefind 脚本加载超时。在开发环境中，请先运行 <code>npm run build</code> 生成搜索索引文件，然后刷新页面。'
+                        : 'Pagefind 脚本加载超时，请检查部署配置。确保部署时运行了 <code>npm run build</code> 命令';
+                    showError(errorMsg);
                 }
-            }
-        }
+            };
+
+            // 监听脚本加载事件
+            window.addEventListener('pagefindUILoaded', () => {
+                initPagefind();
+            }, { once: true });
+
+            window.addEventListener('pagefindUILoadError', () => {
+                const isDev = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+                const errorMsg = isDev 
+                    ? 'Pagefind 脚本未加载。在开发环境中，请先运行 <code>npm run build</code> 生成搜索索引文件，然后刷新页面。'
+                    : 'Pagefind 脚本未加载，请检查部署配置。确保部署时运行了 <code>npm run build</code> 命令';
+                showError(errorMsg);
+            }, { once: true });
+
+            // 开始检查
+            setTimeout(checkAndInit, 100);
+        };
+
+        // 开始等待并初始化
+        waitAndInit();
 
         // 自定义搜索逻辑：按完整关键词匹配
         // 等待 Pagefind UI 初始化完成
