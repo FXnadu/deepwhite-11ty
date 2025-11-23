@@ -31,6 +31,6 @@ title: "关于我"
     <h2>与我联系</h2>
     <ul class="contact-list">
         <li><strong>电子邮件：</strong> <a href="mailto:deepwhite86@outlook.com">deepwhite86@outlook.com</a></li>
-        <li><strong>xhs：</strong> <a href="#" target="_blank" rel="noopener noreferrer">@your-username</a></li>
+        <li><strong>xhs：</strong> <a href="#" target="_blank" rel="noopener noreferrer">更多联系方式</a></li>
     </ul>
 </section>
