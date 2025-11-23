@@ -107,10 +107,22 @@
 
                 // 获取所有标题（包括 h1, h2, h3）
                 const headings = postContent.querySelectorAll('h1, h2, h3');
+                const h1Headings = postContent.querySelectorAll('h1');
                 const h2Headings = postContent.querySelectorAll('h2');
                 
-                // 如果 h2 标题少于等于3个，不显示导航栏
-                if (h2Headings.length <= 3) {
+                // 判断是否显示导航栏：
+                // 1. 如果有 3 个或以上的 h1 标题，显示导航栏
+                // 2. 或者如果有 3 个或以上的 h2 标题，显示导航栏
+                // 3. 否则不显示导航栏
+                if (h1Headings.length < 3 && h2Headings.length < 3) {
+                    // 隐藏目录容器和浮动切换按钮
+                    tocContainer.classList.add('hidden');
+                    tocContainer.classList.remove('visible');
+                    tocContainer.classList.remove('preview');
+                    const floatingToggleBtn = document.getElementById('toc-toggle-btn-floating');
+                    if (floatingToggleBtn) {
+                        floatingToggleBtn.classList.remove('visible');
+                    }
                     return;
                 }
 
