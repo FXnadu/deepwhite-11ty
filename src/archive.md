@@ -162,6 +162,17 @@ showFloatingActions: true
             window.pagefindUILoadError = true;
             // 触发自定义事件，通知脚本加载失败
             window.dispatchEvent(new CustomEvent('pagefindUILoadError'));
+            
+            // 额外检查：如果加载失败，尝试直接 fetch 检查文件是否存在
+            fetch(basePath + 'pagefind/pagefind-ui.js', { method: 'HEAD' })
+                .then(response => {
+                    if (response.ok && response.headers.get('content-type')?.includes('text/html')) {
+                        console.error('[Pagefind] File exists but returns HTML instead of JavaScript. This indicates a server configuration issue (likely SPA redirect).');
+                    }
+                })
+                .catch(() => {
+                    console.error('[Pagefind] Failed to load script. File may not exist or server configuration is incorrect.');
+                });
         };
         
         document.head.appendChild(script);
