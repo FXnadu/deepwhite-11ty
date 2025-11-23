@@ -171,7 +171,6 @@ showFloatingActions: true
         // 自定义搜索逻辑：按完整关键词匹配
         // 等待 Pagefind UI 初始化完成
         setTimeout(async () => {
-            const searchContainer = document.querySelector('#search');
             const searchInput = searchContainer?.querySelector('.pagefind-ui__search-input');
             const searchForm = searchContainer?.querySelector('.pagefind-ui__form');
 
@@ -365,7 +364,6 @@ showFloatingActions: true
 
         // 删除放大镜图标按钮
         setTimeout(() => {
-            const searchContainer = document.querySelector('#search');
             if (searchContainer) {
                 // 尝试多种方式找到搜索按钮并删除
                 const searchButton = searchContainer.querySelector('.pagefind-ui__search-button') ||
@@ -379,7 +377,6 @@ showFloatingActions: true
         }, 200);
 
         // 监听搜索结果，修改标题显示并过滤不需要的页面
-        const searchContainer = document.querySelector('#search');
         if (searchContainer) {
             // 需要过滤的页面 URL
             const excludedUrls = ['/', '/index.html', '/archive/', '/about/'];
