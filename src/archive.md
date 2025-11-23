@@ -63,10 +63,55 @@ showFloatingActions: true
     });
 
     window.addEventListener('DOMContentLoaded', (event) => {
+        const searchContainer = document.querySelector('#search');
+        
+        // 检查 Pagefind 资源是否加载
+        const checkPagefindResources = () => {
+            // 检查 CSS 和 JS 是否加载
+            const pagefindCSS = document.querySelector('link[href*="pagefind-ui.css"]');
+            const pagefindJS = document.querySelector('script[src*="pagefind-ui.js"]');
+            
+            if (!pagefindCSS || !pagefindJS) {
+                // 资源未加载，显示错误消息
+                if (searchContainer) {
+                    searchContainer.innerHTML = `
+                        <div style="padding: 1em; text-align: center; color: var(--color-text, #333);">
+                            <p style="margin: 0.5em 0;">⚠️ 搜索功能暂时不可用</p>
+                            <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
+                                请确保部署时运行了 <code>npm run build</code> 命令
+                            </p>
+                        </div>
+                    `;
+                }
+                return false;
+            }
+            return true;
+        };
+
+        // 延迟检查，给资源加载时间
+        setTimeout(() => {
+            if (!checkPagefindResources()) {
+                return; // 资源未加载，退出初始化
+            }
+        }, 100);
+
         // 初始化 Pagefind，但不自动绑定搜索
         try {
             // 检查 PagefindUI 是否可用
             if (typeof PagefindUI === 'undefined') {
+                // PagefindUI 未定义，可能是脚本未加载
+                setTimeout(() => {
+                    if (typeof PagefindUI === 'undefined' && searchContainer) {
+                        searchContainer.innerHTML = `
+                            <div style="padding: 1em; text-align: center; color: var(--color-text, #333);">
+                                <p style="margin: 0.5em 0;">⚠️ 搜索功能暂时不可用</p>
+                                <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
+                                    Pagefind 脚本未加载，请检查部署配置
+                                </p>
+                            </div>
+                        `;
+                    }
+                }, 1000);
                 return;
             }
 
@@ -84,6 +129,24 @@ showFloatingActions: true
                     // 静默处理 disconnected 错误
                     if (error && error.message && !error.message.includes('disconnected')) {
                         console.warn('Pagefind initialization error:', error);
+                        // 显示友好的错误消息
+                        if (searchContainer) {
+                            const errorMsg = searchContainer.querySelector('.pagefind-ui__message') || 
+                                           document.createElement('div');
+                            errorMsg.className = 'pagefind-ui__message';
+                            errorMsg.style.display = 'block';
+                            errorMsg.style.padding = '1em';
+                            errorMsg.style.textAlign = 'center';
+                            errorMsg.innerHTML = `
+                                <p style="margin: 0.5em 0;">⚠️ 搜索功能初始化失败</p>
+                                <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
+                                    请确保部署时运行了构建命令
+                                </p>
+                            `;
+                            if (!searchContainer.contains(errorMsg)) {
+                                searchContainer.appendChild(errorMsg);
+                            }
+                        }
                     }
                 });
             }
@@ -91,6 +154,17 @@ showFloatingActions: true
             // 静默处理初始化错误
             if (error && error.message && !error.message.includes('disconnected')) {
                 console.warn('Failed to initialize Pagefind:', error);
+                // 显示友好的错误消息
+                if (searchContainer) {
+                    searchContainer.innerHTML = `
+                        <div style="padding: 1em; text-align: center; color: var(--color-text, #333);">
+                            <p style="margin: 0.5em 0;">⚠️ 搜索功能初始化失败</p>
+                            <p style="margin: 0.5em 0; font-size: 0.9em; opacity: 0.8;">
+                                错误: ${error.message}
+                            </p>
+                        </div>
+                    `;
+                }
             }
         }
 
