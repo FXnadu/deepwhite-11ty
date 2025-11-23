@@ -30,6 +30,14 @@ jobs:
           BASE_URL: /
         run: npm run build
 
+      - name: Verify Pagefind files
+        run: |
+          echo "Checking Pagefind files..."
+          ls -la _site/pagefind/pagefind-ui.js || exit 1
+          ls -la _site/pagefind/pagefind-ui.css || exit 1
+          ls -la _site/.nojekyll || exit 1
+          echo "✓ All required files exist"
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
@@ -43,4 +51,6 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
+          # 确保 .nojekyll 文件被部署（禁用 Jekyll 处理）
+          keep_files: false
 

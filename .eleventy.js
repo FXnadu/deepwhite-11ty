@@ -51,6 +51,12 @@ module.exports = function (eleventyConfig) {
   
   // 复制 _redirects 文件到输出目录（用于 Netlify 部署）
   eleventyConfig.addPassthroughCopy("./src/_redirects");
+  
+  // 复制 .nojekyll 文件到输出目录（禁用 GitHub Pages 的 Jekyll 处理）
+  eleventyConfig.addPassthroughCopy("./src/.nojekyll");
+  
+  // 复制 _headers 文件到输出目录（用于 Cloudflare Pages 部署）
+  eleventyConfig.addPassthroughCopy("./src/_headers");
 
   // Eleventy 的目录配置
   return {
