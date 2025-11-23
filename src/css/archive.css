@@ -147,6 +147,128 @@ main .page-header .page-title {
     transform: translateY(-1px);
 }
 
+/* 简单搜索样式 */
+.simple-search-form {
+    position: relative;
+    width: 100%;
+}
+
+.simple-search-input {
+    width: 100%;
+    padding: 12px 14px;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background-color: var(--color-background);
+    color: var(--color-text);
+    font-size: 15px;
+    font-family: var(--font-family-sans);
+    font-weight: 400;
+    line-height: 1.5;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    outline: none;
+    box-sizing: border-box;
+}
+
+.simple-search-input:hover {
+    background-color: var(--color-code-bg);
+    border-color: var(--color-text-subtle);
+}
+
+.simple-search-input:focus {
+    background-color: var(--color-code-bg);
+    border-color: var(--color-text);
+    box-shadow: 0 0 0 2px rgba(var(--color-text-rgb, 0, 0, 0), 0.1);
+}
+
+.simple-search-input::placeholder {
+    color: var(--color-text-subtle);
+    opacity: 0.6;
+}
+
+.simple-search-results {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    margin-top: 8px;
+    background-color: var(--color-background);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    max-height: 500px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.simple-search-message {
+    padding: 12px 16px;
+    color: var(--color-text-subtle);
+    font-size: 14px;
+    text-align: center;
+    border-bottom: 1px solid var(--color-border);
+}
+
+.simple-search-error {
+    padding: 12px 16px;
+    color: var(--color-text-subtle);
+    font-size: 14px;
+    text-align: center;
+}
+
+.simple-search-result {
+    padding: 16px;
+    border-bottom: 1px solid var(--color-border);
+    transition: background-color 0.2s ease;
+}
+
+.simple-search-result:last-child {
+    border-bottom: none;
+}
+
+.simple-search-result:hover {
+    background-color: var(--color-code-bg);
+}
+
+.simple-search-result-title {
+    margin-bottom: 8px;
+}
+
+.simple-search-result-title a {
+    color: var(--color-text);
+    text-decoration: none;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 1.4;
+    transition: color 0.2s ease;
+}
+
+.simple-search-result-title a:hover {
+    color: var(--color-text);
+    text-decoration: underline;
+}
+
+.simple-search-result-excerpt {
+    color: var(--color-text-subtle);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+}
+
+.simple-search-result-date {
+    color: var(--color-text-subtle);
+    font-size: 12px;
+    opacity: 0.7;
+}
+
+.simple-search-result mark {
+    background-color: rgba(255, 235, 59, 0.4);
+    color: inherit;
+    padding: 0 2px;
+    border-radius: 2px;
+    font-weight: 600;
+}
+
 /* Pagefind UI 搜索框样式定制，融入整体设计 */
 /* 使用 CSS 变量覆盖 Pagefind UI 的默认样式 */
 .archive-search .pagefind-ui {

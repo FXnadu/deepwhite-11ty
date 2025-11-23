@@ -38,6 +38,10 @@
     {% if extraCss %}
     <link rel="stylesheet" href="{{ extraCss }}">
     {% endif %}
+    {#- 这是一个"插槽"，用于加载页面专属的 JS -#}
+    {% if extraJs %}
+    <script src="{{ extraJs }}" defer></script>
+    {% endif %}
 </head>
 <body>
     <div class="container">
