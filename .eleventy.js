@@ -45,6 +45,12 @@ module.exports = function (eleventyConfig) {
 
   // 将 CSS 文件直接复制到输出目录
   eleventyConfig.addPassthroughCopy("./src/css/");
+  
+  // 复制 .htaccess 文件到输出目录（用于 Apache 服务器配置）
+  eleventyConfig.addPassthroughCopy("./src/.htaccess");
+  
+  // 复制 _redirects 文件到输出目录（用于 Netlify 部署）
+  eleventyConfig.addPassthroughCopy("./src/_redirects");
 
   // Eleventy 的目录配置
   return {

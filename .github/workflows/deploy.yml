@@ -24,6 +24,10 @@ jobs:
         run: npm ci
 
       - name: Build site
+        env:
+          # 使用自定义域名时，BASE_URL 应该是 "/"
+          # 如果使用 GitHub Pages 默认域名，请将下面的 "/" 改为 "/${{ github.event.repository.name }}/"
+          BASE_URL: /
         run: npm run build
 
       - name: Upload build artifacts

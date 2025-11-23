@@ -1,0 +1,38 @@
+# 确保 Pagefind 文件有正确的 MIME 类型
+<IfModule mod_mime.c>
+    # JavaScript files
+    AddType application/javascript .js
+    AddType application/json .json
+    
+    # CSS files
+    AddType text/css .css
+    
+    # WASM files
+    AddType application/wasm .wasm
+    
+    # Pagefind fragment files
+    AddType application/octet-stream .pf_fragment
+    AddType application/octet-stream .pf_index
+    AddType application/octet-stream .pf_meta
+</IfModule>
+
+# 确保静态文件可以被访问
+<IfModule mod_headers.c>
+    # 允许跨域访问（如果需要）
+    <FilesMatch "\.(js|css|json|wasm)$">
+        Header set Access-Control-Allow-Origin "*"
+    </FilesMatch>
+</IfModule>
+
+# 禁用目录列表
+Options -Indexes
+
+# 如果文件不存在，不要重定向到 index.html（这对于静态文件很重要）
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    
+    # 确保静态文件直接返回，不经过重写规则
+    RewriteCond %{REQUEST_FILENAME} -f
+    RewriteRule ^ - [L]
+</IfModule>
+

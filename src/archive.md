@@ -64,6 +64,30 @@ showFloatingActions: true
             }
         }
         
+        // 方法2.5: 尝试从页面上的链接推断 basePath（更可靠的方法）
+        if (basePath === '/') {
+            // 检查页面上的链接，看是否有相对路径链接
+            // 如果链接是 /archive/ 而不是 /repo-name/archive/，说明 basePath 是 '/'
+            // 如果链接是 /repo-name/archive/，说明 basePath 是 '/repo-name/'
+            const testLinks = document.querySelectorAll('a[href^="/"]');
+            if (testLinks.length > 0) {
+                const firstLink = testLinks[0];
+                const href = firstLink.getAttribute('href');
+                if (href && href.startsWith('/') && href.length > 1) {
+                    const linkPath = href.split('/').filter(seg => seg);
+                    if (linkPath.length > 0) {
+                        const firstLinkSegment = linkPath[0];
+                        const commonPaths = ['archive', 'about', 'posts', 'css', 'img', 'pagefind'];
+                        // 如果链接的第一个段不是常见路径，且当前路径也有这个段，说明这是 basePath
+                        if (!commonPaths.includes(firstLinkSegment) && 
+                            window.location.pathname.includes('/' + firstLinkSegment + '/')) {
+                            basePath = '/' + firstLinkSegment + '/';
+                        }
+                    }
+                }
+            }
+        }
+        
         // 方法3: 从 document.baseURI 推断（如果前两种方法都失败）
         if (basePath === '/') {
             try {
@@ -250,13 +274,27 @@ showFloatingActions: true
                 // PagefindUI 会自动从加载脚本的位置推断索引文件的位置
                 // 由于我们已经正确设置了脚本路径（包含 basePath），
                 // PagefindUI 应该能够自动找到索引文件
-                const searchUI = new PagefindUI({
+                // 但如果 basePath 不是 '/'，需要明确指定 basePath
+                const pagefindConfig = {
                     element: "#search",
                     showSubResults: true,
                     translations: {
                         placeholder: "搜索..."
                     }
-                });
+                };
+                
+                // 如果检测到 basePath 不是根路径，添加到配置中
+                // PagefindUI 支持 basePath 选项来指定索引文件的基础路径
+                if (window.pagefindBasePath && window.pagefindBasePath !== '/') {
+                    // 移除末尾的斜杠（Pagefind 可能需要不带末尾斜杠的路径）
+                    const basePath = window.pagefindBasePath.endsWith('/') 
+                        ? window.pagefindBasePath.slice(0, -1) 
+                        : window.pagefindBasePath;
+                    pagefindConfig.basePath = basePath;
+                    console.log('[Pagefind] Using basePath:', basePath);
+                }
+                
+                const searchUI = new PagefindUI(pagefindConfig);
 
                 // 标记为已初始化
                 pagefindInitialized = true;
