@@ -561,6 +561,22 @@ main .page-header .page-title {
     .archive-search {
         max-width: 100%;
         margin: 0;
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    /* 确保 Pagefind UI 在移动端可见 */
+    .archive-search .pagefind-ui {
+        display: block !important;
+        visibility: visible !important;
+        opacity: 1 !important;
+    }
+
+    .archive-search .pagefind-ui__form {
+        display: flex !important;
+        visibility: visible !important;
+        opacity: 1 !important;
     }
 
     /* 移动端搜索结果框样式调整 */

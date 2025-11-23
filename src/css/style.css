@@ -277,6 +277,25 @@ a:focus-visible {
 .about-bio p {
     margin-top: 0;
 }
+.about-philosophy {
+    margin-bottom: 3em;
+    padding: 1.5em 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+.about-philosophy p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--color-text-subtle);
+}
+.contact-list {
+    list-style: none;
+    padding-left: 0;
+}
+.contact-list li {
+    margin-bottom: 0.8em;
+}
 
 /* --- 10. 文章导航 --- */
 .post-nav {
