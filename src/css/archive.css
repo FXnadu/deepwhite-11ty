@@ -1,46 +1,28 @@
-/* src/css/archive.css */
-
-/* --- 1. 归档页总容器 --- */
 .archive-container {
     margin-top: 1.4em;
     margin-bottom: 1.2em;
-    /* 顶部距离稍微大于搜索框底部到 br 线的距离 */
 }
 
-
-/* --- 2. 按年份分组的区块 --- */
 .archive-year-group {
     position: relative;
     padding-top: 1.2em;
     padding-bottom: 1.2em;
     border-top: 1px solid var(--color-border);
-    /* 用上边框作为年份之间的分隔 */
 }
 
-
-/* --- 3. 年份标题的新样式 --- */
 .archive-year-title {
     font-size: 0.85em;
-    /* 稍微增大字号，更优雅 */
     font-weight: 600;
     color: var(--color-text-subtle);
-    /* 使用更柔和的颜色 */
     text-transform: uppercase;
-    /* 大写 */
     letter-spacing: 1.5px;
-    /* 增加字间距，更优雅 */
-
-    /* 关键：使用绝对定位，创建经典的"轴线"版式 */
     position: absolute;
     top: 1.2em;
     left: -150px;
-    /* 将年份标题拉到主内容区之外 */
     width: 120px;
     text-align: right;
 }
 
-
-/* --- 4. 文章列表的新样式 --- */
 .archive-post-list {
     list-style: none;
     padding: 0;
@@ -50,7 +32,6 @@
 .archive-post-item {
     display: grid;
     grid-template-columns: 100px 1fr;
-    /* 创建 日期 | 标题 的网格布局 */
     gap: 20px;
     align-items: baseline;
     padding: 8px 0;
@@ -60,11 +41,8 @@
 
 .archive-post-item:hover {
     background-color: var(--color-code-bg);
-    /* 整行悬停高亮 */
 }
 
-
-/* --- 5. 列表内元素的样式 --- */
 .archive-post-date {
     color: var(--color-meta);
     font-size: 0.9em;
@@ -84,8 +62,6 @@
     border-bottom: none;
     position: relative;
     display: inline;
-    transition: color 0.3s ease;
-    /* 使用 text-decoration 实现多行下划线，初始状态透明 */
     text-decoration: underline;
     text-decoration-color: transparent;
     text-decoration-thickness: 1.5px;
@@ -96,27 +72,22 @@
 
 .archive-post-title a:hover {
     color: var(--color-text-strong);
-    /* 悬停时下划线颜色变为可见 */
     text-decoration-color: var(--color-text-strong);
 }
 
-
-/* --- 6. 搜索功能的新布局与样式 --- */
-/* 覆盖 style.css 中的 .page-header 样式 - 使用更具体的选择器确保优先级 */
 main .page-header {
     border-bottom: 1px solid var(--color-border);
     padding-top: 0.8em;
     padding-bottom: 1.2em;
     margin-bottom: 0;
     margin-top: 0;
-    text-align: center; /* 保留 style.css 的 text-align */
+    text-align: center;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
-/* 覆盖 style.css 中的 .page-title 样式 */
 main .page-header .page-title {
     font-size: 28px;
     margin-bottom: 0.8em;
@@ -126,20 +97,15 @@ main .page-header .page-title {
     color: var(--color-text-strong);
 }
 
-/* 将搜索框放在标题下方，作为一个独立的功能区域 */
 .archive-search {
     width: 100%;
-    /* 关键：让容器宽度占满 */
     max-width: 520px;
-    /* 您之前设定的最大宽度约束 */
     margin: 0 auto;
     opacity: 1;
     transition: transform 0.2s ease;
     position: relative;
     min-height: 50px;
-    /* 确保有足够的高度 */
     z-index: 100;
-    /* 确保搜索结果框在其他内容之上 */
 }
 
 .archive-search:hover,
@@ -147,7 +113,6 @@ main .page-header .page-title {
     transform: translateY(-1px);
 }
 
-/* 简单搜索样式 */
 .simple-search-form {
     position: relative;
     width: 100%;
@@ -269,400 +234,7 @@ main .page-header .page-title {
     font-weight: 600;
 }
 
-/* Pagefind UI 搜索框样式定制，融入整体设计 */
-/* 使用 CSS 变量覆盖 Pagefind UI 的默认样式 */
-.archive-search .pagefind-ui {
-    opacity: 1 !important;
-    visibility: visible !important;
-    --pagefind-ui-scale: 0.88;
-    --pagefind-ui-primary: var(--color-text);
-    --pagefind-ui-text: var(--color-text);
-    --pagefind-ui-background: var(--color-background);
-    --pagefind-ui-border: var(--color-border);
-    --pagefind-ui-border-width: 1px;
-    --pagefind-ui-border-radius: 6px;
-    --pagefind-ui-font: var(--font-family-sans);
-}
-
-/* 搜索表单容器 */
-.archive-search .pagefind-ui__form {
-    position: relative;
-    display: flex;
-    align-items: center;
-    border: 1px solid var(--color-border);
-    border-radius: 6px;
-    background-color: var(--color-background);
-    min-height: 48px;
-}
-
-/* 修复放大镜图标（通过 ::before 伪元素）的垂直居中 */
-.archive-search .pagefind-ui__form::before {
-    top: calc(50% - 7.92px) !important;
-    transform: none !important;
-    left: 14px !important;
-}
-
-/* 搜索输入框包装器 - 确保按钮正确对齐 */
-.archive-search .pagefind-ui__search-input-wrapper {
-    position: relative !important;
-    width: 100%;
-    display: flex;
-    align-items: center;
-    min-height: 48px;
-    /* 与输入框高度匹配 */
-    height: 48px !important;
-    /* 固定高度，确保按钮可以相对于它定位 */
-}
-
-/* 确保输入框容器有明确的高度，以便按钮可以相对于它定位 */
-.archive-search .pagefind-ui__form {
-    min-height: 48px;
-    /* 与输入框高度匹配 */
-    position: relative !important;
-    /* 确保是定位上下文 */
-}
-
-/* 搜索输入框样式 - 移除边框，由表单容器提供边框 */
-.archive-search .pagefind-ui__form .pagefind-ui__search-input,
-.archive-search input.pagefind-ui__search-input {
-    border: none !important;
-    border-radius: 0 !important;
-    padding: 12px 60px 12px 44px !important;
-    /* 左侧 padding 44px 为搜索图标留空间，右侧为清除按钮留空间 */
-    font-size: 15px !important;
-    font-family: var(--font-family-sans) !important;
-    color: var(--color-text) !important;
-    background-color: transparent !important;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
-    width: 100% !important;
-    box-sizing: border-box !important;
-    height: 48px !important;
-    /* 固定高度，确保按钮可以正确对齐 */
-    font-weight: 400 !important;
-    line-height: 1.5 !important;
-    position: relative !important;
-    display: block !important;
-    outline: none !important;
-}
-
-/* 表单容器的 hover 和 focus 状态 */
-.archive-search .pagefind-ui__form:hover {
-    background-color: var(--color-code-bg);
-    border-color: var(--color-text-subtle);
-}
-
-.archive-search .pagefind-ui__form:focus-within {
-    border-color: var(--color-text);
-    box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.04);
-}
-
-.archive-search .pagefind-ui__form .pagefind-ui__search-input:hover,
-.archive-search input.pagefind-ui__search-input:hover {
-    background-color: transparent !important;
-}
-
-.archive-search .pagefind-ui__form .pagefind-ui__search-input:focus,
-.archive-search input.pagefind-ui__search-input:focus {
-    outline: none !important;
-    background-color: transparent !important;
-}
-
-.archive-search .pagefind-ui__form .pagefind-ui__search-input::placeholder,
-.archive-search input.pagefind-ui__search-input::placeholder {
-    color: var(--color-meta) !important;
-    opacity: 0.5 !important;
-    font-weight: 400 !important;
-}
-
-/* 搜索结果区域样式 - 悬浮显示，不挤压页面内容 */
-.archive-search .pagefind-ui__results-area {
-    position: absolute !important;
-    top: 100% !important;
-    left: 0 !important;
-    right: 0 !important;
-    margin-top: 10px !important;
-    border: 1px solid var(--color-border) !important;
-    border-radius: 6px !important;
-    background-color: var(--color-background) !important;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08) !important;
-    padding: 4px 0 !important;
-    overflow: hidden !important;
-    animation: slideDown 0.2s ease-out !important;
-    z-index: 1000 !important;
-    /* 确保在其他内容之上 */
-    max-height: 70vh !important;
-    /* 限制最大高度 */
-    overflow-y: auto !important;
-    /* 如果内容过多，允许滚动 */
-    font-family: var(--font-family-sans) !important;
-    /* 优化文字排版 */
-}
-
-@keyframes slideDown {
-    from {
-        opacity: 0;
-        transform: translateY(-8px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-.archive-search .pagefind-ui__results {
-    padding: 0 !important;
-    margin: 0 !important;
-}
-
-.archive-search .pagefind-ui__result {
-    border-top: 1px solid var(--color-border) !important;
-    border-bottom: none !important;
-    padding: 14px 18px !important;
-    transition: all 0.2s ease !important;
-    margin: 0 !important;
-    position: relative;
-}
-
-.archive-search .pagefind-ui__result:first-child {
-    border-top: none !important;
-}
-
-.archive-search .pagefind-ui__result:hover {
-    background-color: var(--color-code-bg) !important;
-    padding-left: 20px !important;
-}
-
-.archive-search .pagefind-ui__result-title,
-.archive-search .pagefind-ui__result-title a {
-    color: var(--color-text) !important;
-    font-weight: 500 !important;
-    font-size: 16px !important;
-    margin-bottom: 4px !important;
-    border-bottom: none !important;
-    text-decoration: none !important;
-}
-
-.archive-search .pagefind-ui__result-title a:hover {
-    color: var(--color-text-strong) !important;
-    text-decoration: none !important;
-}
-
-.archive-search .pagefind-ui__result-excerpt {
-    color: var(--color-text-subtle) !important;
-    font-size: 14px !important;
-    line-height: 1.6 !important;
-    margin-top: 6px !important;
-    word-break: break-word !important;
-    overflow-wrap: break-word !important;
-}
-
-/* 优化搜索结果框内的文字排版 */
-.archive-search .pagefind-ui__result {
-    line-height: 1.5 !important;
-}
-
-/* 搜索框的清除按钮样式 - 确保位置正确并垂直居中，且不会溢出 */
-.archive-search .pagefind-ui__search-clear {
-    position: absolute !important;
-    right: 10px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    color: var(--color-meta) !important;
-    opacity: 0.6 !important;
-    transition: opacity 0.2s ease, color 0.2s ease !important;
-    /* 只对 opacity 和 color 应用过渡，背景色保持固定 */
-    background-color: var(--color-background) !important;
-    /* 与搜索框背景色一致 */
-    border-radius: 4px !important;
-    padding: 6px 10px !important;
-    /* 增大内边距，让按钮更明显 */
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    cursor: pointer !important;
-    z-index: 3 !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    font-size: 14px !important;
-    /* 增大字体 */
-    line-height: 1.4 !important;
-    height: 32px !important;
-    /* 固定高度，确保垂直居中 */
-    white-space: nowrap !important;
-    pointer-events: auto !important;
-    margin: 0 !important;
-}
-
-.archive-search .pagefind-ui__search-clear:hover {
-    opacity: 1 !important;
-    color: var(--color-text) !important;
-    background-color: var(--color-background) !important;
-    /* 悬停时保持与搜索框相同的背景色 */
-    outline: none !important;
-    /* 悬停时也移除轮廓 */
-}
-
-.archive-search .pagefind-ui__search-clear:focus {
-    outline: none !important;
-    /* 聚焦时移除轮廓 */
-    box-shadow: none !important;
-}
-
-/* 搜索图标按钮样式 - 使用标准的垂直居中方法 */
-.archive-search .pagefind-ui__search-button,
-.archive-search .pagefind-ui__form button[type="submit"],
-.archive-search .pagefind-ui__form .pagefind-ui__search-button,
-.archive-search .pagefind-ui__search-input-wrapper button {
-    position: absolute !important;
-    left: 14px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    width: 20px !important;
-    height: 20px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    background: transparent !important;
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    cursor: pointer !important;
-    z-index: 3 !important;
-    color: var(--color-meta) !important;
-    opacity: 0.6 !important;
-    transition: opacity 0.2s ease !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    line-height: 0 !important;
-}
-
-/* 确保搜索图标相对于输入框容器定位 */
-.archive-search .pagefind-ui__form .pagefind-ui__search-button,
-.archive-search .pagefind-ui__search-input-wrapper .pagefind-ui__search-button,
-.archive-search .pagefind-ui__form button[type="submit"] {
-    position: absolute !important;
-    left: 14px !important;
-    top: 50% !important;
-    transform: translateY(-50%) !important;
-    width: 20px !important;
-    height: 20px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    line-height: 0 !important;
-}
-
-.archive-search .pagefind-ui__search-button:hover,
-.archive-search .pagefind-ui__form button[type="submit"]:hover,
-.archive-search .pagefind-ui__form .pagefind-ui__search-button:hover,
-.archive-search .pagefind-ui__search-input-wrapper button:hover {
-    opacity: 1 !important;
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-
-.archive-search .pagefind-ui__search-button:focus,
-.archive-search .pagefind-ui__form button[type="submit"]:focus,
-.archive-search .pagefind-ui__form .pagefind-ui__search-button:focus,
-.archive-search .pagefind-ui__search-input-wrapper button:focus {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-
-.archive-search .pagefind-ui__search-button:active,
-.archive-search .pagefind-ui__form button[type="submit"]:active,
-.archive-search .pagefind-ui__form .pagefind-ui__search-button:active,
-.archive-search .pagefind-ui__search-input-wrapper button:active {
-    outline: none !important;
-    box-shadow: none !important;
-    border: none !important;
-}
-
-/* 确保搜索图标 SVG 完美居中 */
-.archive-search .pagefind-ui__search-button svg,
-.archive-search .pagefind-ui__form button[type="submit"] svg,
-.archive-search .pagefind-ui__form .pagefind-ui__search-button svg,
-.archive-search .pagefind-ui__search-input-wrapper button svg {
-    display: block !important;
-    width: 20px !important;
-    height: 20px !important;
-    margin: 0 !important;
-    padding: 0 !important;
-    flex-shrink: 0 !important;
-}
-
-/* 确保清除按钮内的文字也垂直居中 */
-.archive-search .pagefind-ui__search-clear * {
-    vertical-align: middle !important;
-    line-height: 1 !important;
-}
-
-/* 搜索结果消息/计数文本样式 - 移除轮廓并优化排版 */
-.archive-search .pagefind-ui__message,
-.archive-search .pagefind-ui__results-count,
-.archive-search .pagefind-ui__message-text,
-.archive-search [class*="message"],
-.archive-search [class*="count"] {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-    padding: 8px 16px !important;
-    margin: 0 !important;
-    color: var(--color-text-subtle) !important;
-    font-size: 13px !important;
-    line-height: 1.5 !important;
-    background: transparent !important;
-    font-weight: 400 !important;
-    letter-spacing: 0.01em !important;
-}
-
-/* 确保所有 Pagefind UI 内的按钮和可交互元素都没有轮廓 */
-.archive-search .pagefind-ui * {
-    box-sizing: border-box;
-}
-
-.archive-search .pagefind-ui button,
-.archive-search .pagefind-ui [role="button"] {
-    border: none !important;
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-.archive-search .pagefind-ui button:hover,
-.archive-search .pagefind-ui button:focus,
-.archive-search .pagefind-ui button:active,
-.archive-search .pagefind-ui [role="button"]:hover,
-.archive-search .pagefind-ui [role="button"]:focus,
-.archive-search .pagefind-ui [role="button"]:active {
-    outline: none !important;
-    box-shadow: none !important;
-}
-
-/* --- 6.6. 搜索结果高亮样式 --- */
-.archive-search .pagefind-ui__result-title mark,
-.archive-search .pagefind-ui__result-excerpt mark,
-.archive-search .pagefind-ui mark,
-.archive-search mark.pagefind-highlight,
-.archive-search .pagefind-highlight {
-    background-color: rgba(255, 235, 59, 0.3) !important;
-    /* 淡黄色背景 */
-    color: inherit !important;
-    padding: 2px 0 !important;
-    border-radius: 2px !important;
-    font-weight: 500 !important;
-    box-shadow: none !important;
-    border: none !important;
-    outline: none !important;
-}
-
-/* --- 7. 响应式设计 --- */
 @media (max-width: 900px) {
-
-    /* 在窄屏幕上，让年份标题回到内容流中 */
     .archive-year-title {
         position: static;
         width: auto;
@@ -679,32 +251,12 @@ main .page-header .page-title {
         padding-bottom: 1em;
     }
 
-    /* 在窄屏幕上调整搜索框 */
     .archive-search {
         max-width: 100%;
         margin: 0;
         display: block !important;
         visibility: visible !important;
         opacity: 1 !important;
-    }
-
-    /* 确保 Pagefind UI 在移动端可见 */
-    .archive-search .pagefind-ui {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    .archive-search .pagefind-ui__form {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-    }
-
-    /* 移动端搜索结果框样式调整 */
-    .archive-search .pagefind-ui__results-area {
-        max-height: 60vh !important;
-        /* 移动端使用更小的高度 */
     }
 
     .page-header {
@@ -716,7 +268,6 @@ main .page-header .page-title {
     }
 }
 
-/* --- 8. 年份导航滚轮 --- */
 .year-navigator {
     position: fixed;
     right: 30px;
@@ -740,8 +291,8 @@ main .page-header .page-title {
     gap: 8px;
     max-height: 60vh;
     overflow-y: auto;
-    overflow-x: visible; /* 允许横向溢出，避免按钮被裁剪 */
-    padding: 10px 4px; /* 左右增加 padding，给按钮留出空间 */
+    overflow-x: visible;
+    padding: 10px 4px;
     scrollbar-width: thin;
     scrollbar-color: var(--color-border) transparent;
 }
@@ -776,15 +327,15 @@ main .page-header .page-title {
     min-width: 50px;
     letter-spacing: 0.5px;
     border: 1px solid transparent;
-    margin: 0 2px; /* 给左右留出空间，避免放大时超出 */
+    margin: 0 2px;
 }
 
 .year-nav-item:hover {
     color: var(--color-text);
     background-color: var(--color-code-bg);
     border-color: var(--color-border);
-    transform: translateX(-2px); /* 使用位移代替缩放，更优雅 */
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* 添加阴影增强视觉反馈 */
+    transform: translateX(-2px);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .year-nav-item.active {
@@ -794,7 +345,6 @@ main .page-header .page-title {
     font-weight: 600;
 }
 
-/* 响应式：在小屏幕上隐藏年份导航 */
 @media (max-width: 1200px) {
     .year-navigator {
         display: none;

@@ -1,8 +1,3 @@
-/**
- * 简单的客户端搜索功能
- * 不依赖任何外部库，直接搜索文章数据
- */
-
 class SimpleSearch {
   constructor(containerId, options = {}) {
     this.container = document.getElementById(containerId);
@@ -15,6 +10,7 @@ class SimpleSearch {
     };
     this.index = [];
     this.isLoading = false;
+    this.indexPromise = null;
     this.searchTimeout = null;
     
     this.init();
@@ -26,13 +22,7 @@ class SimpleSearch {
       return;
     }
     
-    // 创建搜索 UI
     this.createUI();
-    
-    // 加载搜索索引
-    await this.loadIndex();
-    
-    // 绑定事件
     this.bindEvents();
   }
   
@@ -54,37 +44,54 @@ class SimpleSearch {
   }
   
   async loadIndex() {
+    if (this.isLoading) return;
+    this.isLoading = true;
+    this.showLoading();
+
     try {
-      this.isLoading = true;
-      const response = await fetch(this.options.indexUrl);
+      const response = await fetch(this.options.indexUrl, { cache: 'force-cache' });
       if (!response.ok) {
         throw new Error(`Failed to load search index: ${response.status}`);
       }
-      this.index = await response.json();
-      this.isLoading = false;
+      const data = await response.json();
+      this.index = data.map((item) => ({
+        ...item,
+        _titleLower: (item.title || '').toLowerCase(),
+        _excerptLower: (item.excerpt || '').toLowerCase(),
+        _contentLower: (item.content || '').toLowerCase(),
+      }));
     } catch (error) {
       console.error('Failed to load search index:', error);
-      this.isLoading = false;
       this.showError('搜索索引加载失败，请刷新页面重试。');
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async ensureIndexLoaded() {
+    if (this.index.length) return;
+    if (!this.indexPromise) {
+      this.indexPromise = this.loadIndex();
+    }
+    await this.indexPromise;
+    if (!this.index.length) {
+      this.indexPromise = null;
     }
   }
   
   bindEvents() {
     if (!this.input) return;
     
-    // 输入事件
     this.input.addEventListener('input', (e) => {
       this.handleInput(e.target.value);
     });
-    
-    // 聚焦事件
-    this.input.addEventListener('focus', () => {
+    this.input.addEventListener('focus', async () => {
+      await this.ensureIndexLoaded();
       if (this.input.value.trim()) {
         this.showResults();
       }
     });
     
-    // 点击外部关闭结果
     document.addEventListener('click', (e) => {
       if (!this.container.contains(e.target)) {
         this.hideResults();
@@ -92,7 +99,7 @@ class SimpleSearch {
     });
   }
   
-  handleInput(query) {
+  async handleInput(query) {
     clearTimeout(this.searchTimeout);
     
     const trimmedQuery = query.trim();
@@ -102,15 +109,14 @@ class SimpleSearch {
       return;
     }
     
-    this.searchTimeout = setTimeout(() => {
-      this.search(trimmedQuery);
+    this.searchTimeout = setTimeout(async () => {
+      await this.search(trimmedQuery);
     }, this.options.debounceTime);
   }
   
-  search(query) {
-    if (this.isLoading || !this.index.length) {
-      return;
-    }
+  async search(query) {
+    await this.ensureIndexLoaded();
+    if (!this.index.length) return;
     
     const results = this.performSearch(query);
     this.displayResults(results, query);
@@ -120,32 +126,27 @@ class SimpleSearch {
     const queryLower = query.toLowerCase();
     const queryWords = queryLower.split(/\s+/).filter(w => w.length > 0);
     
-    // 计算每个文章的匹配分数
     const scoredResults = this.index.map((post) => {
-      const title = (post.title || '').toLowerCase();
-      const excerpt = (post.excerpt || '').toLowerCase();
-      const content = (post.content || '').toLowerCase();
+      const title = post._titleLower || '';
+      const excerpt = post._excerptLower || '';
+      const content = post._contentLower || '';
       
       let score = 0;
       
-      // 标题完全匹配
       if (title.includes(queryLower)) {
         score += 100;
       }
       
-      // 标题包含所有查询词
       if (queryWords.every(word => title.includes(word))) {
         score += 50;
       }
       
-      // 标题包含部分查询词
       queryWords.forEach(word => {
         if (title.includes(word)) {
           score += 20;
         }
       });
       
-      // 摘要匹配
       if (excerpt.includes(queryLower)) {
         score += 30;
       }
@@ -156,22 +157,20 @@ class SimpleSearch {
         }
       });
       
-      // 内容匹配
       queryWords.forEach(word => {
         const matches = (content.match(new RegExp(word, 'g')) || []).length;
         score += matches * 2;
       });
       
-      // 完整短语匹配（额外加分）
       if (content.includes(queryLower)) {
         score += 15;
       }
       
       return { post, score };
     })
-    .filter(item => item.score > 0) // 只保留有匹配的结果
-    .sort((a, b) => b.score - a.score) // 按分数降序排列
-    .slice(0, this.options.maxResults) // 限制结果数量
+    .filter(item => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, this.options.maxResults)
     .map(item => item.post);
     
     return scoredResults;
@@ -223,11 +222,15 @@ class SimpleSearch {
     let highlighted = text;
     
     queryWords.forEach(word => {
-      const regex = new RegExp(`(${word})`, 'gi');
+      const regex = new RegExp(`(${this.escapeRegExp(word)})`, 'gi');
       highlighted = highlighted.replace(regex, '<mark>$1</mark>');
     });
     
     return highlighted;
+  }
+
+  escapeRegExp(value) {
+    return value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
   }
   
   showResults() {
@@ -252,9 +255,19 @@ class SimpleSearch {
       this.showResults();
     }
   }
+
+  showLoading() {
+    if (this.resultsContainer) {
+      this.resultsContainer.innerHTML = `
+        <div class="simple-search-message">
+          正在加载搜索索引…
+        </div>
+      `;
+      this.showResults();
+    }
+  }
 }
 
-// 自动初始化（如果容器存在）
 if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', () => {
     const container = document.getElementById('search');

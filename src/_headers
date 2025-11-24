@@ -1,23 +1,14 @@
-# Cloudflare Pages 头部配置
-# 确保 Pagefind 文件有正确的 MIME 类型和缓存策略
-
-/pagefind/*.js
-  Content-Type: application/javascript
-  Cache-Control: public, max-age=31536000, immutable
-
-/pagefind/*.css
+/css/*
   Content-Type: text/css
   Cache-Control: public, max-age=31536000, immutable
 
-/pagefind/*.wasm
-  Content-Type: application/wasm
+/js/*
+  Content-Type: application/javascript
   Cache-Control: public, max-age=31536000, immutable
 
-/pagefind/*.json
+/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/search-index.json
   Content-Type: application/json
-  Cache-Control: public, max-age=31536000, immutable
-
-/pagefind/*.pf_*
-  Content-Type: application/octet-stream
-  Cache-Control: public, max-age=31536000, immutable
-
+  Cache-Control: public, max-age=3600

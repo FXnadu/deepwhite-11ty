@@ -1,11 +1,13 @@
 ---
 layout: "base.njk"
 showFloatingActions: true 
+layoutScripts:
+  - "/js/post-page.js"
 ---
 <article class="post">
     <header class="post-full-header">
     
-        <h1 class="post-full-title" data-pagefind-meta="title">{{ title }}</h1>
+        <h1 class="post-full-title">{{ title }}</h1>
 
         <p class="post-full-meta">发布于 {{ date | readableDate }}</p>
     </header>
@@ -15,7 +17,6 @@ showFloatingActions: true
     </section>
 </article>
 
-<!-- 悬浮的标题导航栏 -->
 <nav class="post-toc-floating" id="post-toc" aria-label="文章目录">
     <div class="toc-header">
         <div class="toc-title">目录</div>
@@ -28,7 +29,6 @@ showFloatingActions: true
     </div>
     <ul class="toc-list" id="toc-list"></ul>
 </nav>
-<!-- 当导航栏隐藏时显示的切换按钮 -->
 <button class="toc-toggle-btn toc-toggle-btn-floating" id="toc-toggle-btn-floating" aria-label="显示目录" title="显示目录">
     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <line x1="3" y1="12" x2="21" y2="12"></line>

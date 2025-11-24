@@ -1,16 +1,9 @@
 # Cloudflare Pages / Netlify 重定向规则
-# 确保静态文件（如 Pagefind 文件）不被重定向
-
-# 允许所有 Pagefind 文件直接访问，不进行重定向
-# 使用 200 状态码确保文件直接返回
-/pagefind/* 200
-/pagefind/*/* 200
-
-# 允许其他静态资源直接访问
+# 保持静态资源直出，避免额外跳转
+/search-index.json 200
 /css/* 200
 /img/* 200
+/js/* 200
 /posts/* 200
 /about/* 200
 /archive/* 200
-
-# 注意：不要添加通配符重定向到 index.html，这会导致所有文件（包括 Pagefind）都被重定向
