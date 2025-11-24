@@ -3,10 +3,11 @@ class PostPageToc {
     this.postContent = document.querySelector(".post-content");
     this.tocContainer = document.getElementById("post-toc");
     this.tocList = document.getElementById("toc-list");
-    this.toggleBtn = document.getElementById("toc-toggle-btn");
     this.floatingToggleBtn = document.getElementById("toc-toggle-btn-floating");
     this.prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    this.visibilityKey = "toc-visible";
+    this.pinStorageKey = "toc-pinned";
+    this.isPinned = false;
+    this.isHovering = false;
 
     if (!this.postContent || !this.tocContainer || !this.tocList) return;
 
@@ -19,9 +20,11 @@ class PostPageToc {
       return;
     }
 
+    this.activeId = null;
     this.ensureHeadingIds();
     this.renderToc();
-    this.restoreVisibility();
+    this.initializeVisibilityState();
+    this.setupHoverInteractions();
     this.registerEvents();
     this.observeHeadings();
   }
@@ -93,35 +96,110 @@ class PostPageToc {
     this.tocContainer.classList.add("visible");
   }
 
-  restoreVisibility() {
-    const stored = window.localStorage?.getItem(this.visibilityKey);
-    const shouldShow = stored === null ? true : stored === "true";
-    this.applyVisibility(shouldShow);
-  }
+  initializeVisibilityState() {
+    const storedPinned = window.localStorage?.getItem(this.pinStorageKey);
+    this.isPinned = storedPinned === "true";
 
-  applyVisibility(visible) {
-    if (visible) {
+    if (this.isPinned) {
       this.tocContainer.classList.remove("hidden");
-      if (this.floatingToggleBtn) {
-        this.floatingToggleBtn.classList.remove("visible");
-      }
+      this.tocContainer.classList.add("visible", "pinned");
     } else {
       this.tocContainer.classList.add("hidden");
-      if (this.floatingToggleBtn) {
-        this.floatingToggleBtn.classList.add("visible");
-      }
+      this.tocContainer.classList.remove("visible", "pinned", "preview");
     }
-    window.localStorage?.setItem(this.visibilityKey, String(visible));
+
+    this.updateFloatingToggleVisibility();
+    this.updateToggleButtonState();
+    this.updatePinnedFocusState();
+  }
+
+  setupHoverInteractions() {
+    const hoverTargets = [this.floatingToggleBtn, this.tocContainer].filter(Boolean);
+    if (!hoverTargets.length) return;
+
+    const handleMouseEnter = () => {
+      this.isHovering = true;
+      if (!this.isPinned) {
+        this.showPreview();
+      }
+      this.updateFloatingToggleVisibility();
+    };
+
+    const handleMouseLeave = (event) => {
+      const related = event.relatedTarget;
+      const movingInside =
+        !!related &&
+        ((this.tocContainer && this.tocContainer.contains(related)) ||
+          (this.floatingToggleBtn && this.floatingToggleBtn.contains(related)));
+      if (movingInside) return;
+
+      this.isHovering = false;
+      if (!this.isPinned) {
+        this.hidePreview();
+      }
+      this.updateFloatingToggleVisibility();
+    };
+
+    hoverTargets.forEach((target) => {
+      target.addEventListener("mouseenter", handleMouseEnter);
+      target.addEventListener("mouseleave", handleMouseLeave);
+    });
+  }
+
+  showPreview() {
+    this.tocContainer.classList.remove("hidden");
+    this.tocContainer.classList.add("visible", "preview");
+    this.tocContainer.classList.remove("pinned");
+  }
+
+  hidePreview() {
+    this.tocContainer.classList.remove("visible", "preview");
+    this.tocContainer.classList.add("hidden");
+  }
+
+  setFloatingToggleVisibility(visible) {
+    if (!this.floatingToggleBtn) return;
+    this.floatingToggleBtn.classList.toggle("visible", visible);
+  }
+
+  updateFloatingToggleVisibility() {
+    const shouldShow = !this.isPinned || this.isHovering;
+    this.setFloatingToggleVisibility(shouldShow);
+  }
+
+  updateToggleButtonState() {
+    if (!this.floatingToggleBtn) return;
+    this.floatingToggleBtn.classList.toggle("active", this.isPinned);
+    this.floatingToggleBtn.setAttribute("aria-pressed", String(this.isPinned));
+    const label = this.isPinned ? "点击隐藏目录" : "点击固定目录";
+    this.floatingToggleBtn.setAttribute("title", label);
+    this.floatingToggleBtn.setAttribute("aria-label", label);
+  }
+
+  togglePinnedState() {
+    const nextPinned = !this.isPinned;
+    this.isPinned = nextPinned;
+
+    if (nextPinned) {
+      this.tocContainer.classList.remove("hidden", "preview");
+      this.tocContainer.classList.add("visible", "pinned");
+    } else if (this.isHovering) {
+      this.showPreview();
+    } else {
+      this.hidePreview();
+    }
+
+    window.localStorage?.setItem(this.pinStorageKey, String(nextPinned));
+    this.updateToggleButtonState();
+    this.updatePinnedFocusState();
+    this.updateFloatingToggleVisibility();
   }
 
   registerEvents() {
-    const toggleHandler = () => {
-      const isHidden = this.tocContainer.classList.contains("hidden");
-      this.applyVisibility(isHidden);
-    };
-
-    this.toggleBtn?.addEventListener("click", toggleHandler);
-    this.floatingToggleBtn?.addEventListener("click", toggleHandler);
+    this.floatingToggleBtn?.addEventListener("click", (event) => {
+      event.preventDefault();
+      this.togglePinnedState();
+    });
 
     this.tocList.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", (event) => {
@@ -181,9 +259,15 @@ class PostPageToc {
       }
     });
 
+    const nearTop = window.scrollY <= 10;
     if (!activeId) {
-      const firstHeading = this.headings[0];
-      activeId = firstHeading?.id || null;
+      if (nearTop) {
+        activeId = this.headings[0]?.id || null;
+      } else {
+        activeId = this.activeId || this.headings[this.headings.length - 1]?.id || null;
+      }
+    } else if (nearTop && activeId !== this.headings[0]?.id) {
+      activeId = this.headings[0]?.id || activeId;
     }
 
     this.setActiveLink(activeId);
@@ -206,17 +290,73 @@ class PostPageToc {
 
   setActiveLink(activeId) {
     if (!activeId) return;
+    const nearTop = window.scrollY <= 10;
+    if (activeId === this.activeId) {
+      if (nearTop) {
+        const existingActive = this.tocList.querySelector(`a[href="#${activeId}"]`);
+        this.keepActiveLinkVisible(existingActive);
+      }
+      return;
+    }
+    this.activeId = activeId;
+
     this.tocList.querySelectorAll("a").forEach((link) => {
-      if (link.getAttribute("href") === `#${activeId}`) {
-        link.classList.add("active");
-        const parent = link.closest("li");
-        if (parent) {
-          parent.scrollIntoView({ block: "nearest" });
-        }
-      } else {
-        link.classList.remove("active");
+      const isActive = link.getAttribute("href") === `#${activeId}`;
+      link.classList.toggle("active", isActive);
+      if (isActive) {
+        this.keepActiveLinkVisible(link);
       }
     });
+
+    this.updatePinnedFocusState();
+  }
+
+  updatePinnedFocusState() {
+    if (!this.tocContainer) return;
+    const shouldFocus = this.isPinned && Boolean(this.activeId);
+    this.tocContainer.classList.toggle("focus-active", shouldFocus);
+  }
+
+  keepActiveLinkVisible(link) {
+    if (!link || !this.tocList) return;
+    const container = this.tocList;
+    const linkTop = link.offsetTop;
+    const linkBottom = linkTop + link.offsetHeight;
+    const viewTop = container.scrollTop;
+    const viewBottom = viewTop + container.clientHeight;
+    const behavior = this.prefersReducedMotion ? "auto" : "smooth";
+    const nearTop = window.scrollY <= 10;
+    const isFirstHeadingActive = this.headings[0]?.id === this.activeId;
+    const shouldSnapToTop = nearTop || isFirstHeadingActive;
+
+    if (shouldSnapToTop) {
+      if (typeof container.scrollTo === "function") {
+        container.scrollTo({ top: 0, behavior });
+      } else {
+        container.scrollTop = 0;
+      }
+      return;
+    }
+
+    if (linkTop - 12 < viewTop) {
+      const targetTop = Math.max(linkTop - 12, 0);
+      if (Math.abs(targetTop - container.scrollTop) > 1) {
+        if (typeof container.scrollTo === "function") {
+          container.scrollTo({ top: targetTop, behavior });
+        } else {
+          container.scrollTop = targetTop;
+        }
+      }
+    } else if (linkBottom + 12 > viewBottom) {
+      const targetBottom = linkBottom - container.clientHeight + 12;
+      if (Math.abs(targetBottom - container.scrollTop) > 1) {
+        if (typeof container.scrollTo === "function") {
+          container.scrollTo({ top: targetBottom, behavior });
+        } else {
+          container.scrollTop = targetBottom;
+        }
+      }
+    }
   }
 }
 

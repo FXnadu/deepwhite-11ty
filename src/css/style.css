@@ -530,6 +530,12 @@ a:focus-visible {
     overflow-y: auto;
     flex: 1;
     min-height: 0;
+    scrollbar-width: none; /* Firefox: hide scrollbar */
+    -ms-overflow-style: none; /* IE/Edge legacy */
+}
+
+.toc-list::-webkit-scrollbar {
+    display: none; /* WebKit: hide scrollbar */
 }
 
 .toc-list li {
