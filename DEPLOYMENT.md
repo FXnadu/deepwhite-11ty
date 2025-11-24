@@ -1,10 +1,10 @@
 # 部署说明
 
-## 问题说明
+## 概述
 
-Pagefind 搜索功能需要在构建时生成索引文件。这些文件位于 `_site/pagefind/` 目录中，但 `_site/` 目录被 `.gitignore` 忽略，不会被提交到仓库。
+站点基于 Eleventy 构建，并在构建完成后通过自定义脚本写入 `_site/search-index.json`（供 `src/js/search.js` 使用）。`_site/` 目录由 `.gitignore` 忽略，因此部署时始终需要重新构建。
 
-**重要**：部署时必须运行构建命令，否则搜索框会消失。
+**重要**：部署时必须运行构建命令，否则搜索索引与静态资源都不会被生成。
 
 ## 构建命令
 
@@ -14,7 +14,7 @@ npm run build
 
 这个命令会：
 1. 运行 Eleventy 构建网站（`eleventy`）
-2. 运行 Pagefind 生成搜索索引（`npx pagefind --site _site`）
+2. 触发 `.eleventy.js` 中的 `eleventy.after` 钩子，写入 `_site/search-index.json`
 
 ## 不同部署平台的配置
 
@@ -63,10 +63,6 @@ npm run build
 
 ## 验证部署
 
-部署后，检查以下文件是否存在：
-- `/pagefind/pagefind-ui.css`
-- `/pagefind/pagefind-ui.js`
-- `/pagefind/pagefind.js`
-
-如果这些文件不存在，说明构建步骤没有正确执行。
-
+部署后建议确认以下文件存在，以确保静态资源正确输出：
+- `/.nojekyll`
+- `/search-index.json`

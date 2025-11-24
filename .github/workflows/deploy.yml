@@ -30,11 +30,9 @@ jobs:
           BASE_URL: /
         run: npm run build
 
-      - name: Verify Pagefind files
+      - name: Verify required site files
         run: |
-          echo "Checking Pagefind files..."
-          ls -la _site/pagefind/pagefind-ui.js || exit 1
-          ls -la _site/pagefind/pagefind-ui.css || exit 1
+          echo "Checking required site files..."
           ls -la _site/.nojekyll || exit 1
           echo "✓ All required files exist"
 
