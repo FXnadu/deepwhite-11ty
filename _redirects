@@ -1,0 +1,9 @@
+# Cloudflare Pages / Netlify 重定向规则
+# 保持静态资源直出，避免额外跳转
+/search-index.json 200
+/css/* 200
+/img/* 200
+/js/* 200
+/posts/* 200
+/about/* 200
+/archive/* 200
