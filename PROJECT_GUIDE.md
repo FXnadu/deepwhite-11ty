@@ -19,6 +19,17 @@
   - 仅保留 `@11ty/eleventy`, `gray-matter`, `luxon` 三个运行依赖。  
   - `start` = 热更新开发服务器，`build` = 纯静态导出。
 
+## 静态资源版本与缓存（Cursor 规则重点）
+
+- 站点通过 Cloudflare 等 CDN 对 `css` / `js` 采用了 `max-age=31536000, immutable` 的**强缓存策略**，同一 URL 的文件理论上会被缓存一年。  
+- 为了保证「本地预览效果」与「线上 deepwhite.me」始终一致，**凡是对下列文件做了会影响 UI 或交互的改动时，必须同步更新版本号**：  
+  - `src/css/style.css`、`src/css/archive.css`  
+  - `src/js/site.js`、`src/js/post-page.js`、`src/js/archive-page.js`、`src/js/search.js`  
+- 版本号管理集中在：`src/_data/assets.js` 中的 `ASSET_VERSION` 常量：  
+  - 修改 CSS / JS 且希望线上立即生效时：**把 `ASSET_VERSION` 改成一个新的字符串（例如日期加序号：`20251126-2`）**。  
+  - 该版本号会自动拼接到所有核心 CSS/JS 的 URL 上（`/css/style.css?v=...`），强制浏览器与 CDN 拉取最新资源。  
+- **Cursor 约定**：今后只要由 AI 修改上述 CSS/JS 文件，我会自动同步更新 `ASSET_VERSION`，无需你手动记忆这一步骤。  
+
 ## 目录结构说明
 
 | 路径 | 用途 |

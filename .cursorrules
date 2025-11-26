@@ -28,6 +28,19 @@
 - 任何第三方库引入前确认必要性；性能敏感页面（首页/归档/文章）优先使用原生 API。
 - 保持分页尺寸合理（目前首页 6 篇、归档 5 篇），如需调整先评估首屏渲染成本。
 
+### 静态资源版本与缓存（必须遵守的 Cursor 规则）
+- 站点通过 Cloudflare 等 CDN 对 `/css/*.css`、`/js/*.js` 使用了长期强缓存（`max-age=31536000, immutable`），**同一 URL 的文件会被浏览器/CDN 视为“一年不变”**。
+- 所有核心前端资源统一经由 `src/_data/assets.js` 暴露，其中 `ASSET_VERSION` 会自动附加到 URL 查询参数（例如 `/css/style.css?v=20251126-1`），用于强制刷新缓存。
+- **只要修改了以下任意文件且影响到 UI 或交互，AI 助手必须自动同步更新 `ASSET_VERSION`：**
+  - `src/css/style.css`
+  - `src/css/archive.css`
+  - `src/js/site.js`
+  - `src/js/post-page.js`
+  - `src/js/archive-page.js`
+  - `src/js/search.js`
+- 更新方式：将 `ASSET_VERSION` 改成一个新的、递增/基于日期的字符串（如：`20251126-2`），然后执行 `npm run build`，再由用户进行 `git push` / 部署。
+- 用户不需要手动记住这一步：**当用户说“改样式/交互/目录/复制按钮”等前端变更需求时，AI 助手要默认负责更新 `ASSET_VERSION` 并提醒构建部署。**
+
 ## 内容编写
 - 文章 front matter 至少包含 `title`, `date`, `layout: "post.njk"`, `tags: ['post']`；缺省 `excerpt` 时由 `.eleventy.js` 自动截取 200 字。
 - 图片放在 `src/img/`，引用相对路径 `/img/...`；其他静态文件走 `src/css` / `src/js`。
