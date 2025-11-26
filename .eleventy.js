@@ -45,6 +45,10 @@ module.exports = (eleventyConfig) => {
     return { cjkChars, latinWords };
   };
 
+  eleventyConfig.setServerOptions({
+    pathPrefix: process.env.BASE_URL || "/",
+  });
+
   eleventyConfig.addFilter("readingMinutes", (content = "", opts = {}) => {
     const plainText = toPlainText(stripHtmlTags(content));
     if (!plainText) return 1;

@@ -14,33 +14,71 @@ showFloatingActions: true
 <div id="search" class="archive-search"></div>
 </header>
 
-<div class="archive-container">
-    {%- set years = collections.postsByYear | dictsort | reverse -%}
+{%- set yearGroups = archiveYearGroups or [] -%}
 
+<div class="archive-container">
     <div class="year-navigator" id="yearNavigator">
         <div class="year-navigator-track">
-            {%- for year, posts in years -%}
+            {%- for year, posts in yearGroups -%}
             <a href="#year-{{ year }}" class="year-nav-item" data-year="{{ year }}">{{ year }}</a>
             {%- endfor -%}
         </div>
     </div>
-    
-    {%- for year, posts in years -%}
+
+    {%- if yearGroups | length -%}
+        {%- for year, posts in yearGroups -%}
         <div class="archive-year-group" id="year-{{ year }}">
             <h2 class="archive-year-title">{{ year }}</h2>
 
-    <ul class="archive-post-list">
-    {%- for post in posts -%}
-        <li class="archive-post-item">
-            <time class="archive-post-date" datetime="{{ post.date | isoDate }}">{{ post.date | readableDate('LL月dd日') }}</time>
-            <div class="archive-post-title">
-                <a href="{{ post.url }}">{{ post.data.title }}</a>
+            <ul class="archive-post-list">
+            {%- for post in posts -%}
+                <li class="archive-post-item">
+                    <time class="archive-post-date" datetime="{{ post.date | isoDate }}">{{ post.date | readableDate('LL月dd日') }}</time>
+                    <div class="archive-post-title">
+                        <a href="{{ post.url | url }}">{{ post.data.title }}</a>
+                    </div>
+                </li>
+            {%- endfor -%}
+            </ul>
+        </div>
+        {%- endfor -%}
+    {%- else -%}
+        <p>暂无归档内容。</p>
+    {%- endif -%}
+</div>
+
+{%- if pagination and pagination.hrefs and (pagination.hrefs | length) > 1 -%}
+<nav class="pagination-nav archive-pagination" aria-label="归档分页导航">
+    <div class="pagination-links">
+        {%- if pagination.href.previous -%}
+            <a class="pagination-link prev" href="{{ pagination.href.previous | url }}">上一页</a>
+        {%- else -%}
+            <span class="pagination-link is-disabled prev" aria-disabled="true">上一页</span>
+        {%- endif -%}
+
+        <div class="pagination-status" tabindex="0" role="button" aria-label="快速跳转">
+            <span class="pagination-status-text">第 {{ (pagination.pageNumber or 0) + 1 }} / {{ pagination.hrefs | length }} 页</span>
+            <div class="pagination-quickjump" role="dialog" aria-live="polite" aria-label="分页快速跳转">
+                <div class="pagination-quickjump-header">快速跳转</div>
+                <div class="pagination-numbers">
+                    {%- for href in pagination.hrefs -%}
+                        {%- set pageIndex = loop.index0 -%}
+                        {%- set pageLabel = pageIndex + 1 -%}
+                        {%- if pageIndex === pagination.pageNumber -%}
+                            <span class="pagination-number current" aria-current="page">{{ pageLabel }}</span>
+                        {%- else -%}
+                            <a class="pagination-number" href="{{ href | url }}">{{ pageLabel }}</a>
+                        {%- endif -%}
+                    {%- endfor -%}
+                </div>
             </div>
-        </li>
-    {%- endfor -%}
-    </ul>
-</div>
+        </div>
 
-{%- endfor -%}
-
-</div>
+        {%- if pagination.href.next -%}
+            <a class="pagination-link next" href="{{ pagination.href.next | url }}">下一页</a>
+        {%- else -%}
+            <span class="pagination-link is-disabled next" aria-disabled="true">下一页</span>
+        {%- endif -%}
+    </div>
+</nav>
+{%- endif -%}
