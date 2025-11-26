@@ -6,26 +6,26 @@
     {% set assetsConfig = assets or {} %}
     {% set pageTitle = title or metadata.title or '[DEEPWHITE]' %}
     <title>{{ pageTitle }} - [DEEPWHITE]</title>
-    <link rel="icon" href="/img/deepwhitelogo.png" type="image/png" sizes="192x192">
+    <link rel="icon" href="{{ '/img/deepwhitelogo.png' | url }}" type="image/png" sizes="192x192">
     {% if assetsConfig.criticalCssInline %}
     <style>{{ assetsConfig.criticalCssInline | safe }}</style>
     {% endif %}
     {% if assetsConfig.mainCssHref %}
-    <link rel="preload" href="{{ assetsConfig.mainCssHref }}" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="{{ assetsConfig.mainCssHref }}"></noscript>
+    <link rel="preload" href="{{ assetsConfig.mainCssHref | url }}" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{{ assetsConfig.mainCssHref | url }}"></noscript>
     {% endif %}
     {% for cssFile in extraCss | toArray %}
-    <link rel="stylesheet" href="{{ cssFile }}">
+    <link rel="stylesheet" href="{{ cssFile | url }}">
     {% endfor %}
 </head>
 <body data-show-floating="{{ (showFloatingActions | default(false)) and 'true' or 'false' }}">
     <div class="container">
         <header class="site-header">
-            <h1 class="site-title"><a href="/">Deepwhite</a></h1>
+            <h1 class="site-title"><a href="{{ '/' | url }}">Deepwhite</a></h1>
             <nav class="site-nav">
-                <a href="/">首页</a>
-                <a href="/archive/">归档</a> 
-                <a href="/about/">关于我</a>
+                <a href="{{ '/' | url }}">首页</a>
+                <a href="{{ '/archive/' | url }}">归档</a> 
+                <a href="{{ '/about/' | url }}">关于我</a>
             </nav>
         </header>
 
@@ -55,7 +55,7 @@
         {% set islandRegistry = assetsConfig.islands or {} %}
         {% set island = islandRegistry[islandName] %}
         {% if island %}
-<script {% if island.module %}type="module"{% endif %} src="{{ island.src }}" defer></script>
+<script {% if island.module %}type="module"{% endif %} src="{{ island.src | url }}" defer></script>
         {% endif %}
     {% endfor %}
 {% endif %}
