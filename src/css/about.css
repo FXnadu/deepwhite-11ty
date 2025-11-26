@@ -1,0 +1,229 @@
+/* --- 关于我页面独立样式 --- */
+
+/* 关于我页面中所有 br 标签高度设置为 0 */
+.about-page br {
+    height: 0;
+    line-height: 0;
+    display: none;
+}
+
+/* 页面头部 */
+.about-page-header {
+    margin-bottom: 30px;
+}
+
+/* 页面内容容器 */
+.about-page {
+    /* 轻微收紧正文块顶端的视觉高度 */
+    padding-top: 0.2em;
+}
+
+/* 介绍区域：头像 + 简介 */
+.about-intro {
+    display: flex;
+    align-items: flex-start;
+    gap: 30px;
+    margin-bottom: 3em;
+    font-size: 18px;
+    line-height: 1.8;
+}
+
+.about-avatar img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0;
+}
+
+.about-bio {
+    /* 像素完美对齐 */
+    transform: translateY(-5px);
+}
+
+.about-bio p {
+    margin-top: 0;
+}
+
+.about-bio p + p {
+    margin-top: 1em;
+}
+
+/* 哲学理念区域 */
+.about-philosophy {
+    margin-bottom: 2.2em;
+    padding: 1.2em 0;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+}
+
+.about-philosophy p {
+    margin: 0;
+    font-size: 18px;
+    line-height: 1.8;
+    color: var(--color-text-subtle);
+}
+
+/* 通用区块样式 */
+.about-section {
+    max-width: var(--measure-reading);
+    margin: 1.8em auto 0;
+}
+
+/* 相邻 about 区块之间增加更"呼吸感"的间距，并用轻微分隔线软分组 */
+.about-section + .about-section {
+    margin-top: 1.6em;
+    padding-top: 0.8em;
+    border-top: 1px solid var(--color-border);
+}
+
+.about-section-title {
+    /* 覆盖通用 page-content h2 的较大上边距，让模块内部节奏更紧凑 */
+    margin-top: 0;
+    margin-bottom: 0.7em;
+}
+
+/* 经验之谈区域 - 科学优雅的排版 */
+.about-section--experience {
+    margin-top: 1.8em;
+}
+
+.about-section--experience .about-section-title {
+    margin-bottom: 1em;
+    font-size: 1.55em;
+    font-weight: 600;
+    color: var(--color-text-strong);
+    letter-spacing: 0.02em;
+}
+
+.about-section--experience .about-section-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5em;
+}
+
+.about-section-list br {
+    height: 0;
+    line-height: 0;
+    display: none;
+}
+
+.about-section--experience .about-section-list li {
+    margin: 0;
+    padding: 0;
+    line-height: 1.8;
+    font-size: 17px;
+    color: var(--color-text);
+}
+
+/* 标题部分（strong 标签）的样式 - 采用更优雅的排版 */
+.about-section--experience .about-section-list li strong {
+    display: block;
+    font-weight: 600;
+    color: var(--color-text-strong);
+    margin-bottom: 0.4em;
+    font-size: 1.08em;
+    letter-spacing: 0.015em;
+    line-height: 1.4;
+}
+
+/* 联系区域 - 优雅可扩展的排版设计 */
+.about-section--contact .about-section-list {
+    margin-top: 0.2em;
+    margin-bottom: 0;
+}
+
+.contact-list {
+    list-style: none;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.9em;
+}
+
+.contact-list br {
+    height: 0;
+    line-height: 0;
+    display: none;
+}
+
+.contact-list li {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.8em;
+    line-height: 1.7;
+    font-size: 17px;
+}
+
+/* 联系方式标签样式 */
+.contact-list li strong {
+    flex-shrink: 0;
+    font-weight: 600;
+    color: var(--color-text-strong);
+    min-width: 5em;
+    letter-spacing: 0.01em;
+}
+
+/* 联系方式内容/链接样式 */
+.contact-list li a,
+.contact-list li > :not(strong) {
+    color: var(--color-text);
+    flex: 1;
+    word-break: break-word;
+}
+
+.contact-list li a:hover {
+    color: var(--color-text-strong);
+}
+
+/* 响应式设计 */
+@media (max-width: 600px) {
+    .about-intro {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .about-bio {
+        transform: translateY(0); /* 取消微调 */
+    }
+
+    .about-section {
+        margin-top: 2em;
+    }
+
+    .about-section + .about-section {
+        margin-top: 1.4em;
+        padding-top: 0.7em;
+    }
+
+    .about-section--experience .about-section-list {
+        gap: 1.3em;
+    }
+
+    .about-section--experience .about-section-list li {
+        font-size: 16px;
+    }
+
+    /* 移动端联系方式排版调整 */
+    .contact-list {
+        gap: 0.7em;
+    }
+
+    .contact-list li {
+        flex-direction: column;
+        gap: 0.3em;
+        font-size: 16px;
+    }
+
+    .contact-list li strong {
+        min-width: auto;
+        font-size: 0.95em;
+    }
+}
+

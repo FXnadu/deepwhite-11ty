@@ -3,6 +3,7 @@ module.exports = {
   title: "关于我",
   permalink: "/about/",
   islands: ["site"],
+  extraCss: ["/css/about.css"],
 };
 
 
