@@ -314,6 +314,40 @@ a:focus-visible {
     transform: translateX(-50%) translateY(0);
 }
 
+/* --- 6.1 分页导航：移动端优化 --- */
+@media (max-width: 640px) {
+    .pagination-nav {
+        margin-top: 40px;
+        margin-bottom: 10px;
+    }
+
+    .pagination-links {
+        flex-wrap: wrap;
+        row-gap: 8px;
+        column-gap: 10px;
+        padding: 10px 12px;
+        border-radius: 18px;
+    }
+
+    .pagination-link {
+        padding: 6px 10px;
+        font-size: 0.8em;
+        letter-spacing: 0.06em;
+    }
+
+    .pagination-status {
+        flex-basis: 100%;
+        order: 3;
+        padding: 6px 12px;
+        font-size: 0.75em;
+    }
+
+    .pagination-quickjump {
+        min-width: 180px;
+        max-width: calc(100vw - 40px);
+    }
+}
+
 .pagination-quickjump-header {
     font-size: 0.7em;
     letter-spacing: 0.2em;
@@ -1163,8 +1197,8 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251126-3" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251126-3"></noscript>
+    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251126-4" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251126-4"></noscript>
     
     
 </head>
@@ -1252,13 +1286,13 @@ pre[class*="language-"] {
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251126-3" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251126-4" defer></script>
         
     
         
         
         
-<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251126-3" defer></script>
+<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251126-4" defer></script>
         
     
 
