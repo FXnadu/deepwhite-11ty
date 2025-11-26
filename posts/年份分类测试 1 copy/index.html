@@ -218,26 +218,6 @@ a:focus-visible {
     pointer-events: none;
 }
 
-.pagination-link.prev::before,
-.pagination-link.next::after {
-    content: '';
-    display: inline-block;
-    width: 18px;
-    height: 10px;
-    background-repeat: no-repeat;
-    background-size: contain;
-    opacity: 0.55;
-    margin: 0 6px;
-}
-
-.pagination-link.prev::before {
-    background-image: url("data:image/svg+xml,%3Csvg width='18' height='10' viewBox='0 0 18 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M5 1L1 5l4 4M1 5h16' stroke='%23333333' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
-.pagination-link.next::after {
-    background-image: url("data:image/svg+xml,%3Csvg width='18' height='10' viewBox='0 0 18 10' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M13 1l4 4-4 4M17 5H1' stroke='%23333333' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-}
-
 .pagination-status {
     position: relative;
     display: inline-flex;
@@ -317,29 +297,31 @@ a:focus-visible {
 /* --- 6.1 分页导航：移动端优化 --- */
 @media (max-width: 640px) {
     .pagination-nav {
-        margin-top: 40px;
-        margin-bottom: 10px;
+        margin-top: 32px;
+        margin-bottom: 16px;
     }
 
     .pagination-links {
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
+        flex-direction: column;
+        align-items: stretch;
         row-gap: 8px;
-        column-gap: 10px;
-        padding: 10px 12px;
-        border-radius: 18px;
+        padding: 10px 14px;
+        border-radius: 14px;
     }
 
     .pagination-link {
-        padding: 6px 10px;
-        font-size: 0.8em;
+        width: 100%;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 0.85em;
         letter-spacing: 0.06em;
     }
 
     .pagination-status {
-        flex-basis: 100%;
-        order: 3;
-        padding: 6px 12px;
-        font-size: 0.75em;
+        order: -1;
+        padding: 4px 4px 8px;
+        font-size: 0.8em;
     }
 
     .pagination-quickjump {
@@ -1197,8 +1179,8 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251126-4" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251126-4"></noscript>
+    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251126-6" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251126-6"></noscript>
     
     
 </head>
@@ -1274,13 +1256,13 @@ pre[class*="language-"] {
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251126-4" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251126-6" defer></script>
         
     
         
         
         
-<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251126-4" defer></script>
+<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251126-6" defer></script>
         
     
 
