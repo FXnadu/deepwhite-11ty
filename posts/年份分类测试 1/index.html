@@ -211,6 +211,13 @@ a:focus-visible {
     outline: none;
 }
 
+.pagination-link.is-disabled {
+    opacity: 0.45;
+    color: var(--color-meta);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .pagination-link.prev::before,
 .pagination-link.next::after {
     content: '';

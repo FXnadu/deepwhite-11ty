@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     
-    <title>一篇来自去年的文章 - [DEEPWHITE]</title>
+    <title>md测试 - [DEEPWHITE]</title>
     <link rel="icon" href="/deepwhite-11ty/img/deepwhitelogo.png" type="image/png" sizes="192x192">
     
     <style>/* --- 1. 设计系统：CSS 变量 --- */
@@ -1183,21 +1183,258 @@ pre[class*="language-"] {
             <article class="post">
     <header class="post-full-header">
     
-        <h1 class="post-full-title">一篇来自去年的文章</h1>
+        <h1 class="post-full-title">md测试</h1>
 
         
         <p class="post-full-meta">
-            发布于 2027年12月20日
+            发布于 2023年12月20日
             ·
             
-                约 1 分钟
+                约 2 分钟
             
         </p>
     </header>
 
     <section class="post-content">
-        <p>这是文章的正文。我们用它来验证2024年的分组是否能正确显示在归档页面上。</p>
+        <h1>0 标题级别测试</h1>
+<h1>一级标题 H1</h1>
+<h2>二级标题 H2</h2>
+<h3>三级标题 H3</h3>
+<h4>四级标题 H4</h4>
+<h5>五级标题 H5</h5>
+<h6>六级标题 H6</h6>
 <hr>
+<h2>1 段落与换行</h2>
+<p>这是一段普通的段落。<br>
+行尾加两个空格即可硬换行（<br>）。</p>
+<p>下面是一个空行分隔的新段落。</p>
+<hr>
+<h2>2 强调</h2>
+<p><em>斜体星号</em><br>
+<em>斜体下划线</em><br>
+<strong>加粗星号</strong><br>
+<strong>加粗下划线</strong><br>
+<em><strong>加粗斜体星号</strong></em><br>
+<s>删除线</s><br>
+<kbd>Ctrl</kbd> + <kbd>C</kbd> 复制</p>
+<hr>
+<h2>3 列表</h2>
+<h3>3.1 无序列表</h3>
+<ul>
+<li>苹果</li>
+<li>香蕉
+<ul>
+<li>青香蕉</li>
+<li>熟香蕉</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li>星号列表</li>
+</ul>
+<ul>
+<li>加号列表</li>
+</ul>
+<h3>3.2 有序列表</h3>
+<ol>
+<li>第一步</li>
+<li>第二步
+<ol>
+<li>子步骤 A</li>
+<li>子步骤 B</li>
+</ol>
+</li>
+<li>第三步</li>
+</ol>
+<h3>3.3 任务列表</h3>
+<ul>
+<li>[x] 已完成任务</li>
+<li>[ ] 未完成任务</li>
+<li>[ ] 另一个待办</li>
+</ul>
+<hr>
+<h2>4 链接与图片</h2>
+<h3>4.1 行内式</h3>
+<p><a href="https://www.baidu.com" title="百度首页">百度一下</a></p>
+<h3>4.2 引用式</h3>
+<p>[Google][google]<br>
+[google]: <a href="https://www.google.com">https://www.google.com</a> &quot;谷歌&quot;</p>
+<h3>4.3 图片</h3>
+<p><img src="https://via.placeholder.com/400x200" alt="占位图" title="占位图标题"></p>
+<hr>
+<h2>5 代码</h2>
+<h3>5.1 行内代码</h3>
+<p>调用 <code>printf(&quot;Hello\n&quot;);</code> 即可打印。</p>
+<h3>5.2 围栏代码块（带语言）</h3>
+<pre class="language-js" tabindex="0"><code class="language-js"><span class="token comment">// JavaScript</span>
+<span class="token keyword">const</span> <span class="token function-variable function">add</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token parameter">a<span class="token punctuation">,</span> b</span><span class="token punctuation">)</span> <span class="token operator">=></span> a <span class="token operator">+</span> b<span class="token punctuation">;</span>
+console<span class="token punctuation">.</span><span class="token function">log</span><span class="token punctuation">(</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class="language-cpp" tabindex="0"><code class="language-cpp"><span class="token comment">// C++</span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;iostream></span></span>
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    std<span class="token double-colon punctuation">::</span>cout <span class="token operator">&lt;&lt;</span> <span class="token string">"Hello Markdown\n"</span><span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<h3>5.3 diff 高亮</h3>
+<pre class="language-diff" tabindex="0"><code class="language-diff"><span class="token deleted-sign deleted"><span class="token prefix deleted">-</span> 删除行
+</span><span class="token inserted-sign inserted"><span class="token prefix inserted">+</span> 新增行
+</span><span class="token unchanged"><span class="token prefix unchanged"> </span> 上下文
+</span></code></pre>
+<hr>
+<h2>6 表格</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">左对齐</th>
+<th style="text-align:center">居中</th>
+<th style="text-align:right">右对齐</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">苹果</td>
+<td style="text-align:center">2</td>
+<td style="text-align:right">￥12</td>
+</tr>
+<tr>
+<td style="text-align:left">香蕉</td>
+<td style="text-align:center">3</td>
+<td style="text-align:right">￥15</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>7 脚注</h2>
+<p>这里有个脚注<a href="%E6%88%91%E6%98%AF%E8%84%9A%E6%B3%A8%E5%86%85%E5%AE%B9%EF%BC%8C%E5%8F%AF%E6%94%BE%E9%93%BE%E6%8E%A5%E6%88%96%E8%AF%B4%E6%98%8E%E3%80%82">^note</a>。</p>
+<hr>
+<h2>8 缩写</h2>
+<p>HTML 是一种标记语言。<br>
+*[HTML]: HyperText Markup Language</p>
+<hr>
+<h2>9 定义列表</h2>
+<p>术语 1<br>
+:   定义 A</p>
+<p>术语 2<br>
+:   定义 B</p>
+<hr>
+<h2>10 上下标</h2>
+<p>H~2~O 是水<br>
+x^2^ + y^2^ = z^2^</p>
+<hr>
+<h2>11 标记与高亮</h2>
+<p><mark>高亮文本</mark><br>
+++插入文本++<br>
+<s>删除文本</s></p>
+<hr>
+<h2>12 自动链接</h2>
+<p><a href="https://github.com">https://github.com</a><br>
+<a href="mailto:user@example.com">user@example.com</a></p>
+<hr>
+<h2>13 锚点跳转</h2>
+<p><a href="#0-%E6%A0%87%E9%A2%98%E7%BA%A7%E5%88%AB%E6%B5%8B%E8%AF%95">回到顶部</a></p>
+<hr>
+<h2>14 Emoji</h2>
+<p>:smile: :heart: :rocket:</p>
+<hr>
+<h2>15 数学公式（需 MathJax/KaTeX）</h2>
+<p>行内 $a^2+b^2=c^2$<br>
+块级：</p>
+<p>$$<br>
+\int_{-\infty}^{\infty} e^{-x^2},dx = \sqrt{\pi}<br>
+$$</p>
+<hr>
+<h2>16 Mermaid 图（需插件）</h2>
+<pre class="language-mermaid" tabindex="0"><code class="language-mermaid"><span class="token keyword">graph</span> TD
+    A<span class="token text string">[开始]</span> <span class="token arrow operator">--></span> B<span class="token text string">{条件}</span>
+    B <span class="token arrow operator">--></span><span class="token label property">|真|</span> C<span class="token text string">[执行]</span>
+    B <span class="token arrow operator">--></span><span class="token label property">|假|</span> D<span class="token text string">[结束]</span></code></pre>
+<hr>
+<h2>17 折叠详情</h2>
+<details>
+<summary>点我展开</summary>
+<p>这里可以嵌套任意块级元素，如：</p>
+<ul>
+<li>列表项</li>
+<li>代码块</li>
+<li>表格</li>
+</ul>
+</details>
+<hr>
+<h2>18 警告/提示（GitHub 风格）</h2>
+<blockquote>
+<p><strong>Note</strong><br>
+这是一条提示。</p>
+</blockquote>
+<blockquote>
+<p><strong>Warning</strong><br>
+这是一条警告。</p>
+</blockquote>
+<hr>
+<h2>19 注释（不可见）</h2>
+<hr>
+<h2>20 换页（打印友好）</h2>
+<div style="page-break-after: always;"></div>
+<hr>
+<h2>21 嵌入 HTML</h2>
+<p style="color: #0366d6;">可直接写原始 HTML，Markdown 不会干预。</p>
+<hr>
+<h2>22 视频</h2>
+<video controls width="100%">
+  <source src="movie.mp4" type="video/mp4">
+  您的浏览器不支持 video 标签。
+</video>
+<hr>
+<h2>23 音频</h2>
+<audio controls>
+  <source src="sound.ogg" type="audio/ogg">
+  您的浏览器不支持 audio 标签。
+</audio>
+<hr>
+<h2>24 容器 &amp; 样式（借助 HTML）</h2>
+<div class="grid cards" markdown>
+<ul>
+<li>卡片 1</li>
+<li>卡片 2</li>
+<li>卡片 3</li>
+</ul>
+</div>
+<hr>
+<h2>25 零宽空格（排版辅助）</h2>
+<p>中文与英文之间插入 <code>&amp;#8203;</code> 可让渲染引擎更易断行。</p>
+<hr>
+<h2>26 混合示例：一段可直接用的 README 片段</h2>
+<pre class="language-markdown" tabindex="0"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> 项目名</span>
+
+<span class="token url"><span class="token operator">!</span>[<span class="token content">CI</span>](<span class="token url">https://github.com/yourname/repo/workflows/CI/badge.svg</span>)</span>
+<span class="token url">[<span class="token content">![License: MIT</span>](<span class="token url">https://img.shields.io/badge/License-MIT-yellow.svg</span>)</span>](LICENSE)
+
+<span class="token blockquote punctuation">></span> <span class="token bold"><span class="token punctuation">**</span><span class="token content">Note</span><span class="token punctuation">**</span></span>  
+<span class="token blockquote punctuation">></span> 要求 Node.js ≥ 18
+
+<span class="token title important"><span class="token punctuation">##</span> 安装</span>
+```bash
+npm i</code></pre>
+<h2>特性</h2>
+<ul>
+<li>[X]  极速构建</li>
+<li>[ ]  插件市场</li>
+</ul>
+<h2>截图</h2>
+<p><img src="./docs/preview.png" alt="预览"></p>
+<h2>许可证</h2>
+<p><a href="./LICENSE">MIT</a> © 2024 Your Name</p>
+<pre><code>
+---
+
+## 27 特殊符号与转义
+\*不是斜体\*  
+\`不是代码\`  
+\\&lt;br\\&gt; 不会被解析为换行
+
+---
+
+以上 **27 大类**语法已覆盖 Markdown（GFM + 常用扩展）的几乎全部要素，可直接复制到本地文件 `all-in-one.md` 进行渲染测试。祝调试顺利！
+
+</code></pre>
 
     </section>
 </article>

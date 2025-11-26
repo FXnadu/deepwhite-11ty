@@ -211,6 +211,13 @@ a:focus-visible {
     outline: none;
 }
 
+.pagination-link.is-disabled {
+    opacity: 0.45;
+    color: var(--color-meta);
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
 .pagination-link.prev::before,
 .pagination-link.next::after {
     content: '';
@@ -1180,123 +1187,64 @@ pre[class*="language-"] {
     <h1 class="page-title">文章归档</h1>
 
 <div id="search" class="archive-search"></div>
-</header>
-
-<div class="archive-container"><div class="year-navigator" id="yearNavigator">
-        <div class="year-navigator-track"><a href="#year-2045" class="year-nav-item" data-year="2045">2045</a><a href="#year-2027" class="year-nav-item" data-year="2027">2027</a><a href="#year-2025" class="year-nav-item" data-year="2025">2025</a><a href="#year-2024" class="year-nav-item" data-year="2024">2024</a><a href="#year-2023" class="year-nav-item" data-year="2023">2023</a><a href="#year-2022" class="year-nav-item" data-year="2022">2022</a><a href="#year-2020" class="year-nav-item" data-year="2020">2020</a><a href="#year-2019" class="year-nav-item" data-year="2019">2019</a><a href="#year-2018" class="year-nav-item" data-year="2018">2018</a></div>
-    </div><div class="archive-year-group" id="year-2045">
-            <h2 class="archive-year-title">2045</h2>
-
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2045-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy 7/">一篇来自去年的文章</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2027">
-            <h2 class="archive-year-title">2027</h2>
-
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2027-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy 6/">一篇来自去年的文章</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2025">
-            <h2 class="archive-year-title">2025</h2>
-
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2025-11-25">11月25日</time>
-            <div class="archive-post-title">
-                <a href="/posts/typography-lab/">Typography Lab 排版示例</a>
-            </div>
-        </li><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2025-11-22">11月22日</time>
-            <div class="archive-post-title">
-                <a href="/posts/拒绝成为“数字佃农”/">好软件值得付费，但我拒绝成为“数字佃农”</a>
-            </div>
-        </li><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2025-11-13">11月13日</time>
-            <div class="archive-post-title">
-                <a href="/posts/保持健康/">改善湿热体质</a>
-            </div>
-        </li><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2025-11-05">11月05日</time>
-            <div class="archive-post-title">
-                <a href="/posts/测试/">RPC failed; curl 28 Failed to connect to github.com port 443 after 75006 ms: </a>
-            </div>
-        </li><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2025-11-05">11月05日</time>
-            <div class="archive-post-title">
-                <a href="/posts/my-first-post/">少即是多：简约设计的力量</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2024">
-            <h2 class="archive-year-title">2024</h2>
-
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2024-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/second-post/">一篇来自去年的文章</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2023">
-            <h2 class="archive-year-title">2023</h2>
-
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2023-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1/">一篇来自去年的文章</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2022">
+</header><div class="archive-container">
+    <div class="year-navigator" id="yearNavigator">
+        <div class="year-navigator-track"><a href="#year-2022" class="year-nav-item" data-year="2022">2022</a><a href="#year-2020" class="year-nav-item" data-year="2020">2020</a><a href="#year-2019" class="year-nav-item" data-year="2019">2019</a><a href="#year-2018" class="year-nav-item" data-year="2018">2018</a></div>
+    </div><div class="archive-year-group" id="year-2022">
             <h2 class="archive-year-title">2022</h2>
 
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2022-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy/">一篇来自去年的文章</a>
-            </div>
-        </li><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2022-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy 8/">一篇来自去年的文章1</a>
-            </div>
-        </li><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2022-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy 2/">分页测试</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2020">
+            <ul class="archive-post-list"><li class="archive-post-item">
+                    <time class="archive-post-date" datetime="2022-12-20">12月20日</time>
+                    <div class="archive-post-title">
+                        <a href="/deepwhite-11ty/posts/年份分类测试 1 copy/">一篇来自去年的文章</a>
+                    </div>
+                </li><li class="archive-post-item">
+                    <time class="archive-post-date" datetime="2022-12-20">12月20日</time>
+                    <div class="archive-post-title">
+                        <a href="/deepwhite-11ty/posts/年份分类测试 1 copy 8/">一篇来自去年的文章1</a>
+                    </div>
+                </li><li class="archive-post-item">
+                    <time class="archive-post-date" datetime="2022-12-20">12月20日</time>
+                    <div class="archive-post-title">
+                        <a href="/deepwhite-11ty/posts/年份分类测试 1 copy 2/">分页测试</a>
+                    </div>
+                </li></ul>
+        </div><div class="archive-year-group" id="year-2020">
             <h2 class="archive-year-title">2020</h2>
 
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2020-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy 3/">一篇来自去年的文章 112</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2019">
+            <ul class="archive-post-list"><li class="archive-post-item">
+                    <time class="archive-post-date" datetime="2020-12-20">12月20日</time>
+                    <div class="archive-post-title">
+                        <a href="/deepwhite-11ty/posts/年份分类测试 1 copy 3/">一篇来自去年的文章 112</a>
+                    </div>
+                </li></ul>
+        </div><div class="archive-year-group" id="year-2019">
             <h2 class="archive-year-title">2019</h2>
 
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2019-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy 4/">一篇来自去年的文章</a>
-            </div>
-        </li></ul>
-</div><div class="archive-year-group" id="year-2018">
+            <ul class="archive-post-list"><li class="archive-post-item">
+                    <time class="archive-post-date" datetime="2019-12-20">12月20日</time>
+                    <div class="archive-post-title">
+                        <a href="/deepwhite-11ty/posts/年份分类测试 1 copy 4/">一篇来自去年的文章</a>
+                    </div>
+                </li></ul>
+        </div><div class="archive-year-group" id="year-2018">
             <h2 class="archive-year-title">2018</h2>
 
-    <ul class="archive-post-list"><li class="archive-post-item">
-            <time class="archive-post-date" datetime="2018-12-20">12月20日</time>
-            <div class="archive-post-title">
-                <a href="/posts/年份分类测试 1 copy 5/">一篇来自去年的文章</a>
+            <ul class="archive-post-list"><li class="archive-post-item">
+                    <time class="archive-post-date" datetime="2018-12-20">12月20日</time>
+                    <div class="archive-post-title">
+                        <a href="/deepwhite-11ty/posts/年份分类测试 1 copy 5/">一篇来自去年的文章</a>
+                    </div>
+                </li></ul>
+        </div></div><nav class="pagination-nav archive-pagination" aria-label="归档分页导航">
+    <div class="pagination-links"><a class="pagination-link prev" href="/deepwhite-11ty/archive/">上一页</a><div class="pagination-status" tabindex="0" role="button" aria-label="快速跳转">
+            <span class="pagination-status-text">第 2 / 2 页</span>
+            <div class="pagination-quickjump" role="dialog" aria-live="polite" aria-label="分页快速跳转">
+                <div class="pagination-quickjump-header">快速跳转</div>
+                <div class="pagination-numbers"><a class="pagination-number" href="/deepwhite-11ty/archive/">1</a><span class="pagination-number current" aria-current="page">2</span></div>
             </div>
-        </li></ul>
-</div></div>
-
+        </div><span class="pagination-link is-disabled next" aria-disabled="true">下一页</span></div>
+</nav>
         </main>
 
         <footer class="site-footer">
