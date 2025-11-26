@@ -1,4 +1,14 @@
-/* --- 1. 设计系统：CSS 变量 --- */
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    
+    <title>Typography Lab 排版示例 - [DEEPWHITE]</title>
+    <link rel="icon" href="/img/deepwhitelogo.png" type="image/png" sizes="192x192">
+    
+    <style>/* --- 1. 设计系统：CSS 变量 --- */
 :root {
     --color-background: #ffffff;
     --color-text: #333333;
@@ -1143,3 +1153,161 @@ pre[class*="language-"] {
     }
 }
 
+</style>
+    
+    
+    <link rel="preload" href="/css/style.css" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/css/style.css"></noscript>
+    
+    
+</head>
+<body data-show-floating="true">
+    <div class="container">
+        <header class="site-header">
+            <h1 class="site-title"><a href="/">Deepwhite</a></h1>
+            <nav class="site-nav">
+                <a href="/">首页</a>
+                <a href="/archive/">归档</a> 
+                <a href="/about/">关于我</a>
+            </nav>
+        </header>
+
+        <main>
+            <article class="post">
+    <header class="post-full-header">
+    
+        <h1 class="post-full-title">Typography Lab 排版示例</h1>
+
+        
+        <p class="post-full-meta">
+            发布于 2025年11月25日
+            ·
+            
+                约 1 分钟
+            
+        </p>
+    </header>
+
+    <section class="post-content">
+        <blockquote>
+<p>这是一段“引言”式的开场，用来感受新的字距与行距设定。刻意保持 2-3 行，可以直观比较段落灰度。</p>
+</blockquote>
+<h2>中英混排 / Bilingual Sample</h2>
+<p>在中文段落中穿插英文句子时，<code>inline code</code> 与 <strong>强调</strong> 应该视觉上克制而清晰。<br>
+<span lang="en">Precision is kindness, and typography is the most patient craft.</span></p>
+<h3>更细一级的小标题</h3>
+<p>字级与分隔线保持节制，避免出现过于厚重的装饰。有时可以像这样使用 <code>mark</code> 来突出关键词：<mark>排版即逻辑</mark>。</p>
+<h4>H4 适合放置分组标签</h4>
+<p>H4 被全大写和更紧凑的字间距处理，可用来标识不同模块。</p>
+<h2>列表与混排</h2>
+<ul>
+<li>极简不是减少内容，而是减少噪音。</li>
+<li>早晚各读 20 分钟，观察眼睛对字距变化的适应性。</li>
+<li>使用 <kbd>⌘</kbd> + <kbd>K</kbd> 呼出命令面板，确保快捷键说明易读。</li>
+</ul>
+<ol>
+<li>Ordered 列表用于流程描述。</li>
+<li>第二步可以混合 <code>code</code>、链接与 <span lang="en">English cue</span>。</li>
+<li>第三步验证数字序号与段落间距。</li>
+</ol>
+<blockquote>
+<p>“排版的意义在于让阅读这件事发生得更轻松。” —— 田英章</p>
+</blockquote>
+<h2>代码示例</h2>
+<p>内联代码 <code>const measure = &quot;68ch&quot;;</code> 应与正文对齐，而多行代码块需要更清晰的背景与边界。</p>
+<pre class="language-js" tabindex="0"><code class="language-js"><span class="token keyword">const</span> measure <span class="token operator">=</span> <span class="token string">"68ch"</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> zhLeading <span class="token operator">=</span> <span class="token number">1.65</span><span class="token punctuation">;</span>
+<span class="token keyword">const</span> latinLeading <span class="token operator">=</span> <span class="token number">1.7</span><span class="token punctuation">;</span>
+
+<span class="token keyword">function</span> <span class="token function">applyRhythm</span><span class="token punctuation">(</span><span class="token parameter">language</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+  <span class="token keyword">return</span> language <span class="token operator">===</span> <span class="token string">"zh"</span> <span class="token operator">?</span> zhLeading <span class="token operator">:</span> latinLeading<span class="token punctuation">;</span>
+<span class="token punctuation">}</span></code></pre>
+<pre class="language-bash" tabindex="0"><code class="language-bash"><span class="token function">npm</span> run build</code></pre>
+<h2>表格</h2>
+<table>
+<thead>
+<tr>
+<th>Pattern</th>
+<th>Purpose</th>
+<th>Notes</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>68ch measure</td>
+<td>控制阅读宽度</td>
+<td>与容器宽度互补</td>
+</tr>
+<tr>
+<td>1.65 line-height</td>
+<td>中文舒适节奏</td>
+<td>英文可略高</td>
+</tr>
+<tr>
+<td>Monospace unifying</td>
+<td>代码与系统提示一致性</td>
+<td><code>JetBrains Mono</code> 首选</td>
+</tr>
+</tbody>
+</table>
+<h2>额外元素</h2>
+<p><code>&lt;kbd&gt;</code>、<code>&lt;mark&gt;</code>、<code>&lt;code&gt;</code> 等元素已经统一处理，也可以使用分隔线来断开大段内容：</p>
+<hr>
+<p>术语列表示例：</p>
+<p>Typography<br>
+: 研究字形、字号、字距的艺术与科学。</p>
+<p>Micro-typography<br>
+: 关注连字、标点悬挂、对齐精度等细节的领域。</p>
+
+    </section>
+</article>
+
+<nav class="post-toc-floating hidden" id="post-toc" aria-label="文章目录">
+    <div class="toc-header">
+        <div class="toc-title">目录</div>
+    </div>
+    <ul class="toc-list" id="toc-list"></ul>
+</nav>
+<button class="toc-toggle-btn toc-toggle-btn-floating" id="toc-toggle-btn-floating" aria-label="显示目录" title="显示目录">
+    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <line x1="3" y1="12" x2="21" y2="12"></line>
+        <line x1="3" y1="6" x2="21" y2="6"></line>
+        <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+</button>
+
+        </main>
+
+        <footer class="site-footer">
+            <p>&copy; 2025 [DEEPWHITE]. <br>少即是多，简约永恒。</p>
+        </footer>
+    </div>
+
+        
+        <div class="floating-actions" id="floating-actions">
+            <a href="javascript:history.back()" class="action-btn" aria-label="返回上一页">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
+            </a>
+            <a href="#" class="action-btn" id="action-btn-top" aria-label="返回顶部">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="19 12 12 5 5 12"></polyline></svg>
+            </a>
+        </div>
+        
+</body>
+
+
+    
+        
+        
+        
+<script type="module" src="/js/site.js" defer></script>
+        
+    
+        
+        
+        
+<script type="module" src="/js/post-page.js" defer></script>
+        
+    
+
+</html>
