@@ -514,6 +514,12 @@ a:focus-visible {
     letter-spacing: 0.15em;
     color: var(--color-text-subtle);
 }
+
+/* 页面级副标题（如“经验之谈”、“与我联系”）收紧上下间距，约等于 1.5 行正文高，避免段落之间出现过大的空白。 */
+.page-content h2 {
+    margin-top: 1.5em;
+    margin-bottom: 0.7em;
+}
 .post-content blockquote, .page-content blockquote {
     margin: 2.4em auto;
     padding: 1.2em 1.5em;
@@ -526,20 +532,20 @@ a:focus-visible {
 .page-content blockquote p {
     margin: 0.6em 0;
 }
-.post-content hr,
-.page-content hr {
-    border: none;
-    border-top: 1px solid var(--color-border);
-    margin: 3em auto;
-    width: 80%;
-}
-.post-content ul,
-.page-content ul,
-.post-content ol,
-.page-content ol {
-    padding-left: 1.4em;
-    margin: 1.4em 0;
-}
+ .post-content hr,
+ .page-content hr {
+     border: none;
+     border-top: 1px solid var(--color-border);
+     margin: 3em auto;
+     width: 80%;
+ }
+ .post-content ul,
+ .page-content ul,
+ .post-content ol,
+ .page-content ol {
+     padding-left: 1.4em;
+     margin: 1em 0;
+ }
 .post-content li,
 .page-content li {
     margin: 0.4em 0;
@@ -807,47 +813,6 @@ pre[class*="language-"] {
     margin-top: 0.8em;
 }
 
-/* --- 9. “关于我”页面专属布局 --- */
-.about-intro {
-    display: flex;
-    align-items: flex-start;
-    gap: 30px;
-    margin-bottom: 3em;
-    font-size: 18px;
-    line-height: 1.8;
-}
-.about-avatar img {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-}
-.about-bio {
-    /* 像素完美对齐 */
-    transform: translateY(-5px); 
-}
-.about-bio p {
-    margin-top: 0;
-}
-.about-philosophy {
-    margin-bottom: 3em;
-    padding: 1.5em 0;
-    border-top: 1px solid var(--color-border);
-    border-bottom: 1px solid var(--color-border);
-}
-.about-philosophy p {
-    margin: 0;
-    font-size: 18px;
-    line-height: 1.8;
-    color: var(--color-text-subtle);
-}
-.contact-list {
-    list-style: none;
-    padding-left: 0;
-}
-.contact-list li {
-    margin-bottom: 0.8em;
-}
 
 /* --- 10. 文章导航 --- */
 .post-nav {
@@ -1165,22 +1130,13 @@ pre[class*="language-"] {
 
     .post-full-title, .page-title { font-size: 30px; }
     .post-content, .page-content { font-size: 17px; }
-
-    .about-intro {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-    }
-    .about-bio {
-        transform: translateY(0); /* 取消微调 */
-    }
 }
 
 </style>
     
     
-    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251126-6" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251126-6"></noscript>
+    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251126-11" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251126-11"></noscript>
     
     
     <link rel="stylesheet" href="/deepwhite-11ty/css/archive.css">
@@ -1285,13 +1241,13 @@ pre[class*="language-"] {
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251126-6" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251126-11" defer></script>
         
     
         
         
         
-<script type="module" src="/deepwhite-11ty/js/archive-page.js?v=20251126-6" defer></script>
+<script type="module" src="/deepwhite-11ty/js/archive-page.js?v=20251126-11" defer></script>
         
     
         
