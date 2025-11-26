@@ -145,6 +145,8 @@ module.exports = (eleventyConfig) => {
 
   eleventyConfig.on("eleventy.after", async () => {
     const outputDir = path.join(__dirname, "_site");
+
+    // 1. 写出搜索索引（供前端搜索使用）
     const searchIndex = postsData.map((post) => ({
       title: post.title,
       url: post.url,
@@ -154,6 +156,17 @@ module.exports = (eleventyConfig) => {
     }));
     const indexPath = path.join(outputDir, "search-index.json");
     fs.writeFileSync(indexPath, JSON.stringify(searchIndex, null, 2), "utf8");
+
+    // 2. 构建后自检：确保搜索相关静态资源存在，防止部署后才发现搜索缺失
+    const searchJsPath = path.join(outputDir, "js", "search.js");
+    if (!fs.existsSync(searchJsPath)) {
+      // 使用 console.warn，而不是抛错中断构建，避免意外阻塞部署；
+      // 但在本地构建日志中能明显看到提示。
+      // eslint-disable-next-line no-console
+      console.warn(
+        "[deepwhite-11ty] Warning: _site/js/search.js 不存在，归档搜索将无法工作，请检查 src/js/search.js 与静态资源复制配置。"
+      );
+    }
   });
 
   eleventyConfig.addWatchTarget("./src/css/");

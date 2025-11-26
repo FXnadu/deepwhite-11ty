@@ -61,5 +61,70 @@
 2. 将 `_site/` 上传到任意静态空间。  
 3. 若有子路径部署需求，构建前设置 `BASE_URL=/your-sub-path/`。  
 4. Cloudflare / Netlify / GitHub Pages / 自建 Apache 均可直接复用 `src` 目录下已准备好的配置文件。
+ 
+## 无需 AI 也能安全维护的操作流程（强烈建议）
 
+### 日常改动流程（样式 / 交互 / 文章）
 
+1. **在 `src/` 修改文件**  
+   - 文章：修改 `src/content/posts/*.md`。  
+   - 页面结构：修改 `src/content/pages/**`。  
+   - 布局：修改 `src/_includes/layouts/*.njk`。  
+   - 样式：修改 `src/css/style.css`、`src/css/archive.css`。  
+   - 前端脚本：修改 `src/js/site.js`、`src/js/post-page.js`、`src/js/archive-page.js`、`src/js/search.js`。
+2. **如改动影响 UI 或交互 → 更新 `ASSET_VERSION`**  
+   - 打开 `src/_data/assets.js`，找到：  
+     - `const ASSET_VERSION = "..."`  
+   - 把字符串改成一个新的值（可以用日期+序号，例如：`20251201-1`）。  
+   - 这一步会让线上浏览器 **强制加载新的 CSS/JS**，避免看到旧缓存。
+3. **本地构建并自检**  
+   ```bash
+   npm run build
+   ```  
+   - 构建结束后，至少检查：  
+     - `_site/index.html`（首页）  
+     - `_site/archive/index.html`（归档）  
+     - `_site/about/index.html`（关于）  
+     - 最近修改的文章对应的 `_site/posts/.../index.html`  
+   - **归档搜索自检**：  
+     - `_site/archive/index.html` 中是否存在 `<div id="search" class="archive-search">`。  
+     - `_site/js/search.js` 文件是否存在。  
+     - 构建日志中不要出现关于 `search.js` 的警告。
+4. **提交并推送**  
+   ```bash
+   git add -A
+   git commit -m "chore: update content/styles/scripts"
+   git push
+   ```  
+   - 等远端（如 Cloudflare）完成构建和部署后，再用浏览器访问线上站点确认。
+
+### 归档搜索功能稳定性要点
+
+- 搜索功能依赖三部分：  
+  1. **索引文件**：构建后生成 `_site/search-index.json`；  
+  2. **前端脚本**：`src/js/search.js` → 构建为 `_site/js/search.js`；  
+  3. **归档模板挂载点**：`src/content/pages/archive/index.njk` 里的 `<div id="search" class="archive-search"></div>`。
+- 构建结束后，`.eleventy.js` 会自动：  
+  - 重新写入 `_site/search-index.json`；  
+  - 检查 `_site/js/search.js` 是否存在，如缺失会在构建日志打印警告。  
+- 若线上发现“归档页没有搜索框/搜索无反应”，可以按下面顺序排查：  
+  1. 在本地重新 `npm run build`，确认 `_site/js/search.js`、`_site/search-index.json` 都存在；  
+  2. 确认 `src/_data/assets.js` 中 `ASSET_VERSION` 已更新，并重新构建 + 推送；  
+  3. 在浏览器中访问线上 `/archive/`，查看源代码：  
+     - 是否包含 `<script type="module" src="/js/search.js"...>`；  
+     - 是否包含 `class="simple-search-form"`；  
+  4. 如仍有问题，在 Cloudflare 后台执行一次 **Purge Cache**（按 URL 或全部清除），再刷新页面。
+
+### 出问题时的“最小回滚”策略
+
+- 若某次改动导致线上页面异常（但本地还能正常构建）：  
+  1. 使用 `git log` 找到上一次稳定的提交；  
+  2. 使用 `git revert <稳定提交之后的那几次提交>` 回滚问题改动；  
+  3. 再次运行：  
+     ```bash
+     npm run build
+     git push
+     ```  
+  4. 等部署完成后确认站点恢复正常，再慢慢重新引入需要的改动。
+
+以上规则设计的目标是：**就算没有 AI 助手、也不看 `.cursorrules`，只要按照本文件操作，就能安全地更新样式、脚本和内容，并在出现问题时有明确的排查和回滚路径。**
