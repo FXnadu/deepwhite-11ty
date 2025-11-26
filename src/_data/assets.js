@@ -7,7 +7,7 @@ const cssPath = path.join(__dirname, "..", "css", "style.css");
 // 说明：
 // - 每次你对 CSS / JS 做了“希望线上立刻生效”的改动，只需要在这里改一次版本号即可；
 // - 我们通过在 URL 上追加 `?v=` 查询参数来绕过 Cloudflare 等 CDN 的长期缓存（max-age=31536000, immutable）。
-const ASSET_VERSION = "20251126-2";
+const ASSET_VERSION = "20251126-3";
 
 const readFileSafe = (filePath) => {
   try {
