@@ -471,13 +471,14 @@ a:focus-visible {
     margin-top: 2.4em;
     margin-bottom: 1.1em;
     border: none;
-    padding-bottom: 0.35em;
+    padding-bottom: 0.4em;
     position: relative;
     letter-spacing: 0.02em;
-    display: inline-block;
-    max-width: 100%;
-    width: fit-content;
-    border-bottom: 0.18em solid var(--color-border);
+    text-decoration-line: underline;
+    text-decoration-thickness: 0.14em;
+    text-underline-offset: 0.5em;
+    text-decoration-color: var(--color-border);
+    text-decoration-skip-ink: auto;
 }
 .post-content h2, .page-content h2 { font-size: 1.55em; }
 .post-content h3, .page-content h3 { font-size: 1.3em; }
