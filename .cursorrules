@@ -1,0 +1,46 @@
+# deepwhite-11ty Cursor Rules
+
+## 项目背景
+- 基于 **11ty v3** 的静态博客，目录配置在 `.eleventy.js`，输出 `_site/`，不要直接修改 `_site`。
+- 运行命令：开发 `npm run start`，构建 `npm run build`（必要时先 `npm install`）。
+- `BASE_URL` 环境变量决定 `pathPrefix`，部署到子路径时务必设置，避免生成错误链接。
+
+## 目录约定
+- 遵循 11ty 官方 starter 推荐的“内容/布局/数据”分层：
+  - `src/content/pages/<feature>/`：每个页面功能独立文件夹，`index.njk|md` 搭配 `<name>.11tydata.js`。删除文件夹即可下线功能。
+  - `src/content/posts/`：全部文章 Markdown，目录级 `posts.11tydata.js` 统一 permalink 与默认 front matter。
+  - `src/_includes/layouts/`：`base.njk`/`post.njk` 作为布局骨架，请复用而非复制粘贴。
+  - `src/_data/assets.js` 负责 critical CSS 和 islands 注册，新增脚本时先更新该文件再在页面 front matter 的 `islands` 声明。
+- 所有静态资产（`src/img`, `src/css`, `src/js`, `_headers`, `_redirects`, `.htaccess`, `.nojekyll`）依赖 `.eleventy.js` 的 `addPassthroughCopy`，新增资产时按原路径放置。
+
+## 模板与数据实践
+- Front matter 逻辑尽量放入 `.11tydata.js`，保持模板只关注标记结构；这是 11ty 官方推荐的“数据层前置”做法。
+- 使用 `eleventyComputed` 生成 permalink、分页 URL、派生数据（参考 `home.11tydata.js` 和 `archive.11tydata.js`），不要在模板里拼接路径。
+- 集合：
+  - `collections.post` + `tags: ['post']` 作为文章基线；首页精选需额外加 `featured`。
+  - `collections.featured`, `postsByYear`, `allPostsForSearch` 已在 `.eleventy.js` 注册，新增页面优先复用。
+- 过滤器/集合需保持纯函数、同步可序列化，避免持久化状态，符合 11ty 文档关于可缓存构建的要求。
+
+## 性能与可维护性
+- 继承 `assets.js` 的做法：`criticalCssInline` 必须保持轻量（关键渲染路径），主样式通过 `<link rel="preload" ... onload>` 延迟加载，禁止在模板内直接引入大 CSS。
+- JS 采用“islands/partial hydration”模式：仅在需要的页面注入对应模块（`site`, `archive`, `post`, `search`）。新增交互脚本时默认 `type="module"`、`defer`，避免阻塞。
+- 搜索索引在 `eleventy.after` 钩子中用 `gray-matter` 解析 Markdown；若修改逻辑，确保输出仍是小写 JSON、限制字段长度，以防页面加载过慢。
+- 任何第三方库引入前确认必要性；性能敏感页面（首页/归档/文章）优先使用原生 API。
+- 保持分页尺寸合理（目前首页 6 篇、归档 5 篇），如需调整先评估首屏渲染成本。
+
+## 内容编写
+- 文章 front matter 至少包含 `title`, `date`, `layout: "post.njk"`, `tags: ['post']`；缺省 `excerpt` 时由 `.eleventy.js` 自动截取 200 字。
+- 图片放在 `src/img/`，引用相对路径 `/img/...`；其他静态文件走 `src/css` / `src/js`。
+- Markdown 中的代码块会在搜索索引阶段被剥离（`toPlainText` 处理），如需保留关键词，可在 `excerpt` 手动填写。
+
+## 提交流程
+- 修改前确认是否影响 `assets.js` / `collections` / `islands` 等核心配置，必要时更新 `PROJECT_GUIDE.md`。
+- 新功能需保持**行为一致**：若无明确需求，不得改变现有 URL、布局、交互。
+- 变更后至少执行一次 `npm run build`，检查 `_site` 中关键页（首页、`/archive/`, `/about/`, 最近文章）与 `_site/search-index.json` 是否符合预期。
+- 不向 Git 提交 `_site/`、`node_modules/`、本地调试文件。
+
+## 协作提醒
+- 讨论设计前可引用 Eleventy 官方文档章节（目录结构、数据级别、不用 JS 的模板增强等）支撑决策。
+- 保持注释简洁，只在非自明的业务约束处补充；禁止以注释形式堆砌需求历史。
+- 若需要引入构建步骤（如额外打包器/处理器），先评估对纯静态输出的影响，并给出回退策略。
+

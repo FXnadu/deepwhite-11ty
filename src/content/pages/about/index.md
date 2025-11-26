@@ -1,7 +1,3 @@
----
-layout: "base.njk"
-title: "关于我"
----
 <header class="page-header">
     <h1 class="page-title">关于我</h1>
 </header>

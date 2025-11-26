@@ -1,15 +1,25 @@
 ---
 layout: "base.njk"
-showFloatingActions: true 
-layoutScripts:
-  - "/js/post-page.js"
+showFloatingActions: true
+islands:
+  - site
+  - post
 ---
 <article class="post">
     <header class="post-full-header">
     
         <h1 class="post-full-title">{{ title }}</h1>
 
-        <p class="post-full-meta">发布于 {{ date | readableDate }}</p>
+        {% set readingMinutes = (content | readingMinutes) or 1 %}
+        <p class="post-full-meta">
+            发布于 {{ date | readableDate }}
+            ·
+            {% if readingMinutes <= 1 %}
+                约 1 分钟
+            {% else %}
+                约 {{ readingMinutes }} 分钟
+            {% endif %}
+        </p>
     </header>
 
     <section class="post-content">

@@ -2,6 +2,9 @@ const { DateTime } = require("luxon");
 const path = require("path");
 const fs = require("fs");
 const matter = require("gray-matter");
+const markdownIt = require("markdown-it");
+const markdownItMark = require("markdown-it-mark");
+const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 
 const toPlainText = (markdown = "") =>
   markdown
@@ -15,6 +18,53 @@ const toPlainText = (markdown = "") =>
     .trim();
 
 module.exports = (eleventyConfig) => {
+  const markdownLib = markdownIt({
+    html: true,
+    breaks: true,
+    linkify: true,
+  }).use(markdownItMark);
+
+  eleventyConfig.setLibrary("md", markdownLib);
+  eleventyConfig.addPlugin(syntaxHighlight, {
+    templateFormats: ["md", "njk"],
+    preAttributes: { tabindex: 0 },
+  });
+
+  const stripHtmlTags = (value = "") =>
+    value.replace(/<\/?[^>]+(>|$)/g, " ").replace(/\s+/g, " ");
+
+  const cjkCharRegex =
+    /[\u2E80-\u2FD5\u3040-\u30FF\u31F0-\u31FF\u3400-\u9FFF\uF900-\uFAFF\uAC00-\uD7AF]/g;
+
+  const countReadingTokens = (text = "") => {
+    const cjkChars = (text.match(cjkCharRegex) || []).length;
+    const latinWords = text
+      .replace(cjkCharRegex, " ")
+      .split(/\s+/)
+      .filter(Boolean).length;
+    return { cjkChars, latinWords };
+  };
+
+  eleventyConfig.addFilter("readingMinutes", (content = "", opts = {}) => {
+    const plainText = toPlainText(stripHtmlTags(content));
+    if (!plainText) return 1;
+    const { cjkChars, latinWords } = countReadingTokens(plainText);
+    const {
+      wordsPerMinute,
+      cjkCharsPerMinute = 450,
+      latinWordsPerMinute = 250,
+    } = opts;
+
+    if (wordsPerMinute) {
+      const totalTokens = cjkChars + latinWords;
+      return Math.max(1, Math.round(totalTokens / wordsPerMinute));
+    }
+
+    const minutes =
+      cjkChars / cjkCharsPerMinute + latinWords / latinWordsPerMinute;
+    return Math.max(1, Math.round(minutes));
+  });
+
   eleventyConfig.addPassthroughCopy("./src/img/");
   eleventyConfig.addPassthroughCopy("./src/css/");
   eleventyConfig.addPassthroughCopy("./src/js/");
@@ -103,6 +153,7 @@ module.exports = (eleventyConfig) => {
     dir: {
       input: "src",
       includes: "_includes",
+      layouts: "_includes/layouts",
       output: "_site",
     },
     markdownTemplateEngine: "njk",

@@ -3,9 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ title }} - [DEEPWHITE]</title>
-    <link rel="stylesheet" href="/css/style.css">
+    {% set assetsConfig = assets or {} %}
+    {% set pageTitle = title or metadata.title or '[DEEPWHITE]' %}
+    <title>{{ pageTitle }} - [DEEPWHITE]</title>
     <link rel="icon" href="/img/deepwhitelogo.png" type="image/png" sizes="192x192">
+    {% if assetsConfig.criticalCssInline %}
+    <style>{{ assetsConfig.criticalCssInline | safe }}</style>
+    {% endif %}
+    {% if assetsConfig.mainCssHref %}
+    <link rel="preload" href="{{ assetsConfig.mainCssHref }}" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="{{ assetsConfig.mainCssHref }}"></noscript>
+    {% endif %}
     {% for cssFile in extraCss | toArray %}
     <link rel="stylesheet" href="{{ cssFile }}">
     {% endfor %}
@@ -41,12 +49,14 @@
         </div>
         {% endif %}
 </body>
-
-<script src="/js/site.js" defer></script>
-{% for scriptFile in layoutScripts | toArray %}
-<script src="{{ scriptFile }}" defer></script>
-{% endfor %}
-{% for scriptFile in extraJs | toArray %}
-<script src="{{ scriptFile }}" defer></script>
-{% endfor %}
+{% set requestedIslands = islands | toArray %}
+{% if requestedIslands | length %}
+    {% for islandName in requestedIslands %}
+        {% set islandRegistry = assetsConfig.islands or {} %}
+        {% set island = islandRegistry[islandName] %}
+        {% if island %}
+<script {% if island.module %}type="module"{% endif %} src="{{ island.src }}" defer></script>
+        {% endif %}
+    {% endfor %}
+{% endif %}
 </html>
