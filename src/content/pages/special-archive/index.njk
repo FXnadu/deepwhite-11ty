@@ -1,0 +1,80 @@
+---
+layout: "base.njk"
+title: "特别归档"
+showFloatingActions: true
+pagination:
+  data: collections.specialArchivePages
+  size: 6
+---
+
+<section class="special-archive">
+    <header class="special-archive-header">
+        <p class="special-archive-title">Special Archive</p>
+        <p class="special-archive-lede">
+            这里收录的是完全不遵循常规模板的页面。让页面 front matter 添加
+            <code>tags: ['special-archive']</code> 即会自动出现在此处；可选字段
+            <code>specialSummary</code>、<code>specialTags</code>、<code>specialLabel</code>、
+            <code>specialOrder</code> 用于补充描述、标签、显式排序。
+        </p>
+</header>
+
+{%- if hasSpecialEntries -%}
+    {%- set pageEntries = pagination.items | default([]) -%}
+    <ul class="special-archive-list">
+        {%- for entry in pageEntries -%}
+        <li class="special-archive-card">
+            <div class="special-archive-meta">
+                {%- if entry.date -%}
+                <time datetime="{{ entry.date | isoDate }}">{{ entry.date | readableDate('yyyy年LL月dd日') }}</time>
+                {%- endif -%}
+                {%- if entry.data.specialLabel -%}
+                <span>{{ entry.data.specialLabel }}</span>
+                {%- endif -%}
+            </div>
+            <h2 class="special-archive-card-title">
+                <a href="{{ entry.url | url }}">{{ entry.data.title or entry.fileSlug }}</a>
+            </h2>
+            {%- set summary = entry.data.specialSummary or entry.data.excerpt -%}
+            {%- if summary -%}
+            <p class="special-archive-card-summary">{{ summary }}</p>
+            {%- endif -%}
+            {%- if entry.data.specialTags -%}
+            <div class="special-archive-card-tags">
+                {%- for tag in entry.data.specialTags | toArray -%}
+                <span class="special-archive-tag">{{ tag }}</span>
+                {%- endfor -%}
+            </div>
+            {%- endif -%}
+            <div class="special-archive-card-cta">
+                <a class="special-archive-link" href="{{ entry.url | url }}" aria-label="访问 {{ entry.data.title }}">进入页面</a>
+            </div>
+        </li>
+        {%- endfor -%}
+    </ul>
+    {%- else -%}
+    <p class="special-archive-empty">还没有特殊页面，敬请期待。</p>
+    {%- endif -%}
+
+    {%- if pagination and pagination.hrefs and (pagination.hrefs | length) > 1 -%}
+    <nav class="pagination-nav" aria-label="特殊归档分页">
+        <div class="pagination-links">
+            {%- if pagination.href.previous -%}
+            <a class="pagination-link prev" href="{{ pagination.href.previous | url }}">上一页</a>
+            {%- else -%}
+            <span class="pagination-link is-disabled prev" aria-disabled="true">上一页</span>
+            {%- endif -%}
+
+            <div class="pagination-status" tabindex="0" role="button" aria-label="分页状态">
+                <span class="pagination-status-text">第 {{ (pagination.pageNumber or 0) + 1 }} / {{ pagination.hrefs | length }} 页</span>
+            </div>
+
+            {%- if pagination.href.next -%}
+            <a class="pagination-link next" href="{{ pagination.href.next | url }}">下一页</a>
+            {%- else -%}
+            <span class="pagination-link is-disabled next" aria-disabled="true">下一页</span>
+            {%- endif -%}
+        </div>
+    </nav>
+    {%- endif -%}
+</section>
+
