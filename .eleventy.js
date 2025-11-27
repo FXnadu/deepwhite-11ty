@@ -125,11 +125,19 @@ module.exports = (eleventyConfig) => {
     const tags = item.data?.tags;
     return Array.isArray(tags) && tags.includes(SPECIAL_ARCHIVE_TAG);
   };
-  const createSpecialArchivePlaceholder = () => ({
-    data: {
-      __specialArchivePlaceholder: true,
-    },
-  });
+  const createSpecialArchivePlaceholder = () => {
+    const placeholderDate = new Date();
+    return {
+      url: "/special-archive/placeholder/",
+      date: placeholderDate,
+      inputPath: "src/content/pages/special-archive/.placeholder",
+      fileSlug: "placeholder",
+      data: {
+        __specialArchivePlaceholder: true,
+        title: "Placeholder",
+      },
+    };
+  };
 
   eleventyConfig.addCollection("specialArchivePages", (collectionApi) =>
     (() => {

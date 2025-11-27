@@ -16,9 +16,10 @@ showFloatingActions: true
 </header>
 
 {%- if hasSpecialEntries -%}
-    {%- set pageEntries = pagination.items | default([]) -%}
+    {%- set entries = pageEntries | default([]) -%}
     <ul class="special-archive-list">
-        {%- for entry in pageEntries -%}
+        {%- for entry in entries -%}
+        {%- if not entry.data.__specialArchivePlaceholder -%}
         <li class="special-archive-card">
             <div class="special-archive-meta">
                 {%- if entry.date -%}
@@ -46,6 +47,7 @@ showFloatingActions: true
                 <a class="special-archive-link" href="{{ entry.url | url }}" aria-label="访问 {{ entry.data.title }}">进入页面</a>
             </div>
         </li>
+        {%- endif -%}
         {%- endfor -%}
     </ul>
     {%- else -%}
