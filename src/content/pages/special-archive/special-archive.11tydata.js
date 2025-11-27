@@ -12,7 +12,9 @@ module.exports = {
     permalink: (data) => paginateUrl(data.pagination?.pageNumber || 0),
     hasSpecialEntries: (data) =>
       Array.isArray(data.collections?.specialArchivePages) &&
-      data.collections.specialArchivePages.length > 0,
+      data.collections.specialArchivePages.some(
+        (entry) => !entry.data?.__specialArchivePlaceholder
+      ),
   },
 };
 

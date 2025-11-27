@@ -114,6 +114,38 @@ module.exports = (eleventyConfig) => {
     collectionApi.getFilteredByTags("post", "featured").reverse()
   );
 
+  const SPECIAL_ARCHIVE_TAG = "special-archive";
+  const isContentPage = (inputPath = "") =>
+    inputPath.includes(`${path.sep}content${path.sep}pages${path.sep}`);
+  const resolveSpecialOrder = (item = {}) => {
+    if (typeof item.data?.specialOrder === "number") {
+      return item.data.specialOrder;
+    }
+    return item.date instanceof Date ? item.date.getTime() : 0;
+  };
+  const createSpecialArchivePlaceholder = () => ({
+    data: {
+      __specialArchivePlaceholder: true,
+    },
+  });
+
+  eleventyConfig.addCollection("specialArchivePages", (collectionApi) =>
+    (() => {
+      const entries = collectionApi
+        .getAll()
+        .filter((item) => {
+          const tags = item.data?.tags || [];
+          return (
+            isContentPage(item.inputPath || "") &&
+            tags.includes(SPECIAL_ARCHIVE_TAG)
+          );
+        })
+        .sort((a, b) => resolveSpecialOrder(b) - resolveSpecialOrder(a));
+
+      return entries.length ? entries : [createSpecialArchivePlaceholder()];
+    })()
+  );
+
   let postsData = [];
   eleventyConfig.addCollection("allPostsForSearch", (collectionApi) => {
     const posts = collectionApi.getFilteredByTag("post").reverse();
