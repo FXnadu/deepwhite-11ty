@@ -21,7 +21,21 @@
 <body data-show-floating="{{ (showFloatingActions | default(false)) and 'true' or 'false' }}">
     <div class="container">
         <header class="site-header">
-            <h1 class="site-title"><a href="{{ '/' | url }}">Deepwhite</a></h1>
+            {% set isSpecialArchivePage = isSpecialArchivePage | default(false) %}
+            {% if isSpecialArchivePage %}
+                {% set brandTarget = '/' %}
+                {% set brandLabel = '返回首页' %}
+                {% set brandText = 'DEEPWHITE' %}
+            {% else %}
+                {% set brandTarget = '/special-archive/' %}
+                {% set brandLabel = '前往炫技特别归档' %}
+                {% set brandText = 'Deepwhite' %}
+            {% endif %}
+            <div class="site-branding">
+                <h1 class="site-title">
+                    <a href="{{ brandTarget | url }}" aria-label="{{ brandLabel }}">{{ brandText }}</a>
+                </h1>
+            </div>
             <nav class="site-nav">
                 <a href="{{ '/' | url }}">首页</a>
                 <a href="{{ '/archive/' | url }}">归档</a> 
