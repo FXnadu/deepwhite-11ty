@@ -1110,6 +1110,182 @@ pre[class*="language-"] {
     color: var(--color-text-subtle);
 }
 
+/* 工具类：仅供屏幕阅读器使用 */
+.screen-reader-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    border: 0;
+}
+
+/* 404 页面：模拟终端界面 */
+.page-404 {
+    padding: 0 0 40px;
+    margin-top: -42px;
+}
+
+.page-404__terminal {
+    display: block;
+}
+
+.page-404 .terminal-window {
+    width: 100%;
+    max-width: none;
+    background: transparent;
+    border-radius: 0;
+    border: none;
+    box-shadow: none;
+    overflow: visible;
+    display: flex;
+    flex-direction: column;
+}
+
+.page-404 .terminal-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 0 0 8px;
+    background: transparent;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.page-404 .terminal-header__dots {
+    display: flex;
+    gap: 6px;
+}
+
+.page-404 .dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    display: block;
+    opacity: 0.8;
+}
+
+.page-404 .dot-red { background-color: #fb7185; }
+.page-404 .dot-yellow { background-color: #fbbf24; }
+.page-404 .dot-green { background-color: #22c55e; }
+
+.page-404 .terminal-title {
+    margin: 0;
+    color: var(--color-text-subtle);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: lowercase;
+    font-family: var(--font-family-mono);
+}
+
+.page-404 .terminal-body {
+    padding: 24px 0 0;
+    min-height: 0;
+    font-family: var(--font-family-mono);
+    color: var(--color-text);
+    background: transparent;
+    line-height: 1.6;
+}
+
+.page-404 .prompt {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 10px;
+}
+
+.page-404 .user { color: #3b82f6; }
+.page-404 .path { color: #14b8a6; }
+.page-404 .cmd { color: var(--color-text-strong); }
+
+.page-404 .output {
+    color: var(--color-meta);
+    font-size: 14px;
+    margin-bottom: 18px;
+}
+
+.page-404 .error-text {
+    color: #e03131;
+    font-weight: 600;
+}
+
+.page-404 .typewriter {
+    min-height: 24px;
+    margin-bottom: 22px;
+}
+
+.page-404__suggestions p {
+    color: var(--color-text-subtle);
+    margin-bottom: 10px;
+    font-size: 15px;
+}
+
+.page-404__suggestions ul {
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+}
+
+.page-404__suggestions li {
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.page-404 .index-num {
+    color: var(--color-meta);
+    font-size: 12px;
+}
+
+.page-404__suggestions a {
+    color: var(--color-text);
+    border-bottom: 1px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+}
+
+.page-404__suggestions a:hover,
+.page-404__suggestions a:focus-visible {
+    color: var(--color-text-strong);
+    border-bottom-color: var(--color-text-strong);
+}
+
+.page-404 .hidden {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+}
+
+.page-404 .visible {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.page-404 .cursor {
+    display: inline-block;
+    width: 10px;
+    height: 16px;
+    background-color: var(--color-text);
+    animation: page404-blink 1s step-end infinite;
+    margin-left: 6px;
+}
+
+@keyframes page404-blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.page-404 .prompt input {
+    border: none;
+    background: transparent;
+}
+
+@media (max-width: 640px) {
+    .page-404 { padding: 0 0 30px; margin-top: -20px; }
+    .page-404 .terminal-body { padding-top: 18px; font-size: 14px; }
+}
+
 /* --- 11. 响应式设计 --- */
 @media (max-width: 1200px) {
     /* 在较小屏幕上隐藏导航栏 */
@@ -1135,8 +1311,8 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251126-11" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251126-11"></noscript>
+    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251127-7" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251127-7"></noscript>
     
     
     <link rel="stylesheet" href="/deepwhite-11ty/css/about.css">
@@ -1202,7 +1378,7 @@ pre[class*="language-"] {
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251126-11" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251127-7" defer></script>
         
     
 
