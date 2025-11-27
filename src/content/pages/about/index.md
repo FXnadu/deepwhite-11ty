@@ -29,7 +29,17 @@
     <section class="about-section about-section--contact">
         <h2 class="about-section-title">与我联系</h2>
         <ul class="contact-list about-section-list">
-            <li><strong>电子邮件：</strong> <a href="mailto:deepwhite86@outlook.com">deepwhite86@outlook.com</a></li>
+            <li>
+                <strong>电子邮件：</strong>
+                <template
+                    data-contact
+                    data-contact-type="email"
+                    data-user="deepwhite86"
+                    data-domain="outlook"
+                    data-tld="com"
+                    data-fallback="email unavailable"
+                ></template>
+            </li>
             <li><strong>xhs：</strong> <a href="#" target="_blank" rel="noopener noreferrer">更多联系方式</a></li>
         </ul>
     </section>

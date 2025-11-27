@@ -6,6 +6,7 @@ const markdownIt = require("markdown-it");
 const markdownItMark = require("markdown-it-mark");
 const markdownItSub = require("markdown-it-sub");
 const markdownItSup = require("markdown-it-sup");
+const markdownItFootnote = require("markdown-it-footnote");
 const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 
 const toPlainText = (markdown = "") =>
@@ -27,7 +28,8 @@ module.exports = (eleventyConfig) => {
   })
     .use(markdownItMark)
     .use(markdownItSub)
-    .use(markdownItSup);
+    .use(markdownItSup)
+    .use(markdownItFootnote);
 
   eleventyConfig.setLibrary("md", markdownLib);
   eleventyConfig.addPlugin(syntaxHighlight, {
