@@ -1,16 +1,89 @@
-<section class="page-404">
-    <header class="page-header">
-        <h1 class="page-title">这里什么都没有</h1>
-        <p class="page-subtitle">你访问的页面可能已经被移动、重命名，或者从未存在过。</p>
-    </header>
+<section class="page-404" aria-labelledby="page-404-title">
+    <div class="page-404__terminal">
+        <div class="terminal-window" data-404-terminal>
+            <div class="terminal-header">
+                <div class="terminal-header__dots" aria-hidden="true">
+                    <span class="dot dot-red"></span>
+                    <span class="dot dot-yellow"></span>
+                    <span class="dot dot-green"></span>
+                </div>
+                <p class="terminal-title" id="page-404-title">guest@deepwhite-11ty:~ (zsh)</p>
+            </div>
 
-    <div class="page-content">
-        <p>别担心，你可以：</p>
-        <ul>
-            <li>回到 <a href="{{ '/' | url }}">首页</a>，从最新的文章开始浏览</li>
-            <li>前往 <a href="{{ '/archive/' | url }}">归档</a>，按时间查看所有内容</li>
-        </ul>
+            <div class="terminal-body" role="status" aria-live="polite" onclick="document.getElementById('page-404-input').focus()">
+                <div class="prompt">
+                    <span class="user">➜</span>
+                    <span class="path">~</span>
+                    <span class="cmd">system_check --status</span>
+                </div>
+                <div class="output">
+                    <span>&gt; Kernel loaded... OK</span><br>
+                    <span>&gt; Loading assets... OK</span><br>
+                    <span>&gt; Verifying path integrity... <span class="error-text">FAILED</span></span>
+                </div>
+
+                <div class="prompt">
+                    <span class="user">➜</span>
+                    <span class="path">~</span>
+                    <span class="cmd">access <span data-display-url style="color: #facc15;">/unknown/path</span></span>
+                </div>
+
+                <div class="typewriter error-text" data-typewriter aria-live="assertive"></div>
+
+                <div class="page-404__suggestions hidden" data-suggestions>
+                    <p>别慌，我们准备了几个快捷命令：</p>
+                    <ul>
+                        <li><span class="index-num">1.</span><a href="{{ '/' | url }}">[cd /home] 返回首页</a></li>
+                        <li><span class="index-num">2.</span><a href="{{ '/archive/' | url }}">[ls /archive] 打开归档</a></li>
+                        <li><span class="index-num">3.</span><a href="https://github.com/FXnadu" target="_blank" rel="noopener">[git remote] 访问 GitHub</a></li>
+                    </ul>
+                </div>
+
+                <div class="prompt hidden" data-prompt-cursor>
+                    <span class="user">➜</span>
+                    <span class="path">~</span>
+                    <span class="cursor" aria-hidden="true"></span>
+                    <input type="text" id="page-404-input" class="screen-reader-only" aria-hidden="true">
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const displayUrlEl = document.querySelector("[data-display-url]");
+    const typewriterEl = document.querySelector("[data-typewriter]");
+    const suggestionsEl = document.querySelector("[data-suggestions]");
+    const promptCursorEl = document.querySelector("[data-prompt-cursor]");
+    const hiddenInput = document.getElementById("page-404-input");
+    if (!displayUrlEl || !typewriterEl) return;
 
+    const path = window.location.pathname;
+    const displayPath = path && path.length > 1 ? path : "/content/missing";
+    displayUrlEl.textContent = displayPath;
+
+    const message = "Error 404: The requested resource was not found in the matrix.";
+    let index = 0;
+
+    function revealExtras() {
+        suggestionsEl?.classList.remove("hidden");
+        suggestionsEl?.classList.add("visible");
+        promptCursorEl?.classList.remove("hidden");
+        promptCursorEl?.classList.add("visible");
+        hiddenInput?.focus();
+    }
+
+    function typeWriter() {
+        if (index < message.length) {
+            typewriterEl.textContent += message.charAt(index);
+            index += 1;
+            window.setTimeout(typeWriter, 40);
+        } else {
+            window.setTimeout(revealExtras, 400);
+        }
+    }
+
+    window.setTimeout(typeWriter, 800);
+});
+</script>
