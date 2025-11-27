@@ -32,7 +32,7 @@
                 {% set brandText = 'Deepwhite' %}
             {% endif %}
             <div class="site-branding">
-                <h1 class="site-title">
+                <h1 class="site-title{% if isSpecialArchivePage %} site-title-uppercase{% endif %}">
                     <a href="{{ brandTarget | url }}" aria-label="{{ brandLabel }}">{{ brandText }}</a>
                 </h1>
             </div>

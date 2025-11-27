@@ -105,6 +105,9 @@ a:focus-visible {
     text-transform: lowercase;
     font-variant-numeric: oldstyle-nums;
 }
+.site-title-uppercase {
+    text-transform: uppercase;
+}
 .site-title a {
     color: var(--color-text-strong);
     border-bottom: none;
