@@ -1122,6 +1122,83 @@ pre[class*="language-"] {
     border: 0;
 }
 
+/* 脚注预览浮层 */
+.footnote-preview {
+    position: absolute;
+    z-index: 40;
+    max-width: min(320px, calc(100vw - 32px));
+    padding: 12px 14px;
+    border-radius: 12px;
+    border: 1px solid var(--color-border);
+    background-color: var(--color-background);
+    box-shadow: 0 18px 45px rgba(15, 15, 15, 0.12);
+    font-size: 0.85em;
+    line-height: 1.5;
+    color: var(--color-text);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(4px);
+    transition: opacity 0.15s ease, transform 0.15s ease;
+    pointer-events: none;
+}
+
+.footnote-preview.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.footnote-preview::before,
+.footnote-preview::after {
+    content: '';
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+    border-style: solid;
+}
+
+.footnote-preview::before {
+    border-width: 10px 10px 0 10px;
+    border-color: var(--color-border) transparent transparent transparent;
+    bottom: -10px;
+}
+
+.footnote-preview::after {
+    border-width: 9px 9px 0 9px;
+    border-color: var(--color-background) transparent transparent transparent;
+    bottom: -9px;
+}
+
+.footnote-preview[data-placement="bottom"]::before {
+    bottom: auto;
+    top: -10px;
+    border-width: 0 10px 10px 10px;
+    border-color: transparent transparent var(--color-border) transparent;
+}
+
+.footnote-preview[data-placement="bottom"]::after {
+    bottom: auto;
+    top: -9px;
+    border-width: 0 9px 9px 9px;
+    border-color: transparent transparent var(--color-background) transparent;
+}
+
+.footnote-target-highlight {
+    animation: footnote-target-highlight 1.4s ease;
+}
+
+@keyframes footnote-target-highlight {
+    0% {
+        background-color: rgba(255, 235, 167, 0.9);
+        box-shadow: 0 0 0 6px rgba(255, 235, 167, 0.2);
+    }
+    100% {
+        background-color: transparent;
+        box-shadow: none;
+    }
+}
+
 /* 404 页面：模拟终端界面 */
 .page-404 {
     padding: 0 0 40px;
@@ -1311,8 +1388,8 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251127-7" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251127-7"></noscript>
+    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251127-11" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251127-11"></noscript>
     
     
 </head>
@@ -1400,13 +1477,13 @@ pre[class*="language-"] {
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251127-7" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251127-11" defer></script>
         
     
         
         
         
-<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251127-7" defer></script>
+<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251127-11" defer></script>
         
     
 
