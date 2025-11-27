@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% set assetsConfig = assets or {} %}
+    {% set pageTitle = title or metadata.title or '[SHOWCASE]' %}
+    <title>{{ pageTitle }}</title>
+    {% if assetsConfig.mainCssHref %}
+    <link rel="stylesheet" href="{{ assetsConfig.mainCssHref | url }}">
+    {% endif %}
+    {% for cssFile in extraCss | toArray %}
+    <link rel="stylesheet" href="{{ cssFile | url }}">
+    {% endfor %}
+    {{ head | safe }}
+</head>
+<body class="{{ bodyClass | default('showcase-body') }}">
+    {{ content | safe }}
+    {% for scriptFile in extraJs | toArray %}
+    <script src="{{ scriptFile | url }}" defer></script>
+    {% endfor %}
+    {% set requestedIslands = islands | toArray %}
+    {% if requestedIslands | length %}
+        {% for islandName in requestedIslands %}
+            {% set islandRegistry = assetsConfig.islands or {} %}
+            {% set island = islandRegistry[islandName] %}
+            {% if island %}
+<script {% if island.module %}type="module"{% endif %} src="{{ island.src | url }}" defer></script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</body>
+</html>
+
+

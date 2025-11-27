@@ -1,0 +1,225 @@
+---
+title: "SONIC RIBBONS"
+layout: "showcase.njk"
+permalink: "/showcase/sonic-ribbons/"
+tags:
+  - special-archive
+specialSummary: "基于多层贝塞尔丝带与音波震荡的视觉表演，指针与滚动都会重塑色带轨迹。"
+specialTags:
+  - svg
+  - motion
+  - immersive
+specialLabel: "Lab Release"
+specialOrder: 110
+showFloatingActions: false
+bodyClass: "showcase-body sonic-body"
+---
+
+<style>
+    .sonic-body {
+        margin: 0;
+        min-height: 100vh;
+        background: radial-gradient(circle at 20% 20%, #1b1b1b, #020202 60%);
+        color: #f5f5f5;
+        font-family: "Space Grotesk", "Inter", system-ui, sans-serif;
+        overflow-x: hidden;
+    }
+    .sonic-stage {
+        padding: clamp(32px, 8vw, 80px);
+    }
+    .sonic-meta {
+        letter-spacing: 0.3em;
+        text-transform: uppercase;
+        font-size: 12px;
+        color: rgba(255, 255, 255, 0.6);
+        margin-bottom: 18px;
+    }
+    .sonic-title {
+        font-size: clamp(48px, 10vw, 128px);
+        margin: 0;
+        letter-spacing: 0.24em;
+        text-transform: uppercase;
+        mix-blend-mode: screen;
+    }
+    .sonic-intro {
+        max-width: 540px;
+        line-height: 1.8;
+        margin-top: 24px;
+        color: rgba(255, 255, 255, 0.8);
+    }
+    .sonic-ribbons {
+        margin-top: 60px;
+        border-radius: 40px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+        position: relative;
+        backdrop-filter: blur(6px);
+    }
+    .sonic-ribbons svg {
+        display: block;
+        width: 100%;
+        height: clamp(360px, 60vh, 520px);
+    }
+    .sonic-overlay {
+        position: absolute;
+        top: 24px;
+        right: 24px;
+        font-size: 12px;
+        letter-spacing: 0.4em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.5);
+    }
+    .sonic-controls {
+        margin-top: 32px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        font-size: 13px;
+        letter-spacing: 0.2em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.7);
+    }
+    .slider-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+    .slider-group label {
+        font-size: 11px;
+    }
+    .slider-group input[type="range"] {
+        width: 200px;
+        accent-color: #ff5df0;
+    }
+    @media (max-width: 640px) {
+        .sonic-controls {
+            flex-direction: column;
+        }
+        .slider-group input[type="range"] {
+            width: 100%;
+        }
+    }
+</style>
+
+<section class="sonic-stage">
+    <p class="sonic-meta">AUDIO VISUAL LAB / ZERO GRAVITY</p>
+    <h1 class="sonic-title">SONIC RIBBONS</h1>
+    <p class="sonic-intro">
+        多条贝塞尔丝带以声波节奏反复重构，这是一个测试“音频可视化即界面”的概念实验。
+        鼠标指针、滚轮与参数滑块共同塑造丝带的延展，形成一种即兴的 VJ 演出体验。
+    </p>
+
+    <div class="sonic-ribbons">
+        <div class="sonic-overlay">LIVE / GENERATIVE</div>
+        <svg id="ribbonScene" viewBox="0 0 1200 600" preserveAspectRatio="none">
+            <defs>
+                <linearGradient id="ribbonGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stop-color="#00f5ff"></stop>
+                    <stop offset="50%" stop-color="#ff5df0"></stop>
+                    <stop offset="100%" stop-color="#ffe65d"></stop>
+                </linearGradient>
+            </defs>
+        </svg>
+    </div>
+
+    <div class="sonic-controls">
+        <div class="slider-group">
+            <label for="ribbonCount">Ribbons</label>
+            <input type="range" id="ribbonCount" min="3" max="12" value="7">
+        </div>
+        <div class="slider-group">
+            <label for="glowLevel">Glow</label>
+            <input type="range" id="glowLevel" min="4" max="24" value="12">
+        </div>
+        <div class="slider-group">
+            <label for="tempo">Tempo</label>
+            <input type="range" id="tempo" min="10" max="50" value="25">
+        </div>
+    </div>
+</section>
+
+<script type="module">
+    const svg = document.getElementById("ribbonScene");
+    const ribbonCountInput = document.getElementById("ribbonCount");
+    const glowInput = document.getElementById("glowLevel");
+    const tempoInput = document.getElementById("tempo");
+
+    const createRibbon = (index) => {
+        const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+        path.setAttribute("fill", "none");
+        path.setAttribute("stroke", "url(#ribbonGradient)");
+        path.setAttribute("stroke-width", 2 + index * 0.4);
+        path.setAttribute("stroke-linecap", "round");
+        path.setAttribute("opacity", 0.65 - index * 0.04);
+        path.classList.add("ribbon");
+        svg.appendChild(path);
+        return path;
+    };
+
+    let ribbons = [];
+    const initScene = () => {
+        svg.querySelectorAll(".ribbon").forEach((node) => node.remove());
+        ribbons = [];
+        const count = Number(ribbonCountInput.value);
+        for (let i = 0; i < count; i++) {
+            ribbons.push(createRibbon(i));
+        }
+    };
+
+    const noise = (x) => Math.sin(x) + Math.sin(x / 1.8) * 0.5;
+    let pointer = { x: 0.5, y: 0.5 };
+    window.addEventListener("pointermove", (event) => {
+        pointer.x = event.clientX / window.innerWidth;
+        pointer.y = event.clientY / window.innerHeight;
+    });
+
+    window.addEventListener("scroll", () => {
+        pointer.y = (window.scrollY % window.innerHeight) / window.innerHeight;
+    });
+
+    const render = () => {
+        const time = performance.now() / (100 - Number(tempoInput.value));
+        const glow = Number(glowInput.value);
+        svg.style.filter = `drop-shadow(0 0 ${glow}px rgba(255, 93, 240, 0.45))`;
+
+        ribbons.forEach((path, idx) => {
+            const segments = 16;
+            const points = [];
+            for (let i = 0; i <= segments; i++) {
+                const t = i / segments;
+                const baseX = t * 1200;
+                const offset = noise(time * 0.8 + idx * 0.6 + t * 5);
+                const pointerInfluence = (pointer.x - 0.5) * 200 * (1 - t);
+                const y =
+                    300 +
+                    Math.sin(t * Math.PI * (1 + idx * 0.1) + time * 0.8) * (80 + idx * 12) +
+                    offset * 40 +
+                    pointerInfluence;
+                points.push({ x: baseX, y });
+            }
+            const d = points
+                .map((point, i) =>
+                    i === 0
+                        ? `M ${point.x} ${point.y}`
+                        : `C ${points[i - 1].x + 50} ${points[i - 1].y}, ${point.x - 50} ${point.y}, ${point.x} ${point.y}`
+                )
+                .join(" ");
+            path.setAttribute("d", d);
+        });
+
+        requestAnimationFrame(render);
+    };
+
+    [ribbonCountInput, glowInput, tempoInput].forEach((input) =>
+        input.addEventListener("input", () => {
+            if (input === ribbonCountInput) {
+                initScene();
+            }
+        })
+    );
+
+    initScene();
+    render();
+</script>
+
+

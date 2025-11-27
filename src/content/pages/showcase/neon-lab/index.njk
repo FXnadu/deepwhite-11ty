@@ -1,0 +1,169 @@
+---
+title: "GLITCH NEON LAB"
+layout: "showcase.njk"
+permalink: "/showcase/glitch-neon/"
+tags:
+  - special-archive
+specialSummary: "纯前端生成的霓虹噪声画布，滚动即可触发现代主义海报的动态律动。"
+specialTags:
+  - canvas
+  - glitch
+  - experimental
+specialLabel: "Prototype"
+specialOrder: 120
+showFloatingActions: false
+---
+
+<style>
+    :root {
+        --glitch-bg: radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.25), transparent 55%),
+                      radial-gradient(circle at 70% 40%, rgba(255, 0, 153, 0.35), transparent 60%),
+                      radial-gradient(circle at 40% 80%, rgba(0, 255, 213, 0.3), transparent 60%),
+                      #050505;
+    }
+    .glitch-lab {
+        min-height: 75vh;
+        padding: 40px 0 80px;
+        color: #f6f6f6;
+        font-family: "Space Grotesk", "Inter", "JetBrains Mono", system-ui, sans-serif;
+    }
+    .glitch-hero {
+        border-radius: 32px;
+        padding: 48px;
+        position: relative;
+        overflow: hidden;
+        background: var(--glitch-bg);
+        box-shadow: 0 40px 120px rgba(0, 0, 0, 0.5);
+    }
+    .glitch-hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background: repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.02) 0, rgba(255, 255, 255, 0.02) 2px, transparent 2px, transparent 8px);
+        mix-blend-mode: screen;
+        opacity: 0.4;
+        animation: scan 10s linear infinite;
+    }
+    @keyframes scan {
+        from { transform: translateX(-20%); }
+        to { transform: translateX(20%); }
+    }
+    .glitch-title {
+        font-size: clamp(48px, 8vw, 100px);
+        margin: 0;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        position: relative;
+    }
+    .glitch-title span {
+        display: block;
+        mix-blend-mode: screen;
+    }
+    .glitch-title span:nth-child(2) {
+        color: #ff00e5;
+        transform: translateY(-0.1em);
+    }
+    .glitch-title span:nth-child(3) {
+        color: #00ffe1;
+        transform: translateY(-0.2em);
+    }
+    .glitch-intro {
+        max-width: 540px;
+        margin: 32px 0 0;
+        font-size: 18px;
+        line-height: 1.7;
+        letter-spacing: 0.06em;
+    }
+    .glitch-canvas {
+        margin-top: 50px;
+        border-radius: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        overflow: hidden;
+    }
+    .glitch-canvas canvas {
+        width: 100%;
+        height: 400px;
+        display: block;
+    }
+    .glitch-meta {
+        margin-top: 36px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 18px;
+        font-size: 13px;
+        letter-spacing: 0.18em;
+        text-transform: uppercase;
+        color: rgba(255, 255, 255, 0.75);
+    }
+    @media (max-width: 640px) {
+        .glitch-hero {
+            padding: 32px 24px;
+        }
+        .glitch-intro {
+            font-size: 16px;
+        }
+        .glitch-canvas canvas {
+            height: 280px;
+        }
+    }
+</style>
+
+<section class="glitch-lab">
+    <div class="glitch-hero">
+        <p class="glitch-meta">GLITCH / NEON / AUDIOVISUAL</p>
+        <h1 class="glitch-title">
+            <span>GLITCH</span>
+            <span>GLITCH</span>
+            <span>GLITCH</span>
+        </h1>
+        <p class="glitch-intro">
+            这是一个完全由原生 Canvas 与噪声函数驱动的动态背景，
+            灵感来自 80 年代复古科幻海报。滚动页面时将触发更多偏移，
+            色彩与噪声带来的律动像霓虹灯一样层层堆叠。
+        </p>
+        <div class="glitch-canvas">
+            <canvas id="glitchCanvas" aria-hidden="true"></canvas>
+        </div>
+        <div class="glitch-meta">
+            <span>CODE & DESIGN</span>
+            <span>纯前端</span>
+            <span>2025</span>
+        </div>
+    </div>
+</section>
+
+<script type="module">
+    const canvas = document.getElementById("glitchCanvas");
+    const ctx = canvas.getContext("2d");
+    const resize = () => {
+        const ratio = window.devicePixelRatio || 1;
+        canvas.width = canvas.clientWidth * ratio;
+        canvas.height = canvas.clientHeight * ratio;
+        ctx.scale(ratio, ratio);
+    };
+
+    let tick = 0;
+    const draw = () => {
+        const { width, height } = canvas;
+        ctx.clearRect(0, 0, width, height);
+        const stripes = 30;
+        for (let i = 0; i < stripes; i++) {
+            const y = (i / stripes) * height;
+            const hue = (tick + i * 5) % 360;
+            ctx.fillStyle = `hsla(${hue}, 80%, 60%, 0.12)`;
+            ctx.fillRect(0, y, width, height / stripes + 1);
+
+            const glitchWidth = (Math.sin(tick / 20 + i) + 1) * 0.5 * width * 0.4;
+            const glitchX = Math.random() * (width - glitchWidth);
+            ctx.fillStyle = `hsla(${(hue + 120) % 360}, 90%, 65%, 0.45)`;
+            ctx.fillRect(glitchX, y, glitchWidth, height / stripes * 0.8);
+        }
+        tick += 1;
+        requestAnimationFrame(draw);
+    };
+
+    resize();
+    draw();
+    window.addEventListener("resize", resize);
+</script>
+
