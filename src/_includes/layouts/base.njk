@@ -22,13 +22,18 @@
     <div class="container">
         <header class="site-header">
             {% set isSpecialArchivePage = isSpecialArchivePage | default(false) %}
+            {% set isHomePage = (page.url === '/' or page.url === '/index.html') %}
             {% if isSpecialArchivePage %}
                 {% set brandTarget = '/' %}
                 {% set brandLabel = '返回首页' %}
                 {% set brandText = 'DEEPWHITE' %}
-            {% else %}
+            {% elif isHomePage %}
                 {% set brandTarget = '/special-archive/' %}
                 {% set brandLabel = '前往炫技特别归档' %}
+                {% set brandText = 'Deepwhite' %}
+            {% else %}
+                {% set brandTarget = '/' %}
+                {% set brandLabel = '返回首页' %}
                 {% set brandText = 'Deepwhite' %}
             {% endif %}
             <div class="site-branding">

@@ -211,11 +211,20 @@ graph TD
 
 ## 18 警告/提示（GitHub 风格）
 
-> **Note**
+> [!NOTE]
 > 这是一条提示。
 
-> **Warning**
+> [!WARNING]
 > 这是一条警告。
+
+> [!TIP]
+> 这是一个提示。
+
+> [!IMPORTANT]
+> 这是重要信息。
+
+> [!CAUTION]
+> 这是警告信息。
 
 ---
 

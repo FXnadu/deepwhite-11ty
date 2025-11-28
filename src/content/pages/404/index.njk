@@ -31,11 +31,29 @@
                 <div class="typewriter error-text" data-typewriter aria-live="assertive"></div>
 
                 <div class="page-404__suggestions hidden" data-suggestions>
-                    <p>别慌，我们准备了几个快捷命令：</p>
-                    <ul>
-                        <li><span class="index-num">1.</span><a href="{{ '/' | url }}">[cd /home] 返回首页</a></li>
-                        <li><span class="index-num">2.</span><a href="{{ '/archive/' | url }}">[ls /archive] 打开归档</a></li>
-                        <li><span class="index-num">3.</span><a href="https://github.com/FXnadu" target="_blank" rel="noopener">[git remote] 访问 GitHub</a></li>
+                    <span class="comment">// 别慌，检测到以下可用入口，建议尝试跳转：</span>
+                    <ul class="command-list">
+                        <li>
+                            <a href="{{ '/' | url }}">
+                                <span class="arrow" aria-hidden="true">➜</span>
+                                <span class="link-cmd">cd /home</span>
+                                <span class="link-desc">// 返回首页</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ '/archive/' | url }}">
+                                <span class="arrow" aria-hidden="true">➜</span>
+                                <span class="link-cmd">ls -a /archive</span>
+                                <span class="link-desc">// 查看归档</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="mailto:deepwhite86@outlook.com">
+                                <span class="arrow" aria-hidden="true">➜</span>
+                                <span class="link-cmd">mail author</span>
+                                <span class="link-desc">// 联系作者</span>
+                            </a>
+                        </li>
                     </ul>
                 </div>
 
@@ -59,11 +77,12 @@ document.addEventListener("DOMContentLoaded", function () {
     const hiddenInput = document.getElementById("page-404-input");
     if (!displayUrlEl || !typewriterEl) return;
 
-    const path = window.location.pathname;
-    const displayPath = path && path.length > 1 ? path : "/content/missing";
-    displayUrlEl.textContent = displayPath;
+    const path = window.location.pathname || "/";
+    const cleanPath = path.length > 1 ? path.replace(/\/$/, "") : "/index";
+    displayUrlEl.textContent = cleanPath;
 
-    const message = "Error 404: The requested resource was not found in the matrix.";
+    const commandArg = cleanPath === "/index" ? "./index" : `.${cleanPath}`;
+    const message = `cat: ${commandArg}: No such file or directory`;
     let index = 0;
 
     function revealExtras() {

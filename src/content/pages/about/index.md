@@ -13,18 +13,9 @@
         </div>
     </div>
 
-    <div class="about-philosophy">
-        <p>完美不在于无以复加，而在于无可删减。少即是多，无论是代码、设计还是生活，剔除冗余、回归核心能带来更强大的力量。简约不仅是一种美学选择，更是一种哲学。它关乎清晰、专注和尊重我们的时间。</p>
-    </div>
+    <p>完美不在于无以复加，而在于无可删减。少即是多，无论是代码、设计还是生活，剔除冗余、回归核心能带来更强大的力量。简约不仅是一种美学选择，更是一种哲学。它关乎清晰、专注和尊重我们的时间。</p>
 
-    <section class="about-section about-section--experience">
-        <h2 class="about-section-title">经验之谈</h2>
-        <ul class="about-section-list">
-            <li><strong>少即是多：</strong> 简约设计的首要目标是清晰地传达信息。</li>
-            <li><strong>持续学习：</strong> 技术浪潮奔涌不息，保持好奇心和学习的热情是我应对变化的唯一方式。</li>
-            <li><strong>保持均衡：</strong> 颜值即正义，质感是灵魂，功能决定生死，性能决定价值。</li>
-        </ul>
-    </section>
+    <p>少即是多：简约设计的首要目标是清晰地传达信息。持续学习：技术浪潮奔涌不息，保持好奇心和学习的热情是我应对变化的唯一方式。保持均衡：颜值即正义，质感是灵魂，功能决定生死，性能决定价值。</p>
 
     <section class="about-section about-section--contact">
         <h2 class="about-section-title">与我联系</h2>

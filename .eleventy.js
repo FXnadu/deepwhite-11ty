@@ -20,7 +20,10 @@ const toPlainText = (markdown = "") =>
     .replace(/\s+/g, " ")
     .trim();
 
-module.exports = (eleventyConfig) => {
+module.exports = async (eleventyConfig) => {
+  // 动态导入 ESM 模块
+  const { default: markdownItGitHubAlerts } = await import('markdown-it-github-alerts');
+  
   const markdownLib = markdownIt({
     html: true,
     breaks: true,
@@ -29,7 +32,8 @@ module.exports = (eleventyConfig) => {
     .use(markdownItMark)
     .use(markdownItSub)
     .use(markdownItSup)
-    .use(markdownItFootnote);
+    .use(markdownItFootnote)
+    .use(markdownItGitHubAlerts);
 
   eleventyConfig.setLibrary("md", markdownLib);
   eleventyConfig.addPlugin(syntaxHighlight, {

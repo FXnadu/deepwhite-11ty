@@ -19,6 +19,7 @@
     "luxon": "^3.7.2",
     "markdown-it": "^14.1.0",
     "markdown-it-footnote": "^4.0.0",
+    "markdown-it-github-alerts": "^1.0.0",
     "markdown-it-mark": "^4.0.0",
     "markdown-it-sub": "^2.0.0",
     "markdown-it-sup": "^2.0.0",

@@ -36,9 +36,12 @@
 | --- | --- |
 | `src/_includes/base.njk` | 全站基础骨架。通过 `extraCss`/`extraJs`/`layoutScripts` 注入额外资源，`showFloatingActions` 控制右下角按钮。 |
 | `src/_includes/post.njk` | 文章详情布局。默认启用浮动操作和 `post-page.js`（TOC 逻辑）。 |
+| `src/_includes/layouts/showcase.njk` | 纯净画布布局，供炫技页面使用，不包含常规导航/容器。 |
 | `src/index.njk` | 首页，分页数据来源 `collections.featured`。把想展示的文章 front matter 中添加 `tags: ['post', 'featured']` 即可。 |
 | `src/about.md` | 关于页面（直接使用 `base.njk`）。 |
 | `src/archive.md` | 归档页，加载 `archive.css`、`search.js`、`archive-page.js`。依赖 `collections.postsByYear`。 |
+| `src/content/pages/special-archive/` | 炫技特别归档。分页展示带 `tags: ['special-archive']` 的自定义页面，无需搜索脚本。 |
+| `src/content/pages/showcase/` | 存放炫技页面的独立目录，每个页面可自定义布局但需自带 `tags: ['special-archive']` 才会出现在归档中。 |
 | `src/posts/`、`src/*.md` | Markdown 文章。front matter 需包含 `layout: "post.njk"`、`title`、`date`、`tags: ['post']`。`excerpt` 将进入首页与搜索索引。 |
 | `src/css/style.css` | 全局样式。 |
 | `src/css/archive.css` | 归档页和搜索组件样式。 |
@@ -54,6 +57,16 @@
 - **摘要**：`excerpt` 字段将用于首页与搜索结果；如缺省，将自动截取正文前 200 个字符。  
 - **资源引用**：图片请放在 `src/img/`，构建时自动拷贝。  
 - **额外脚本/样式**：任意页面 front matter 中设置 `extraCss` / `extraJs`（可为字符串或数组）即可注入。
+
+### 炫技特别归档使用说明
+
+- 自定义页面（推荐放在 `src/content/pages/showcase/<slug>/index.njk`）想要加入“炫技归档”时，在 front matter 中添加 `tags: ['special-archive']` 并设置 `layout: "showcase.njk"` 以获得无导航的画布环境。  
+- 可选字段：  
+  - `specialSummary`：对页面的摘要描述。  
+  - `specialTags`: `['CSS', 'WebGL']` 这类自由标签，展示在卡片底部。  
+  - `specialLabel`：用于 meta 行的额外说明，如「Prototype」或版本号。  
+  - `specialOrder`：数字。值越大越靠前，未设置时按页面日期倒序。  
+- 这些页面不会出现在常规文章归档或搜索索引中（除非它们自行引用 `tags: ['post']`，默认建议不要如此设置）。
 
 ## 部署要点
 
