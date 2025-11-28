@@ -665,6 +665,134 @@ a:focus-visible {
 .page-content blockquote p {
     margin: 0.6em 0;
 }
+
+/* GitHub 风格警报框 */
+.post-content .markdown-alert,
+.page-content .markdown-alert {
+    margin: 2em 0;
+    padding: 1em 1.25em;
+    border-left: 4px solid;
+    border-radius: 6px;
+    background: var(--color-bg);
+}
+
+.post-content .markdown-alert-title,
+.page-content .markdown-alert-title {
+    margin: 0 0 0.5em 0;
+    font-weight: 600;
+    font-size: 0.95em;
+    display: flex;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.post-content .markdown-alert-title svg.octicon,
+.page-content .markdown-alert-title svg.octicon {
+    flex-shrink: 0;
+    vertical-align: text-bottom;
+    fill: currentColor;
+}
+
+.post-content .markdown-alert p,
+.page-content .markdown-alert p {
+    margin: 0.5em 0;
+}
+
+.post-content .markdown-alert p:first-of-type,
+.page-content .markdown-alert p:first-of-type {
+    margin-top: 0;
+}
+
+.post-content .markdown-alert p:last-of-type,
+.page-content .markdown-alert p:last-of-type {
+    margin-bottom: 0;
+}
+
+/* Note - 蓝色 */
+.post-content .markdown-alert-note,
+.page-content .markdown-alert-note {
+    border-left-color: #0969da;
+    background: rgba(9, 105, 218, 0.05);
+}
+
+.post-content .markdown-alert-note .markdown-alert-title,
+.page-content .markdown-alert-note .markdown-alert-title {
+    color: #0969da;
+}
+
+.post-content .markdown-alert-note .markdown-alert-title svg,
+.page-content .markdown-alert-note .markdown-alert-title svg {
+    fill: #0969da;
+}
+
+/* Tip - 绿色 */
+.post-content .markdown-alert-tip,
+.page-content .markdown-alert-tip {
+    border-left-color: #1a7f37;
+    background: rgba(26, 127, 55, 0.05);
+}
+
+.post-content .markdown-alert-tip .markdown-alert-title,
+.page-content .markdown-alert-tip .markdown-alert-title {
+    color: #1a7f37;
+}
+
+.post-content .markdown-alert-tip .markdown-alert-title svg,
+.page-content .markdown-alert-tip .markdown-alert-title svg {
+    fill: #1a7f37;
+}
+
+/* Important - 紫色 */
+.post-content .markdown-alert-important,
+.page-content .markdown-alert-important {
+    border-left-color: #8250df;
+    background: rgba(130, 80, 223, 0.05);
+}
+
+.post-content .markdown-alert-important .markdown-alert-title,
+.page-content .markdown-alert-important .markdown-alert-title {
+    color: #8250df;
+}
+
+.post-content .markdown-alert-important .markdown-alert-title svg,
+.page-content .markdown-alert-important .markdown-alert-title svg {
+    fill: #8250df;
+}
+
+/* Warning - 橙色 */
+.post-content .markdown-alert-warning,
+.page-content .markdown-alert-warning {
+    border-left-color: #9a6700;
+    background: rgba(154, 103, 0, 0.05);
+}
+
+.post-content .markdown-alert-warning .markdown-alert-title,
+.page-content .markdown-alert-warning .markdown-alert-title {
+    color: #9a6700;
+}
+
+.post-content .markdown-alert-warning .markdown-alert-title svg,
+.page-content .markdown-alert-warning .markdown-alert-title svg {
+    fill: #9a6700;
+}
+
+/* Caution - 红色 */
+.post-content .markdown-alert-caution,
+.page-content .markdown-alert-caution {
+    border-left-color: #cf222e;
+    background: rgba(207, 34, 46, 0.05);
+}
+
+.post-content .markdown-alert-caution .markdown-alert-title,
+.page-content .markdown-alert-caution .markdown-alert-title {
+    color: #cf222e;
+}
+
+.post-content .markdown-alert-caution .markdown-alert-title svg,
+.page-content .markdown-alert-caution .markdown-alert-title svg {
+    fill: #cf222e;
+}
+
  .post-content hr,
  .page-content hr {
      border: none;
@@ -1425,40 +1553,54 @@ pre[class*="language-"] {
     margin-bottom: 22px;
 }
 
-.page-404__suggestions p {
-    color: var(--color-text-subtle);
-    margin-bottom: 10px;
+.page-404__suggestions .comment {
+    display: block;
+    color: var(--color-meta);
+    margin-bottom: 14px;
     font-size: 15px;
 }
 
-.page-404__suggestions ul {
+.page-404__suggestions .command-list {
     list-style: none;
     padding-left: 0;
     margin: 0;
-}
-
-.page-404__suggestions li {
-    margin-bottom: 8px;
     display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.page-404__suggestions li a {
+    display: inline-flex;
     align-items: center;
-    gap: 8px;
-}
-
-.page-404 .index-num {
-    color: var(--color-meta);
-    font-size: 12px;
-}
-
-.page-404__suggestions a {
+    gap: 10px;
+    font-family: var(--font-family-mono);
     color: var(--color-text);
+    text-decoration: none;
     border-bottom: 1px solid transparent;
-    transition: color 0.2s, border-color 0.2s;
+    padding: 2px 0;
+    transition: color 0.2s ease, border-color 0.2s ease;
 }
 
-.page-404__suggestions a:hover,
-.page-404__suggestions a:focus-visible {
+.page-404__suggestions li a:hover,
+.page-404__suggestions li a:focus-visible {
     color: var(--color-text-strong);
-    border-bottom-color: var(--color-text-strong);
+    border-bottom-color: rgba(255, 255, 255, 0.2);
+}
+
+.page-404__suggestions .arrow {
+    color: var(--color-accent, #22c55e);
+    font-size: 16px;
+}
+
+.page-404__suggestions .link-cmd {
+    color: var(--color-text-strong);
+    font-weight: 600;
+}
+
+.page-404__suggestions .link-desc {
+    color: var(--color-meta);
+    margin-left: 4px;
+    white-space: nowrap;
 }
 
 .page-404 .hidden {
@@ -1521,8 +1663,8 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251127-17" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251127-17"></noscript>
+    <link rel="preload" href="/deepwhite-11ty/css/style.css?v=20251128-4" as="style" onload="this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251128-4"></noscript>
     
     
 </head>
@@ -1531,13 +1673,14 @@ pre[class*="language-"] {
         <header class="site-header">
             
             
+            
                 
                 
                 
             
             <div class="site-branding">
                 <h1 class="site-title">
-                    <a href="/deepwhite-11ty/special-archive/" aria-label="前往炫技特别归档">Deepwhite</a>
+                    <a href="/deepwhite-11ty/" aria-label="返回首页">Deepwhite</a>
                 </h1>
             </div>
             <nav class="site-nav">
@@ -1729,14 +1872,16 @@ $$</p>
 </details>
 <hr>
 <h2>18 警告/提示（GitHub 风格）</h2>
-<blockquote>
-<p><strong>Note</strong><br>
-这是一条提示。</p>
-</blockquote>
-<blockquote>
-<p><strong>Warning</strong><br>
-这是一条警告。</p>
-</blockquote>
+<div class="markdown-alert markdown-alert-note"><p class="markdown-alert-title"><svg class="octicon octicon-info mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8Zm8-6.5a6.5 6.5 0 1 0 0 13 6.5 6.5 0 0 0 0-13ZM6.5 7.75A.75.75 0 0 1 7.25 7h1a.75.75 0 0 1 .75.75v2.75h.25a.75.75 0 0 1 0 1.5h-2a.75.75 0 0 1 0-1.5h.25v-2h-.25a.75.75 0 0 1-.75-.75ZM8 6a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Note</p><p>这是一条提示。</p>
+</div>
+<div class="markdown-alert markdown-alert-warning"><p class="markdown-alert-title"><svg class="octicon octicon-alert mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M6.457 1.047c.659-1.234 2.427-1.234 3.086 0l6.082 11.378A1.75 1.75 0 0 1 14.082 15H1.918a1.75 1.75 0 0 1-1.543-2.575Zm1.763.707a.25.25 0 0 0-.44 0L1.698 13.132a.25.25 0 0 0 .22.368h12.164a.25.25 0 0 0 .22-.368Zm.53 3.996v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 11a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Warning</p><p>这是一条警告。</p>
+</div>
+<div class="markdown-alert markdown-alert-tip"><p class="markdown-alert-title"><svg class="octicon octicon-light-bulb mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M8 1.5c-2.363 0-4 1.69-4 3.75 0 .984.424 1.625.984 2.304l.214.253c.223.264.47.556.673.848.284.411.537.896.621 1.49a.75.75 0 0 1-1.484.211c-.04-.282-.163-.547-.37-.847a8.456 8.456 0 0 0-.542-.68c-.084-.1-.173-.205-.268-.32C3.201 7.75 2.5 6.766 2.5 5.25 2.5 2.31 4.863 0 8 0s5.5 2.31 5.5 5.25c0 1.516-.701 2.5-1.328 3.259-.095.115-.184.22-.268.319-.207.245-.383.453-.541.681-.208.3-.33.565-.37.847a.751.751 0 0 1-1.485-.212c.084-.593.337-1.078.621-1.489.203-.292.45-.584.673-.848.075-.088.147-.173.213-.253.561-.679.985-1.32.985-2.304 0-2.06-1.637-3.75-4-3.75ZM5.75 12h4.5a.75.75 0 0 1 0 1.5h-4.5a.75.75 0 0 1 0-1.5ZM6 15.25a.75.75 0 0 1 .75-.75h2.5a.75.75 0 0 1 0 1.5h-2.5a.75.75 0 0 1-.75-.75Z"></path></svg>Tip</p><p>这是一个提示。</p>
+</div>
+<div class="markdown-alert markdown-alert-important"><p class="markdown-alert-title"><svg class="octicon octicon-report mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M0 1.75C0 .784.784 0 1.75 0h12.5C15.216 0 16 .784 16 1.75v9.5A1.75 1.75 0 0 1 14.25 13H8.06l-2.573 2.573A1.458 1.458 0 0 1 3 14.543V13H1.75A1.75 1.75 0 0 1 0 11.25Zm1.75-.25a.25.25 0 0 0-.25.25v9.5c0 .138.112.25.25.25h2a.75.75 0 0 1 .75.75v2.19l2.72-2.72a.749.749 0 0 1 .53-.22h6.5a.25.25 0 0 0 .25-.25v-9.5a.25.25 0 0 0-.25-.25Zm7 2.25v2.5a.75.75 0 0 1-1.5 0v-2.5a.75.75 0 0 1 1.5 0ZM9 9a1 1 0 1 1-2 0 1 1 0 0 1 2 0Z"></path></svg>Important</p><p>这是重要信息。</p>
+</div>
+<div class="markdown-alert markdown-alert-caution"><p class="markdown-alert-title"><svg class="octicon octicon-stop mr-2" viewBox="0 0 16 16" version="1.1" width="16" height="16" aria-hidden="true"><path d="M4.47.22A.749.749 0 0 1 5 0h6c.199 0 .389.079.53.22l4.25 4.25c.141.14.22.331.22.53v6a.749.749 0 0 1-.22.53l-4.25 4.25A.749.749 0 0 1 11 16H5a.749.749 0 0 1-.53-.22L.22 11.53A.749.749 0 0 1 0 11V5c0-.199.079-.389.22-.53Zm.84 1.28L1.5 5.31v5.38l3.81 3.81h5.38l3.81-3.81V5.31L10.69 1.5ZM8 4a.75.75 0 0 1 .75.75v3.5a.75.75 0 0 1-1.5 0v-3.5A.75.75 0 0 1 8 4Zm0 8a1 1 0 1 1 0-2 1 1 0 0 1 0 2Z"></path></svg>Caution</p><p>这是警告信息。</p>
+</div>
 <hr>
 <h2>19 注释（不可见）</h2>
 <hr>
@@ -1853,13 +1998,13 @@ npm i</code></pre>
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251127-17" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251128-4" defer></script>
         
     
         
         
         
-<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251127-17" defer></script>
+<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251128-4" defer></script>
         
     
 
