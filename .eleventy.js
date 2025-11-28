@@ -21,7 +21,7 @@ const toPlainText = (markdown = "") =>
     .trim();
 
 module.exports = async (eleventyConfig) => {
-  // 动态导入 ESM 模块
+  // 动态导入 ESM 模块（在构建时执行，不影响运行时性能）
   const { default: markdownItGitHubAlerts } = await import('markdown-it-github-alerts');
   
   const markdownLib = markdownIt({

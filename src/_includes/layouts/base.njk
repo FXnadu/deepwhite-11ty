@@ -11,8 +11,7 @@
     <style>{{ assetsConfig.criticalCssInline | safe }}</style>
     {% endif %}
     {% if assetsConfig.mainCssHref %}
-    <link rel="preload" href="{{ assetsConfig.mainCssHref | url }}" as="style" onload="this.rel='stylesheet'">
-    <noscript><link rel="stylesheet" href="{{ assetsConfig.mainCssHref | url }}"></noscript>
+    <link rel="stylesheet" href="{{ assetsConfig.mainCssHref | url }}">
     {% endif %}
     {% for cssFile in extraCss | toArray %}
     <link rel="stylesheet" href="{{ cssFile | url }}">
