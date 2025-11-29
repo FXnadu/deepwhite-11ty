@@ -14,13 +14,7 @@
     <link rel="stylesheet" href="{{ assetsConfig.mainCssHref | url }}">
     {% endif %}
     {% for cssFile in extraCss | toArray %}
-    {% set versionSuffix = "" %}
-    {% if assetsConfig.mainCssHref and "?v=" in assetsConfig.mainCssHref %}
-        {% set versionMatch = assetsConfig.mainCssHref | regex_replace(".*\\?v=([^&]+).*", "$1") %}
-        {% if versionMatch != assetsConfig.mainCssHref %}
-            {% set versionSuffix = "?v=" + versionMatch %}
-        {% endif %}
-    {% endif %}
+    {% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
     <link rel="stylesheet" href="{{ (cssFile + versionSuffix) | url }}">
     {% endfor %}
 </head>

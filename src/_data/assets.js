@@ -21,6 +21,9 @@ module.exports = () => {
   const v = ASSET_VERSION ? `?v=${ASSET_VERSION}` : "";
 
   return {
+    // 暴露版本号，供模板使用（如自动为 extraCss 添加版本号）
+    assetVersion: ASSET_VERSION,
+    assetVersionSuffix: v,
     criticalCssInline: readFileSafe(cssPath),
     mainCssHref: `/css/style.css${v}`,
     islands: {

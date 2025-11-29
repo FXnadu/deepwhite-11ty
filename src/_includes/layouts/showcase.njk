@@ -10,7 +10,8 @@
     <link rel="stylesheet" href="{{ assetsConfig.mainCssHref | url }}">
     {% endif %}
     {% for cssFile in extraCss | toArray %}
-    <link rel="stylesheet" href="{{ cssFile | url }}">
+    {% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
+    <link rel="stylesheet" href="{{ (cssFile + versionSuffix) | url }}">
     {% endfor %}
     {{ head | safe }}
 </head>
