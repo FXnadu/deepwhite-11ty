@@ -17,8 +17,22 @@
     {% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
     <link rel="stylesheet" href="{{ (cssFile + versionSuffix) | url }}">
     {% endfor %}
+    {%- set pageTags = tags | default([]) | toArray -%}
+    {%- set entryAnimation = entryAnimation | default(false) -%}
+    {%- set hasSpecialArchiveTag = 'special-archive' in pageTags -%}
+    {%- set shouldShowEntryAnimation = entryAnimation or hasSpecialArchiveTag -%}
+    {%- if shouldShowEntryAnimation -%}
+    {% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
+    <link rel="stylesheet" href="{{ ('/css/special-archive-entry.css' + versionSuffix) | url }}">
+    {%- endif -%}
 </head>
-<body data-show-floating="{{ (showFloatingActions | default(false)) and 'true' or 'false' }}">
+<body data-show-floating="{{ (showFloatingActions | default(false)) and 'true' or 'false' }}"{% if shouldShowEntryAnimation %} class="is-loading"{% endif %}>
+    {%- if shouldShowEntryAnimation -%}
+    <!-- 粒子画布 -->
+    <canvas id="particle-layer"></canvas>
+    <!-- 内容包裹层 -->
+    <div id="main-wrapper">
+    {%- endif -%}
     <div class="container">
         <header class="site-header">
             {% set isSpecialArchivePage = isSpecialArchivePage | default(false) %}
@@ -69,6 +83,10 @@
             </a>
         </div>
         {% endif %}
+    {%- if shouldShowEntryAnimation -%}
+    </div>
+    <!-- 结束内容包裹层 -->
+    {%- endif -%}
 </body>
 {% set requestedIslands = islands | toArray %}
 {% if requestedIslands | length %}
@@ -87,4 +105,8 @@
 <script {% if siteIsland.module %}type="module"{% endif %} src="{{ siteIsland.src | url }}" defer></script>
     {% endif %}
 {% endif %}
+{%- if shouldShowEntryAnimation -%}
+{% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
+<script src="{{ ('/js/special-archive-entry.js' + versionSuffix) | url }}"></script>
+{%- endif -%}
 </html>

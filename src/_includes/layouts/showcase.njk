@@ -13,10 +13,28 @@
     {% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
     <link rel="stylesheet" href="{{ (cssFile + versionSuffix) | url }}">
     {% endfor %}
+    {%- set pageTags = tags | default([]) | toArray -%}
+    {%- set entryAnimation = entryAnimation | default(false) -%}
+    {%- set hasSpecialArchiveTag = 'special-archive' in pageTags -%}
+    {%- set shouldShowEntryAnimation = entryAnimation or hasSpecialArchiveTag -%}
+    {%- if shouldShowEntryAnimation -%}
+    {% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
+    <link rel="stylesheet" href="{{ ('/css/special-archive-entry.css' + versionSuffix) | url }}">
+    {%- endif -%}
     {{ head | safe }}
 </head>
-<body class="{{ bodyClass | default('showcase-body') }}">
+<body class="{{ bodyClass | default('showcase-body') }}{% if shouldShowEntryAnimation %} is-loading{% endif %}">
+    {%- if shouldShowEntryAnimation -%}
+    <!-- 粒子画布 -->
+    <canvas id="particle-layer"></canvas>
+    <!-- 内容包裹层 -->
+    <div id="main-wrapper">
+    {%- endif -%}
     {{ content | safe }}
+    {%- if shouldShowEntryAnimation -%}
+    </div>
+    <!-- 结束内容包裹层 -->
+    {%- endif -%}
     {% for scriptFile in extraJs | toArray %}
     <script src="{{ scriptFile | url }}" defer></script>
     {% endfor %}
@@ -30,6 +48,10 @@
             {% endif %}
         {% endfor %}
     {% endif %}
+    {%- if shouldShowEntryAnimation -%}
+    {% set versionSuffix = assetsConfig.assetVersionSuffix | default("") %}
+    <script src="{{ ('/js/special-archive-entry.js' + versionSuffix) | url }}"></script>
+    {%- endif -%}
 </body>
 </html>
 

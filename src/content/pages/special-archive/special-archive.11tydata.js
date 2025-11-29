@@ -8,6 +8,7 @@ module.exports = {
   title: "特别归档",
   showFloatingActions: true,
   isSpecialArchivePage: true,
+  extraCss: ["/css/special-archive.css"],
   pagination: {
     data: "collections.specialArchivePages",
     size: 6,
