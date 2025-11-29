@@ -14,7 +14,14 @@
     <link rel="stylesheet" href="{{ assetsConfig.mainCssHref | url }}">
     {% endif %}
     {% for cssFile in extraCss | toArray %}
-    <link rel="stylesheet" href="{{ cssFile | url }}">
+    {% set versionSuffix = "" %}
+    {% if assetsConfig.mainCssHref and "?v=" in assetsConfig.mainCssHref %}
+        {% set versionMatch = assetsConfig.mainCssHref | regex_replace(".*\\?v=([^&]+).*", "$1") %}
+        {% if versionMatch != assetsConfig.mainCssHref %}
+            {% set versionSuffix = "?v=" + versionMatch %}
+        {% endif %}
+    {% endif %}
+    <link rel="stylesheet" href="{{ (cssFile + versionSuffix) | url }}">
     {% endfor %}
 </head>
 <body data-show-floating="{{ (showFloatingActions | default(false)) and 'true' or 'false' }}">
