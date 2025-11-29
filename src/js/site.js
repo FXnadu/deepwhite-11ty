@@ -378,6 +378,91 @@
     });
   };
 
+  const initAboutContact = () => {
+    // 仅在 about 联系区域内初始化，支持多个网格容器
+    const contactSection = document.querySelector(".about-section--contact");
+    if (!contactSection) return;
+
+    const drawers = contactSection.querySelectorAll("[data-contact-drawer]");
+    const triggers = contactSection.querySelectorAll("[data-contact-trigger]");
+    let activeType = null;
+    let toastTimer = null;
+
+    const closeAll = () => {
+      drawers.forEach((drawer) => drawer.classList.remove("is-open"));
+      triggers.forEach((trigger) => trigger.classList.remove("is-active"));
+    };
+
+    const openDrawer = (type) => {
+      const drawer = contactSection.querySelector(
+        `[data-contact-drawer=\"${type}\"]`
+      );
+      const trigger = contactSection.querySelector(
+        `[data-contact-trigger=\"${type}\"]`
+      );
+      if (!drawer || !trigger) return;
+
+      if (activeType === type) {
+        closeAll();
+        activeType = null;
+        return;
+      }
+
+      closeAll();
+      drawer.classList.add("is-open");
+      trigger.classList.add("is-active");
+      activeType = type;
+    };
+
+    triggers.forEach((trigger) => {
+      const type = trigger.dataset.contactTrigger;
+      if (!type) return;
+      trigger.addEventListener("click", () => openDrawer(type));
+    });
+
+    const showToast = (message) => {
+      const toast = document.getElementById("about-contact-toast");
+      if (!toast) return;
+      toast.textContent = message;
+      toast.classList.add("is-visible");
+      window.clearTimeout(toastTimer);
+      toastTimer = window.setTimeout(() => {
+        toast.classList.remove("is-visible");
+      }, 2000);
+    };
+
+    const wechatButton = document.querySelector("[data-wechat-id]");
+    if (wechatButton) {
+      wechatButton.addEventListener("click", async () => {
+        const id =
+          wechatButton.dataset.wechatId ||
+          wechatButton.textContent.trim();
+        if (!id) return;
+        try {
+          if (navigator.clipboard && navigator.clipboard.writeText) {
+            await navigator.clipboard.writeText(id);
+            showToast("已复制到剪贴板");
+          }
+        } catch {
+          // ignore clipboard errors
+        }
+      });
+    }
+
+    const emailButton = document.querySelector("[data-email-send]");
+    if (emailButton) {
+      const textarea = document.querySelector("[data-email-body]");
+      const baseHref = "mailto:deepwhite86@outlook.com?subject=Contact";
+
+      emailButton.addEventListener("click", () => {
+        const body = textarea ? textarea.value.trim() : "";
+        const bodyParam = body ? `&body=${encodeURIComponent(body)}` : "";
+        const href = `${baseHref}${bodyParam}`;
+        window.location.href = href;
+      });
+    }
+  };
+
   ready(() => {
     importMermaid();
     initFloatingActions();
@@ -385,6 +470,7 @@
     hydrateContactTemplates();
     initFootnotePreview();
     initFootnoteNavigation();
+    initAboutContact();
   });
 })();
 

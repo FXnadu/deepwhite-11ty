@@ -6,31 +6,31 @@
 - `BASE_URL` 环境变量决定 `pathPrefix`，部署到子路径时务必设置，避免生成错误链接。
 
 ## 目录约定
-- 遵循 11ty 官方 starter 推荐的“内容/布局/数据”分层：
+- 遵循 11ty 官方 starter 推荐的"内容/布局/数据"分层：
   - `src/content/pages/<feature>/`：每个页面功能独立文件夹，`index.njk|md` 搭配 `<name>.11tydata.js`。删除文件夹即可下线功能。
   - `src/content/posts/`：全部文章 Markdown，目录级 `posts.11tydata.js` 统一 permalink 与默认 front matter。
-  - `src/_includes/layouts/`：`base.njk`/`post.njk` 作为布局骨架，请复用而非复制粘贴。
+  - `src/_includes/layouts/`：`base.njk`/`post.njk`/`showcase.njk` 作为布局骨架，请复用而非复制粘贴。
   - `src/_data/assets.js` 负责 critical CSS 和 islands 注册，新增脚本时先更新该文件再在页面 front matter 的 `islands` 声明。
 - 所有静态资产（`src/img`, `src/css`, `src/js`, `_headers`, `_redirects`, `.htaccess`, `.nojekyll`）依赖 `.eleventy.js` 的 `addPassthroughCopy`，新增资产时按原路径放置。
 
 ## 模板与数据实践
-- Front matter 逻辑尽量放入 `.11tydata.js`，保持模板只关注标记结构；这是 11ty 官方推荐的“数据层前置”做法。
+- Front matter 逻辑尽量放入 `.11tydata.js`，保持模板只关注标记结构；这是 11ty 官方推荐的"数据层前置"做法。
 - 使用 `eleventyComputed` 生成 permalink、分页 URL、派生数据（参考 `home.11tydata.js` 和 `archive.11tydata.js`），不要在模板里拼接路径。
 - 集合：
   - `collections.post` + `tags: ['post']` 作为文章基线；首页精选需额外加 `featured`。
-  - `collections.featured`, `postsByYear`, `allPostsForSearch` 已在 `.eleventy.js` 注册，新增页面优先复用。
+  - `collections.featured`, `postsByYear`, `allPostsForSearch`, `specialArchivePages` 已在 `.eleventy.js` 注册，新增页面优先复用。
 - 过滤器/集合需保持纯函数、同步可序列化，避免持久化状态，符合 11ty 文档关于可缓存构建的要求。
 
 ## 性能与可维护性
-- 继承 `assets.js` 的做法：`criticalCssInline` 必须保持轻量（关键渲染路径），主样式通过 `<link rel="preload" ... onload>` 延迟加载，禁止在模板内直接引入大 CSS。
-- JS 采用“islands/partial hydration”模式：仅在需要的页面注入对应模块（`site`, `archive`, `post`, `search`）。新增交互脚本时默认 `type="module"`、`defer`，避免阻塞。
+- CSS 加载：主样式通过 `<link rel="stylesheet">` 直接同步加载，确保样式立即应用，避免页面闪烁和延迟。`criticalCssInline` 必须保持轻量（关键渲染路径）。
+- JS 采用"islands/partial hydration"模式：仅在需要的页面注入对应模块（`site`, `archive`, `post`, `search`）。新增交互脚本时默认 `type="module"`、`defer`，避免阻塞。
 - 搜索索引在 `eleventy.after` 钩子中用 `gray-matter` 解析 Markdown；若修改逻辑，确保输出仍是小写 JSON、限制字段长度，以防页面加载过慢。
 - 任何第三方库引入前确认必要性；性能敏感页面（首页/归档/文章）优先使用原生 API。
-- 保持分页尺寸合理（目前首页 6 篇、归档 5 篇），如需调整先评估首屏渲染成本。
+- 保持分页尺寸合理（目前首页 6 篇、归档 5 篇、special-archive 6 篇），如需调整先评估首屏渲染成本。
 
 ### 静态资源版本与缓存（必须遵守的 Cursor 规则）
-- 站点通过 Cloudflare 等 CDN 对 `/css/*.css`、`/js/*.js` 使用了长期强缓存（`max-age=31536000, immutable`），**同一 URL 的文件会被浏览器/CDN 视为“一年不变”**。
-- 所有核心前端资源统一经由 `src/_data/assets.js` 暴露，其中 `ASSET_VERSION` 会自动附加到 URL 查询参数（例如 `/css/style.css?v=20251126-1`），用于强制刷新缓存。
+- 站点通过 Cloudflare 等 CDN 对 `/css/*.css`、`/js/*.js` 使用了长期强缓存（`max-age=31536000, immutable`），**同一 URL 的文件会被浏览器/CDN 视为"一年不变"**。
+- 所有核心前端资源统一经由 `src/_data/assets.js` 暴露，其中 `ASSET_VERSION` 会自动附加到 URL 查询参数（例如 `/css/style.css?v=20251128-4`），用于强制刷新缓存。
 - **只要修改了以下任意文件且影响到 UI 或交互，AI 助手必须自动同步更新 `ASSET_VERSION`：**
   - `src/css/style.css`
   - `src/css/archive.css`
@@ -38,28 +38,50 @@
   - `src/js/post-page.js`
   - `src/js/archive-page.js`
   - `src/js/search.js`
-- 更新方式：将 `ASSET_VERSION` 改成一个新的、递增/基于日期的字符串（如：`20251126-2`），然后执行 `npm run build`，再由用户进行 `git push` / 部署。
-- 用户不需要手动记住这一步：**当用户说“改样式/交互/目录/复制按钮”等前端变更需求时，AI 助手要默认负责更新 `ASSET_VERSION` 并提醒构建部署。**
+- 更新方式：将 `ASSET_VERSION` 改成一个新的、递增/基于日期的字符串（如：`20251128-5`），然后执行 `npm run build`，再由用户进行 `git push` / 部署。
+- 用户不需要手动记住这一步：**当用户说"改样式/交互/目录/复制按钮"等前端变更需求时，AI 助手要默认负责更新 `ASSET_VERSION` 并提醒构建部署。**
 
-## 内容编写
-- 文章 front matter 至少包含 `title`, `date`, `layout: "post.njk"`, `tags: ['post']`；缺省 `excerpt` 时由 `.eleventy.js` 自动截取 200 字。
-- 图片放在 `src/img/`，引用相对路径 `/img/...`；其他静态文件走 `src/css` / `src/js`。
-- Markdown 中的代码块会在搜索索引阶段被剥离（`toPlainText` 处理），如需保留关键词，可在 `excerpt` 手动填写。
+## 集合设计原则（关键规则）
+- **避免依赖文件路径进行过滤**：路径格式可能因操作系统和构建环境而异（`/` vs `\`），导致跨环境不一致。
+- **优先使用 front matter 中的 `tags` 或 `data` 字段**：这些字段是跨环境一致的标识符。
+- **分页依赖的集合必须永远不为空**：当集合为空时，Eleventy 不会生成分页页面。对于 `specialArchivePages` 等关键集合，必须添加占位符机制。
+- **占位符必须包含完整结构**：`url`, `date`, `inputPath`, `fileSlug`, `data.__specialArchivePlaceholder` 等 Eleventy 分页所需的属性。
+- **模板中必须过滤占位符**：使用 `{%- if not entry.data.__specialArchivePlaceholder -%}` 确保占位符不显示。
+
+## 分页配置规范
+- 分页配置统一在 `.11tydata.js` 中，不在模板 front matter。
+- 分页数据源使用字符串引用：`data: "collections.xxx"`，而不是直接引用集合对象。
+- 使用 `alias` 提供清晰的数据访问路径，如 `alias: "pageEntries"`。
+- `permalink` 计算使用 `eleventyComputed`，确保分页 URL 正确生成。
+
+## 品牌链接跳转逻辑
+- 首页（`page.url === '/'`）：品牌链接指向 `/special-archive/`
+- 其他页面（归档/关于等）：品牌链接指向首页 `/`
+- special-archive 页面：品牌链接指向首页 `/`
+- 通过 `isSpecialArchivePage` 和 `isHomePage` 变量控制跳转目标。
+
+## 错误预防规则
+- 修改集合过滤逻辑时，必须验证跨环境兼容性（避免路径依赖）。
+- 新增分页页面时，确保集合不为空或添加占位符机制。
+- 修改搜索索引逻辑时，确保输出 JSON 为小写、限制字段长度。
+- 构建后必须检查关键文件是否存在：`_site/search-index.json`、`_site/js/search.js` 等。
 
 ## 提交流程
-- 修改前确认是否影响 `assets.js` / `collections` / `islands` 等核心配置，必要时更新 `PROJECT_GUIDE.md`。
+- 修改前确认是否影响 `assets.js` / `collections` / `islands` 等核心配置。
 - 新功能需保持**行为一致**：若无明确需求，不得改变现有 URL、布局、交互。
-- 变更后至少执行一次 `npm run build`，检查 `_site` 中关键页（首页、`/archive/`, `/about/`, 最近文章）与 `_site/search-index.json` 是否符合预期。
+- 变更后至少执行一次 `npm run build`，检查 `_site` 中关键页（首页、`/archive/`, `/about/`, `/special-archive/`, 最近文章）与 `_site/search-index.json` 是否符合预期。
+- 验证集合不为空：特别是 `specialArchivePages`，确保至少有一个占位符。
 - 不向 Git 提交 `_site/`、`node_modules/`、本地调试文件。
+
+## 一致性要求
+- 一切功能要保持上传和本地运行是一致的，包括样式、交互、功能等。
+- 添加任何新功能，要维持原有功能的正常使用，不得影响原有功能。
+- 删除任何功能，要维持原有功能的正常使用，不得影响其他原有功能。
+- 所有功能应该在本地能运行，推送到远程，不同的环境也能正常运行。
+- 确保兼容性，Safari、Chrome 等浏览器的兼容性一致。
+- 集合过滤逻辑必须跨环境一致，避免依赖路径、文件系统等环境相关因素。
 
 ## 协作提醒
 - 讨论设计前可引用 Eleventy 官方文档章节（目录结构、数据级别、不用 JS 的模板增强等）支撑决策。
 - 保持注释简洁，只在非自明的业务约束处补充；禁止以注释形式堆砌需求历史。
 - 若需要引入构建步骤（如额外打包器/处理器），先评估对纯静态输出的影响，并给出回退策略。
-
-## 一致性
-- 一切功能要保持上传和本地运行是一致的，包括样式、交互、功能等。
-- 添加任何新功能，要维持原有功能的正常使用，不得影响原有功能。
-- 删除任何功能，要维持原有功能的正常使用，不得影响其他原有功能。
-- 所有功能应该在本地能运行，推送到远程，不同的环境也能正常运行。
-

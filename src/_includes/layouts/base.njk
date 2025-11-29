@@ -40,11 +40,13 @@
                     <a href="{{ brandTarget | url }}" aria-label="{{ brandLabel }}">{{ brandText }}</a>
                 </h1>
             </div>
-            <nav class="site-nav">
-                <a href="{{ '/' | url }}">首页</a>
-                <a href="{{ '/archive/' | url }}">归档</a> 
-                <a href="{{ '/about/' | url }}">关于我</a>
-            </nav>
+            <div class="site-controls">
+                <nav class="site-nav">
+                    <a href="{{ '/' | url }}">首页</a>
+                    <a href="{{ '/archive/' | url }}">归档</a> 
+                    <a href="{{ '/about/' | url }}">关于我</a>
+                </nav>
+            </div>
         </header>
 
         <main>
@@ -52,7 +54,7 @@
         </main>
 
         <footer class="site-footer">
-            <p>&copy; 2025 [DEEPWHITE]. <br>少即是多，简约永恒。</p>
+            <p>&copy; 2025 [DEEPWHITE]. <br>完美不在于无以复加，而在于无可删减。</p>
         </footer>
     </div>
 
@@ -76,5 +78,12 @@
 <script {% if island.module %}type="module"{% endif %} src="{{ island.src | url }}" defer></script>
         {% endif %}
     {% endfor %}
+{% endif %}
+{% if 'site' not in requestedIslands %}
+    {% set islandRegistry = assetsConfig.islands or {} %}
+    {% set siteIsland = islandRegistry['site'] %}
+    {% if siteIsland %}
+<script {% if siteIsland.module %}type="module"{% endif %} src="{{ siteIsland.src | url }}" defer></script>
+    {% endif %}
 {% endif %}
 </html>

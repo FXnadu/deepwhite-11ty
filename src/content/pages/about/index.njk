@@ -1,0 +1,186 @@
+<header class="page-header about-page-header">
+    <h1 class="page-title">关于我</h1>
+</header>
+
+<section class="page-content about-page">
+    <div class="about-intro">
+        <div class="about-avatar">
+            <img src="https://personal-pic86.oss-cn-beijing.aliyuncs.com/picture/202511132103828.svg" alt="deepwhite的个人照片">
+        </div>
+        <div class="about-bio">
+            <p>I'm deepwhite，欢迎来到我的数字人生旅途随想集。</p>
+            <p>温和极简主义，追求"刚刚好"的丰盈，一切都应有美学、性能与实用之间完美的平衡点。</p>
+        </div>
+    </div>
+
+    <p>完美不在于无以复加，而在于无可删减。少即是多，无论是代码、设计还是生活，剔除冗余、回归核心能带来更强大的力量。简约不仅是一种美学选择，更是一种哲学。它关乎清晰、专注和尊重我们的时间。</p>
+
+    <p>少即是多：简约设计的首要目标是清晰地传达信息。持续学习：技术浪潮奔涌不息，保持好奇心和学习的热情是我应对变化的唯一方式。保持均衡：颜值即正义，质感是灵魂，功能决定生死，性能决定价值。</p>
+
+    <section class="about-section about-section--contact">
+        <h2 class="about-section-title">与我联系</h2>
+
+        <div class="about-contact-wrapper">
+            <!-- 顶部 Email 行（单行全宽） -->
+            <div class="about-contact-grid about-contact-grid--primary" data-contact-grid>
+                <button
+                    type="button"
+                    class="about-contact-card about-contact-card--full"
+                    data-contact-trigger="email"
+                    id="about-email-trigger"
+                >
+                    <span class="about-contact-card-label">01 / EMAIL</span>
+                    <span class="about-contact-card-main about-contact-card-main--email">
+                        deepwhite86@outlook.com
+                    </span>
+                    <span class="about-contact-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="about-contact-arrow">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Email 抽屉 -->
+            <div
+                class="about-contact-drawer about-contact-drawer--email"
+                data-contact-drawer="email"
+                id="about-email-drawer"
+            >
+                <div class="about-contact-drawer-inner">
+                    <p class="about-contact-hint">
+                        复制地址或在下方输入：
+                    </p>
+                    <div class="about-contact-email-input">
+                        <textarea
+                            id="about-email-body"
+                            placeholder="输入你的消息..."
+                            data-email-body
+                        ></textarea>
+                        <button
+                            type="button"
+                            class="about-contact-email-btn"
+                            data-email-send
+                        >
+                            发送邮件
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中部社交行：小红书 + WeChat -->
+            <div class="about-contact-grid about-contact-grid--secondary">
+                <button
+                    type="button"
+                    class="about-contact-card"
+                    data-contact-trigger="xiaohongshu"
+                    id="about-xiaohongshu-trigger"
+                >
+                    <span class="about-contact-card-label">02 / SOCIAL</span>
+                    <span class="about-contact-card-main">XIAOHONGSHU</span>
+                    <span class="about-contact-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="about-contact-arrow">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </span>
+                </button>
+
+                <button
+                    type="button"
+                    class="about-contact-card"
+                    data-contact-trigger="wechat"
+                    id="about-wechat-trigger"
+                >
+                    <span class="about-contact-card-label">03 / CHAT</span>
+                    <span class="about-contact-card-main">WECHAT</span>
+                    <span class="about-contact-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="about-contact-arrow">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- 小红书抽屉 -->
+            <div
+                class="about-contact-drawer about-contact-drawer--xiaohongshu"
+                data-contact-drawer="xiaohongshu"
+                id="about-xiaohongshu-drawer"
+            >
+                <div class="about-contact-drawer-inner">
+                    <div class="about-contact-xiaohongshu">
+                        <div class="about-contact-xiaohongshu-info">
+                            <div class="about-contact-xiaohongshu-label">
+                                访问我的小红书主页
+                            </div>
+                            <a
+                                href="https://www.xiaohongshu.com/user/profile/64fff8dc0000000005002066"
+                                target="_blank"
+                                rel="noopener"
+                                class="about-contact-xiaohongshu-link"
+                            >
+                                <span class="about-contact-xiaohongshu-link-text">访问主页</span>
+                                <svg
+                                    class="about-contact-external-icon"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WeChat 抽屉 -->
+            <div
+                class="about-contact-drawer about-contact-drawer--wechat"
+                data-contact-drawer="wechat"
+                id="about-wechat-drawer"
+            >
+                <div class="about-contact-drawer-inner">
+                    <div class="about-contact-wechat">
+                        <div class="about-contact-wechat-info">
+                            <div class="about-contact-wechat-label">
+                                微信号（点击复制）
+                            </div>
+                            <button
+                                type="button"
+                                class="about-contact-wechat-id"
+                                data-wechat-id="deepwhite8611"
+                            >
+                                <span class="about-contact-wechat-id-text">deepwhite8611</span>
+                                <svg
+                                    class="about-contact-copy-icon"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path
+                                        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="about-contact-wechat-qr">
+                            <img
+                                src="https://personal-pic86.oss-cn-beijing.aliyuncs.com/picture/202511291230939.png"
+                                alt="WeChat QR"
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部轻微收口线条 -->
+            <div class="about-contact-closure" aria-hidden="true"></div>
+        </div>
+
+        <div class="about-contact-toast" id="about-contact-toast" aria-live="polite">
+            已复制到剪贴板
+        </div>
+    </section>
+</section>
+
+

@@ -130,55 +130,390 @@
     line-height: 1.4;
 }
 
-/* 联系区域 - 优雅可扩展的排版设计 */
-.about-section--contact .about-section-list {
-    margin-top: 0.2em;
+/* 联系区域 - 网格 + 抽屉交互（适配参考联系组件，仅配色使用站点变量） */
+.about-section--contact {
+    margin-top: 2.2em;
+}
+
+.about-contact-wrapper {
+    width: 100%;
+    max-width: 800px;
+    margin: 50px auto;
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-border);
+}
+
+/* 顶部 / 中部网格容器：3 列网格 + 1px 分隔线（无圆角，贴近参考稿） */
+.about-contact-grid {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 1px;
+    overflow: hidden;
+    border-top: 1px solid var(--color-border);
+    border-bottom: 1px solid var(--color-border);
+    background-color: var(--color-border);
+}
+
+/* 顶部 Email 行与社交行之间保持轻微间距 */
+.about-contact-grid--primary {
     margin-bottom: 0;
 }
 
-.contact-list {
-    list-style: none;
-    padding-left: 0;
+.about-contact-grid--secondary {
+    margin-top: 0;
+}
+
+.about-contact-card {
+    position: relative;
+    background-color: var(--color-background);
+    border: none;
+    padding: 20px;
     display: flex;
     flex-direction: column;
-    gap: 0.9em;
-}
-
-.contact-list br {
-    height: 0;
-    line-height: 0;
-    display: none;
-}
-
-.contact-list li {
-    margin: 0;
-    padding: 0;
-    display: flex;
+    justify-content: space-between;
     align-items: flex-start;
-    gap: 0.8em;
-    line-height: 1.7;
-    font-size: 17px;
+    text-align: left;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+    min-height: 120px;
+    /* 统一 button 和 a 标签的默认样式，确保图标位置一致 */
+    margin: 0;
+    box-sizing: border-box;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    /* 覆盖 a 标签的下划线样式 */
+    border-bottom: none;
 }
 
-/* 联系方式标签样式 */
-.contact-list li strong {
-    flex-shrink: 0;
-    font-weight: 600;
+.about-contact-card--full {
+    grid-column: 1 / -1;
+}
+
+.about-contact-card-label {
+    font-size: 10px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--color-meta);
+    font-family: var(--font-family-mono);
+}
+
+.about-contact-card-main {
+    margin-top: 10px;
+    font-size: 16px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
     color: var(--color-text-strong);
-    min-width: 5em;
-    letter-spacing: 0.01em;
 }
 
-/* 联系方式内容/链接样式 */
-.contact-list li a,
-.contact-list li > :not(strong) {
-    color: var(--color-text);
+.about-contact-card-main--email {
+    letter-spacing: 0.02em;
+    text-transform: none;
+    font-size: 20px;
+}
+
+.about-contact-card-icon {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+}
+
+.about-contact-arrow {
+    width: 14px;
+    height: 14px;
+    stroke: var(--color-meta);
+    fill: none;
+    stroke-width: 2;
+    opacity: 0;
+    transform: translate(-5px, 5px);
+    transition:
+        opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        stroke 0.3s ease;
+}
+
+.about-contact-card:hover,
+.about-contact-card:focus-visible {
+    outline: none;
+    background-color: var(--color-code-bg);
+}
+
+.about-contact-card:hover .about-contact-arrow,
+.about-contact-card:focus-visible .about-contact-arrow,
+.about-contact-card.is-active .about-contact-arrow {
+    opacity: 1;
+    stroke: var(--color-text-subtle);
+    transform: translate(0, 0);
+}
+
+.about-contact-card.is-active .about-contact-arrow {
+    transform: rotate(180deg);
+}
+
+/* 抽屉 */
+.about-contact-drawer {
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition:
+        height 0.6s cubic-bezier(0.25, 1, 0.5, 1),
+        opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    background-color: var(--color-code-bg);
+}
+
+/* 抽屉打开状态：与 JS 中的 is-open 保持一致 */
+.about-contact-drawer.is-open {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* 不同类型抽屉的高度控制 */
+.about-contact-drawer.is-open[data-contact-drawer="email"] {
+    height: 200px;
+}
+
+.about-contact-drawer.is-open[data-contact-drawer="xiaohongshu"] {
+    height: 180px;
+}
+
+.about-contact-drawer.is-open[data-contact-drawer="wechat"] {
+    height: 240px;
+}
+
+.about-contact-drawer-inner {
+    padding: 40px;
+    height: 100%;
+    box-sizing: border-box;
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.about-contact-drawer.is-open .about-contact-drawer-inner {
+    opacity: 1;
+    transform: translateY(0);
+    transition-delay: 0.2s;
+}
+
+.about-contact-hint {
+    margin: 0;
+    font-size: 14px;
+    color: var(--color-meta);
+}
+
+.about-contact-email-input {
+    display: flex;
+    gap: 12px;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+.about-contact-email-input textarea {
     flex: 1;
-    word-break: break-word;
+    resize: none;
+    min-height: 30px;
+    font-family: var(--font-family-sans);
+    font-size: 16px;
+    border-radius: 0;
+    border: none;
+    border-bottom: 1px solid var(--color-border);
+    padding: 4px 0;
+    color: var(--color-text-strong);
+    background-color: transparent;
 }
 
-.contact-list li a:hover {
+.about-contact-email-input textarea:focus {
+    outline: none;
+    box-shadow: none;
+    border-bottom-color: var(--color-text-strong);
+}
+
+.about-contact-email-btn {
+    flex-shrink: 0;
+    align-self: flex-end;
+    border-radius: 0;
+    padding: 10px 24px;
+    border: none;
+    background-color: var(--color-text-strong);
+    color: var(--color-background);
+    font-size: 12px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.about-contact-email-btn:hover,
+.about-contact-email-btn:focus-visible {
+    outline: none;
+    background-color: #000000;
+}
+
+/* WeChat 抽屉布局 */
+.about-contact-wechat {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+}
+
+.about-contact-wechat-info {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.about-contact-wechat-label {
+    font-size: 13px;
+    color: var(--color-meta);
+}
+
+.about-contact-wechat-id {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border: none;
+    background: none;
+    cursor: pointer;
     color: var(--color-text-strong);
+    font-size: 22px;
+    letter-spacing: 0.06em;
+}
+
+.about-contact-wechat-id-text {
+    border-bottom: 1px solid transparent;
+}
+
+.about-contact-wechat-id:hover .about-contact-wechat-id-text,
+.about-contact-wechat-id:focus-visible .about-contact-wechat-id-text {
+    border-bottom-color: var(--color-text-strong);
+}
+
+.about-contact-copy-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-meta);
+    fill: none;
+    stroke-width: 1.6;
+}
+
+.about-contact-wechat-id:hover .about-contact-copy-icon,
+.about-contact-wechat-id:focus-visible .about-contact-copy-icon {
+    stroke: var(--color-text-subtle);
+}
+
+.about-contact-wechat-qr {
+    width: 132px;
+    height: 132px;
+    border-radius: 0;
+    border: 1px solid var(--color-border);
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: var(--color-background);
+}
+
+.about-contact-wechat-qr img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+/* 小红书抽屉布局 */
+.about-contact-xiaohongshu {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.about-contact-xiaohongshu-info {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.about-contact-xiaohongshu-label {
+    font-size: 13px;
+    color: var(--color-meta);
+}
+
+.about-contact-xiaohongshu-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    color: var(--color-text-strong);
+    font-size: 22px;
+    letter-spacing: 0.06em;
+    text-decoration: none;
+    border-bottom: 1px solid transparent;
+    transition: border-bottom-color 0.3s ease;
+}
+
+.about-contact-xiaohongshu-link:hover,
+.about-contact-xiaohongshu-link:focus-visible {
+    outline: none;
+    border-bottom-color: var(--color-text-strong);
+}
+
+.about-contact-xiaohongshu-link-text {
+    border-bottom: none;
+}
+
+.about-contact-external-icon {
+    width: 18px;
+    height: 18px;
+    stroke: var(--color-meta);
+    fill: none;
+    stroke-width: 2;
+    transition: stroke 0.3s ease;
+}
+
+.about-contact-xiaohongshu-link:hover .about-contact-external-icon,
+.about-contact-xiaohongshu-link:focus-visible .about-contact-external-icon {
+    stroke: var(--color-text-subtle);
+}
+
+.about-contact-toast {
+    position: fixed;
+    left: 50%;
+    bottom: 30px;
+    transform: translateX(-50%) translateY(20px);
+    background-color: #ffffff;
+    color: #000000;
+    padding: 8px 16px;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+        opacity 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+        transform 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    z-index: 80;
+}
+
+.about-contact-toast.is-visible {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+}
+
+/* 底部收口线条，模拟参考交互中的“封口”网格 */
+.about-contact-closure {
+    margin-top: 0;
+    height: 1px;
+    border-top: 1px solid var(--color-border);
 }
 
 /* 响应式设计 */
@@ -210,20 +545,36 @@
         font-size: 16px;
     }
 
-    /* 移动端联系方式排版调整 */
-    .contact-list {
-        gap: 0.7em;
+    .about-contact-grid {
+        grid-template-columns: minmax(0, 1fr);
     }
 
-    .contact-list li {
+    .about-contact-card {
+        padding: 18px 16px 20px;
+        min-height: 0;
+    }
+
+    .about-contact-drawer.is-open {
+        height: auto; /* 移动端与参考稿一致，抽屉高度自适应内容 */
+    }
+
+    .about-contact-email-input {
         flex-direction: column;
-        gap: 0.3em;
-        font-size: 16px;
+        align-items: stretch;
     }
 
-    .contact-list li strong {
-        min-width: auto;
-        font-size: 0.95em;
+    .about-contact-email-btn {
+        align-self: flex-start;
+    }
+
+    .about-contact-wechat {
+        flex-direction: column-reverse;
+        align-items: flex-start;
+    }
+
+    .about-contact-wechat-qr {
+        width: 132px;
+        height: 132px;
     }
 }
 
