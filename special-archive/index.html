@@ -425,130 +425,6 @@ a:focus-visible {
     }
 }
 
-/* --- 7.5 炫技特别归档 --- */
-.special-archive {
-    display: flex;
-    flex-direction: column;
-    gap: 32px;
-}
-.special-archive-header {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-.special-archive-title {
-    margin: 0;
-    font-size: 28px;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-}
-.special-archive-lede {
-    margin: 0;
-    color: var(--color-text-subtle);
-    max-width: var(--measure-reading);
-}
-.special-archive-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-.special-archive-card {
-    border: 1px solid var(--color-border);
-    border-radius: 28px;
-    padding: 28px;
-    background: rgba(255, 255, 255, 0.95);
-    box-shadow: 0 20px 45px rgba(15, 15, 15, 0.08);
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-}
-.special-archive-card:hover,
-.special-archive-card:focus-within {
-    transform: translateY(-4px);
-    box-shadow: 0 30px 60px rgba(15, 15, 15, 0.12);
-}
-.special-archive-meta {
-    font-size: 13px;
-    color: var(--color-meta);
-    display: flex;
-    gap: 8px;
-    flex-wrap: wrap;
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    margin-bottom: 12px;
-}
-.special-archive-card-title {
-    margin: 0 0 12px;
-    font-size: 24px;
-    font-weight: 500;
-}
-.special-archive-card-title a {
-    border-bottom: none;
-}
-.special-archive-card-summary {
-    margin: 0;
-    color: var(--color-text-subtle);
-}
-.special-archive-card-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 8px;
-    margin-top: 18px;
-}
-.special-archive-tag {
-    font-size: 12px;
-    letter-spacing: 0.08em;
-    border: 1px solid var(--color-border);
-    border-radius: 999px;
-    padding: 4px 12px;
-    text-transform: uppercase;
-    color: var(--color-text);
-}
-.special-archive-card-cta {
-    margin-top: 22px;
-}
-.special-archive-link {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    border: none;
-    border-bottom: none;
-    border-radius: 999px;
-    padding: 10px 18px;
-    background: var(--color-text-strong);
-    color: var(--color-background);
-    text-transform: uppercase;
-    letter-spacing: 0.15em;
-    font-size: 12px;
-    transition: text-shadow 0.2s ease;
-}
-.special-archive-link:hover,
-.special-archive-link:focus-visible {
-    color: var(--color-background);
-    text-shadow: 0 0 8px rgba(255, 255, 255, 0.55);
-}
-.special-archive-link::after {
-    content: "↗";
-    font-size: 14px;
-}
-.special-archive-empty {
-    color: var(--color-text-subtle);
-}
-
-@media (max-width: 640px) {
-    .special-archive-card {
-        padding: 22px;
-    }
-    .special-archive-card-title {
-        font-size: 20px;
-    }
-    .special-archive-link {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
 /* --- 7. 首页：文章列表 --- */
 .post-list {
     list-style: none;
@@ -1875,12 +1751,13 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251129-19">
+    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251130-1">
     
     
-</head>
-<body data-show-floating="true">
-    <div class="container">
+    
+    <link rel="stylesheet" href="/deepwhite-11ty/css/special-archive.css?v=20251130-1">
+    </head>
+<body data-show-floating="true"><div class="container">
         <header class="site-header">
             
             
@@ -1909,20 +1786,17 @@ pre[class*="language-"] {
     <header class="special-archive-header">
         <p class="special-archive-title">Special Archive</p>
         <p class="special-archive-lede">
-            这里收录的是完全不遵循常规模板的页面。让页面 front matter 添加
-            <code>tags: ['special-archive']</code> 即会自动出现在此处；可选字段
-            <code>specialSummary</code>、<code>specialTags</code>、<code>specialLabel</code>、
-            <code>specialOrder</code> 用于补充描述、标签、显式排序。
+            实验性非标页面集合
         </p>
 </header><ul class="special-archive-list"><li class="special-archive-card">
-            <div class="special-archive-meta"><time datetime="2025-11-29">2025年11月29日</time><span>Prototype</span></div>
+            <div class="special-archive-meta"><time datetime="2025-11-30">2025年11月30日</time><span>Prototype</span></div>
             <h2 class="special-archive-card-title">
                 <a href="/deepwhite-11ty/showcase/glitch-neon/">GLITCH NEON LAB</a>
             </h2><p class="special-archive-card-summary">纯前端生成的霓虹噪声画布，滚动即可触发现代主义海报的动态律动。</p><div class="special-archive-card-tags"><span class="special-archive-tag">canvas</span><span class="special-archive-tag">glitch</span><span class="special-archive-tag">experimental</span></div><div class="special-archive-card-cta">
                 <a class="special-archive-link" href="/deepwhite-11ty/showcase/glitch-neon/" aria-label="访问 GLITCH NEON LAB">进入页面</a>
             </div>
         </li><li class="special-archive-card">
-            <div class="special-archive-meta"><time datetime="2025-11-29">2025年11月29日</time><span>Lab Release</span></div>
+            <div class="special-archive-meta"><time datetime="2025-11-30">2025年11月30日</time><span>Lab Release</span></div>
             <h2 class="special-archive-card-title">
                 <a href="/deepwhite-11ty/showcase/sonic-ribbons/">SONIC RIBBONS</a>
             </h2><p class="special-archive-card-summary">基于多层贝塞尔丝带与音波震荡的视觉表演，指针与滚动都会重塑色带轨迹。</p><div class="special-archive-card-tags"><span class="special-archive-tag">svg</span><span class="special-archive-tag">motion</span><span class="special-archive-tag">immersive</span></div><div class="special-archive-card-cta">
@@ -1947,15 +1821,13 @@ pre[class*="language-"] {
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="19 12 12 5 5 12"></polyline></svg>
             </a>
         </div>
-        
-</body>
+        </body>
 
 
 
     
     
     
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251129-19" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251130-1" defer></script>
     
-
 </html>
