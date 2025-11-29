@@ -23,11 +23,12 @@
 
 - 站点通过 Cloudflare 等 CDN 对 `css` / `js` 采用了 `max-age=31536000, immutable` 的**强缓存策略**，同一 URL 的文件理论上会被缓存一年。  
 - 为了保证「本地预览效果」与「线上 deepwhite.me」始终一致，**凡是对下列文件做了会影响 UI 或交互的改动时，必须同步更新版本号**：  
-  - `src/css/style.css`、`src/css/archive.css`  
+  - `src/css/style.css`、`src/css/archive.css`、`src/css/about.css` 等所有 CSS 文件
   - `src/js/site.js`、`src/js/post-page.js`、`src/js/archive-page.js`、`src/js/search.js`  
 - 版本号管理集中在：`src/_data/assets.js` 中的 `ASSET_VERSION` 常量：  
   - 修改 CSS / JS 且希望线上立即生效时：**把 `ASSET_VERSION` 改成一个新的字符串（例如日期加序号：`20251126-2`）**。  
   - 该版本号会自动拼接到所有核心 CSS/JS 的 URL 上（`/css/style.css?v=...`），强制浏览器与 CDN 拉取最新资源。  
+  - **重要**：所有通过 `extraCss` 配置的 CSS 文件也会**自动获得版本号**，无需手动处理。只需在页面配置中写 `extraCss: ["/css/your-page.css"]`，模板会自动添加版本号后缀。
 - **Cursor 约定**：今后只要由 AI 修改上述 CSS/JS 文件，我会自动同步更新 `ASSET_VERSION`，无需你手动记忆这一步骤。  
 
 ## 目录结构说明
@@ -56,7 +57,7 @@
 - **日期与标签**：所有文章的 front matter 至少包含 `date`（ISO 字符串即可）和 `tags: ['post']`。若需要进首页推荐，再追加 `featured` 标签。  
 - **摘要**：`excerpt` 字段将用于首页与搜索结果；如缺省，将自动截取正文前 200 个字符。  
 - **资源引用**：图片请放在 `src/img/`，构建时自动拷贝。  
-- **额外脚本/样式**：任意页面 front matter 中设置 `extraCss` / `extraJs`（可为字符串或数组）即可注入。
+- **额外脚本/样式**：任意页面 front matter 中设置 `extraCss` / `extraJs`（可为字符串或数组）即可注入。**注意**：所有 `extraCss` 中的 CSS 文件会自动获得版本号（从 `assets.js` 的 `ASSET_VERSION` 读取），无需手动添加版本号参数。
 
 ### 炫技特别归档使用说明
 

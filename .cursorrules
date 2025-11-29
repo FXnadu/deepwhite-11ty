@@ -34,10 +34,16 @@
 - **只要修改了以下任意文件且影响到 UI 或交互，AI 助手必须自动同步更新 `ASSET_VERSION`：**
   - `src/css/style.css`
   - `src/css/archive.css`
+  - `src/css/about.css` 等所有 CSS 文件
   - `src/js/site.js`
   - `src/js/post-page.js`
   - `src/js/archive-page.js`
   - `src/js/search.js`
+- **重要：`extraCss` 自动版本号机制**：
+  - `assets.js` 暴露了 `assetVersion` 和 `assetVersionSuffix` 供模板使用。
+  - `base.njk` 和 `showcase.njk` 会自动为所有 `extraCss` 中的 CSS 文件添加版本号后缀。
+  - 页面配置时只需写 `extraCss: ["/css/your-page.css"]`，无需手动添加版本号。
+  - 修改任何 CSS 文件（包括通过 `extraCss` 加载的）后，只需更新 `ASSET_VERSION`，所有 CSS 文件都会同步获得新版本号。
 - 更新方式：将 `ASSET_VERSION` 改成一个新的、递增/基于日期的字符串（如：`20251128-5`），然后执行 `npm run build`，再由用户进行 `git push` / 部署。
 - 用户不需要手动记住这一步：**当用户说"改样式/交互/目录/复制按钮"等前端变更需求时，AI 助手要默认负责更新 `ASSET_VERSION` 并提醒构建部署。**
 

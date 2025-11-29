@@ -287,6 +287,7 @@ CSS 中的 `.site-title` 类设置了 `text-transform: lowercase;`，会将所�
 
 2. **检查资源版本号**：
    - 确认 `ASSET_VERSION` 已更新
+   - **注意**：所有通过 `extraCss` 配置的 CSS 文件会自动获得版本号，无需手动添加。只需更新 `ASSET_VERSION`，所有 CSS 文件（包括 `extraCss` 中的）都会同步更新。
    - 清除浏览器缓存或使用硬刷新
 
 3. **验证内联 CSS**：
