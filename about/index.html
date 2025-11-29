@@ -8,7 +8,22 @@
     <title>关于我 - [DEEPWHITE]</title>
     <link rel="icon" href="/deepwhite-11ty/img/deepwhitelogo.png" type="image/png" sizes="192x192">
     
-    <style>/* --- 1. 设计系统：CSS 变量 --- */
+    <style>/* ==========================================================================
+   DEEPWHITE 全局样式表
+   --------------------------------------------------------------------------
+   本文件主要负责站点外观与布局结构：
+       1. 设计系统（CSS 变量）
+       2. 全局排版 / 基础布局（container、链接、头部 / 尾部）
+       3. 分页组件
+       4. 首页列表、文章页 / 通用页面内容
+       5. 代码高亮与 Markdown 提示框
+       6. 图片系统
+       7. 浮动按钮 / 目录导航（TOC）
+       8. 脚注预览与 404 页面
+       9. 响应式断点（>1200px / <600px）
+   ========================================================================== */
+
+/* --- 1. 设计系统：CSS 变量 --- */
 :root {
     --color-background: #ffffff;
     --color-text: #333333;
@@ -152,6 +167,11 @@ a:focus-visible {
 .site-nav a:focus-visible {
     color: var(--color-text-strong);
     outline: none;
+}
+.site-controls {
+    display: flex;
+    align-items: center;
+    gap: 20px;
 }
 .site-footer {
     text-align: center;
@@ -648,7 +668,7 @@ a:focus-visible {
     color: var(--color-text-subtle);
 }
 
-/* 页面级副标题（如“经验之谈”、“与我联系”）收紧上下间距，约等于 1.5 行正文高，避免段落之间出现过大的空白。 */
+/* 页面级副标题（page-content h2）的专用间距设置，约等于 1.5 行正文高，避免段落之间出现过大的空白。 */
 .page-content h2 {
     margin-top: 1.5em;
     margin-bottom: 0.7em;
@@ -1460,6 +1480,198 @@ pre[class*="language-"] {
     }
 }
 
+/* --- 脚注相关样式 --- */
+.post-content .footnote-ref,
+.page-content .footnote-ref {
+    font-size: 0.85em;
+    vertical-align: super;
+    line-height: 0;
+}
+
+.post-content .footnote-ref a,
+.page-content .footnote-ref a {
+    color: var(--color-text-subtle);
+    border-bottom: none;
+    text-decoration: none;
+    padding: 0 2px;
+    border-radius: 2px;
+    transition: color 0.2s ease, background-color 0.2s ease;
+}
+
+.post-content .footnote-ref a:hover,
+.page-content .footnote-ref a:focus-visible {
+    color: var(--color-text-strong);
+    background-color: var(--color-code-bg);
+}
+
+.post-content .footnotes-sep,
+.page-content .footnotes-sep {
+    border: none;
+    border-top: 1px solid var(--color-border);
+    margin: 3em 0 2em;
+}
+
+.post-content .footnotes,
+.page-content .footnotes {
+    margin-top: 3em;
+    padding-top: 2em;
+    font-size: 0.9em;
+    color: var(--color-text-subtle);
+}
+
+.post-content .footnotes-list,
+.page-content .footnotes-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.post-content .footnote-item,
+.page-content .footnote-item {
+    margin-bottom: 1em;
+    padding-left: 1.5em;
+    position: relative;
+}
+
+.post-content .footnote-item::before,
+.page-content .footnote-item::before {
+    content: counter(footnote-counter);
+    counter-increment: footnote-counter;
+    position: absolute;
+    left: 0;
+    color: var(--color-text-subtle);
+    font-weight: 600;
+}
+
+.post-content .footnotes-list,
+.page-content .footnotes-list {
+    counter-reset: footnote-counter;
+}
+
+.post-content .footnote-backref,
+.page-content .footnote-backref {
+    color: var(--color-text-subtle);
+    border-bottom: none;
+    text-decoration: none;
+    margin-left: 0.5em;
+    font-size: 1.2em;
+    line-height: 0;
+    vertical-align: baseline;
+    transition: color 0.2s ease;
+}
+
+.post-content .footnote-backref:hover,
+.page-content .footnote-backref:focus-visible {
+    color: var(--color-text-strong);
+}
+
+/* --- Details/Summary 折叠元素 --- */
+.post-content details,
+.page-content details {
+    margin: 1.5em 0;
+    padding: 1em;
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+    background-color: var(--color-code-bg);
+}
+
+.post-content details summary,
+.page-content details summary {
+    cursor: pointer;
+    font-weight: 600;
+    color: var(--color-text-strong);
+    padding: 0.5em 0;
+    user-select: none;
+    list-style: none;
+    position: relative;
+    padding-left: 1.5em;
+}
+
+.post-content details summary::-webkit-details-marker,
+.page-content details summary::-webkit-details-marker {
+    display: none;
+}
+
+.post-content details summary::before,
+.page-content details summary::before {
+    content: "▶";
+    position: absolute;
+    left: 0;
+    font-size: 0.8em;
+    transition: transform 0.2s ease;
+    color: var(--color-text-subtle);
+}
+
+.post-content details[open] summary::before,
+.page-content details[open] summary::before {
+    transform: rotate(90deg);
+}
+
+.post-content details[open] summary,
+.page-content details[open] summary {
+    margin-bottom: 0.5em;
+}
+
+.post-content details > *:not(summary),
+.page-content details > *:not(summary) {
+    margin-top: 0.5em;
+}
+
+/* --- 任务列表（Task List / Checkbox） --- */
+.post-content input[type="checkbox"],
+.page-content input[type="checkbox"] {
+    margin-right: 0.5em;
+    cursor: pointer;
+    accent-color: var(--color-text-strong);
+}
+
+.post-content li:has(input[type="checkbox"]),
+.page-content li:has(input[type="checkbox"]) {
+    list-style: none;
+    padding-left: 0;
+}
+
+.post-content li:has(input[type="checkbox"])::marker,
+.page-content li:has(input[type="checkbox"])::marker {
+    display: none;
+}
+
+/* --- 定义列表（Definition List） --- */
+.post-content dl,
+.page-content dl {
+    margin: 1.5em 0;
+}
+
+.post-content dt,
+.page-content dt {
+    font-weight: 600;
+    color: var(--color-text-strong);
+    margin-top: 1em;
+    margin-bottom: 0.3em;
+}
+
+.post-content dt:first-child,
+.page-content dt:first-child {
+    margin-top: 0;
+}
+
+.post-content dd,
+.page-content dd {
+    margin-left: 1.5em;
+    margin-bottom: 0.5em;
+    color: var(--color-text);
+}
+
+/* --- 缩写（Abbreviation） --- */
+.post-content abbr,
+.page-content abbr {
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 0.2em;
+    cursor: help;
+    border-bottom: none;
+}
+
 /* 404 页面：模拟终端界面 */
 .page-404 {
     padding: 0 0 40px;
@@ -1663,7 +1875,7 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251128-4">
+    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251129-18">
     
     
     <link rel="stylesheet" href="/deepwhite-11ty/css/about.css">
@@ -1684,17 +1896,20 @@ pre[class*="language-"] {
                     <a href="/deepwhite-11ty/" aria-label="返回首页">Deepwhite</a>
                 </h1>
             </div>
-            <nav class="site-nav">
-                <a href="/deepwhite-11ty/">首页</a>
-                <a href="/deepwhite-11ty/archive/">归档</a> 
-                <a href="/deepwhite-11ty/about/">关于我</a>
-            </nav>
+            <div class="site-controls">
+                <nav class="site-nav">
+                    <a href="/deepwhite-11ty/">首页</a>
+                    <a href="/deepwhite-11ty/archive/">归档</a> 
+                    <a href="/deepwhite-11ty/about/">关于我</a>
+                </nav>
+            </div>
         </header>
 
         <main>
             <header class="page-header about-page-header">
     <h1 class="page-title">关于我</h1>
 </header>
+
 <section class="page-content about-page">
     <div class="about-intro">
         <div class="about-avatar">
@@ -1705,31 +1920,183 @@ pre[class*="language-"] {
             <p>温和极简主义，追求"刚刚好"的丰盈，一切都应有美学、性能与实用之间完美的平衡点。</p>
         </div>
     </div>
-<p><p>完美不在于无以复加，而在于无可删减。少即是多，无论是代码、设计还是生活，剔除冗余、回归核心能带来更强大的力量。简约不仅是一种美学选择，更是一种哲学。它关乎清晰、专注和尊重我们的时间。</p></p>
-<p><p>少即是多：简约设计的首要目标是清晰地传达信息。持续学习：技术浪潮奔涌不息，保持好奇心和学习的热情是我应对变化的唯一方式。保持均衡：颜值即正义，质感是灵魂，功能决定生死，性能决定价值。</p></p>
-<p><section class="about-section about-section--contact"><br>
-<h2 class="about-section-title">与我联系</h2><br>
-<ul class="contact-list about-section-list"><br>
-<li><br>
-<strong>电子邮件：</strong><br>
-<template
-                    data-contact
-                    data-contact-type="email"
-                    data-user="deepwhite86"
-                    data-domain="outlook"
-                    data-tld="com"
-                    data-fallback="email unavailable"
-                ></template><br>
-</li><br>
-<li><strong>xhs：</strong> <a href="#" target="_blank" rel="noopener noreferrer">更多联系方式</a></li><br>
-</ul><br>
-</section></p>
+
+    <p>完美不在于无以复加，而在于无可删减。少即是多，无论是代码、设计还是生活，剔除冗余、回归核心能带来更强大的力量。简约不仅是一种美学选择，更是一种哲学。它关乎清晰、专注和尊重我们的时间。</p>
+
+    <p>少即是多：简约设计的首要目标是清晰地传达信息。持续学习：技术浪潮奔涌不息，保持好奇心和学习的热情是我应对变化的唯一方式。保持均衡：颜值即正义，质感是灵魂，功能决定生死，性能决定价值。</p>
+
+    <section class="about-section about-section--contact">
+        <h2 class="about-section-title">与我联系</h2>
+
+        <div class="about-contact-wrapper">
+            <!-- 顶部 Email 行（单行全宽） -->
+            <div class="about-contact-grid about-contact-grid--primary" data-contact-grid>
+                <button
+                    type="button"
+                    class="about-contact-card about-contact-card--full"
+                    data-contact-trigger="email"
+                    id="about-email-trigger"
+                >
+                    <span class="about-contact-card-label">01 / EMAIL</span>
+                    <span class="about-contact-card-main about-contact-card-main--email">
+                        deepwhite86@outlook.com
+                    </span>
+                    <span class="about-contact-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="about-contact-arrow">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- Email 抽屉 -->
+            <div
+                class="about-contact-drawer about-contact-drawer--email"
+                data-contact-drawer="email"
+                id="about-email-drawer"
+            >
+                <div class="about-contact-drawer-inner">
+                    <p class="about-contact-hint">
+                        复制地址或在下方输入：
+                    </p>
+                    <div class="about-contact-email-input">
+                        <textarea
+                            id="about-email-body"
+                            placeholder="输入你的消息..."
+                            data-email-body
+                        ></textarea>
+                        <button
+                            type="button"
+                            class="about-contact-email-btn"
+                            data-email-send
+                        >
+                            发送邮件
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 中部社交行：小红书 + WeChat -->
+            <div class="about-contact-grid about-contact-grid--secondary">
+                <button
+                    type="button"
+                    class="about-contact-card"
+                    data-contact-trigger="xiaohongshu"
+                    id="about-xiaohongshu-trigger"
+                >
+                    <span class="about-contact-card-label">02 / SOCIAL</span>
+                    <span class="about-contact-card-main">XIAOHONGSHU</span>
+                    <span class="about-contact-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="about-contact-arrow">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </span>
+                </button>
+
+                <button
+                    type="button"
+                    class="about-contact-card"
+                    data-contact-trigger="wechat"
+                    id="about-wechat-trigger"
+                >
+                    <span class="about-contact-card-label">03 / CHAT</span>
+                    <span class="about-contact-card-main">WECHAT</span>
+                    <span class="about-contact-card-icon" aria-hidden="true">
+                        <svg viewBox="0 0 24 24" class="about-contact-arrow">
+                            <path d="M6 9l6 6 6-6" />
+                        </svg>
+                    </span>
+                </button>
+            </div>
+
+            <!-- 小红书抽屉 -->
+            <div
+                class="about-contact-drawer about-contact-drawer--xiaohongshu"
+                data-contact-drawer="xiaohongshu"
+                id="about-xiaohongshu-drawer"
+            >
+                <div class="about-contact-drawer-inner">
+                    <div class="about-contact-xiaohongshu">
+                        <div class="about-contact-xiaohongshu-info">
+                            <div class="about-contact-xiaohongshu-label">
+                                访问我的小红书主页
+                            </div>
+                            <a
+                                href="https://www.xiaohongshu.com/user/profile/64fff8dc0000000005002066"
+                                target="_blank"
+                                rel="noopener"
+                                class="about-contact-xiaohongshu-link"
+                            >
+                                <span class="about-contact-xiaohongshu-link-text">访问主页</span>
+                                <svg
+                                    class="about-contact-external-icon"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <path d="M7 17L17 7M17 7H7M17 7V17" />
+                                </svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- WeChat 抽屉 -->
+            <div
+                class="about-contact-drawer about-contact-drawer--wechat"
+                data-contact-drawer="wechat"
+                id="about-wechat-drawer"
+            >
+                <div class="about-contact-drawer-inner">
+                    <div class="about-contact-wechat">
+                        <div class="about-contact-wechat-info">
+                            <div class="about-contact-wechat-label">
+                                微信号（点击复制）
+                            </div>
+                            <button
+                                type="button"
+                                class="about-contact-wechat-id"
+                                data-wechat-id="deepwhite8611"
+                            >
+                                <span class="about-contact-wechat-id-text">deepwhite8611</span>
+                                <svg
+                                    class="about-contact-copy-icon"
+                                    viewBox="0 0 24 24"
+                                    aria-hidden="true"
+                                >
+                                    <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                    <path
+                                        d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"
+                                    ></path>
+                                </svg>
+                            </button>
+                        </div>
+                        <div class="about-contact-wechat-qr">
+                            <img
+                                src="https://personal-pic86.oss-cn-beijing.aliyuncs.com/picture/202511291230939.png"
+                                alt="WeChat QR"
+                            >
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 底部轻微收口线条 -->
+            <div class="about-contact-closure" aria-hidden="true"></div>
+        </div>
+
+        <div class="about-contact-toast" id="about-contact-toast" aria-live="polite">
+            已复制到剪贴板
+        </div>
+    </section>
 </section>
+
+
 
         </main>
 
         <footer class="site-footer">
-            <p>&copy; 2025 [DEEPWHITE]. <br>少即是多，简约永恒。</p>
+            <p>&copy; 2025 [DEEPWHITE]. <br>完美不在于无以复加，而在于无可删减。</p>
         </footer>
     </div>
 
@@ -1741,8 +2108,9 @@ pre[class*="language-"] {
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251128-4" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251129-18" defer></script>
         
     
+
 
 </html>
