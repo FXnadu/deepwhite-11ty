@@ -1,7 +1,8 @@
 /* --- 关于我页面独立样式 --- */
 
 /* 关于我页面中所有 br 标签高度设置为 0 */
-.about-page br {
+.about-page br,
+.about-section-list br {
     height: 0;
     line-height: 0;
     display: none;
@@ -103,12 +104,6 @@
     display: flex;
     flex-direction: column;
     gap: 1.5em;
-}
-
-.about-section-list br {
-    height: 0;
-    line-height: 0;
-    display: none;
 }
 
 .about-section--experience .about-section-list li {
@@ -278,11 +273,9 @@
     height: 200px;
 }
 
-.about-contact-drawer.is-open[data-contact-drawer="xiaohongshu"] {
-    height: 180px;
-}
-
-.about-contact-drawer.is-open[data-contact-drawer="wechat"] {
+.about-contact-drawer.is-open[data-contact-drawer="xiaohongshu"],
+.about-contact-drawer.is-open[data-contact-drawer="wechat"],
+.about-contact-drawer.is-open[data-contact-drawer="xianyu"] {
     height: 180px;
 }
 
@@ -432,26 +425,30 @@
     object-fit: contain;
 }
 
-/* 小红书抽屉布局 */
-.about-contact-xiaohongshu {
+/* 外部链接抽屉布局（小红书、闲鱼等共享样式） */
+.about-contact-xiaohongshu,
+.about-contact-xianyu {
     display: flex;
     align-items: center;
     justify-content: flex-start;
     height: 100%;
 }
 
-.about-contact-xiaohongshu-info {
+.about-contact-xiaohongshu-info,
+.about-contact-xianyu-info {
     display: flex;
     flex-direction: column;
     gap: 16px;
 }
 
-.about-contact-xiaohongshu-label {
+.about-contact-xiaohongshu-label,
+.about-contact-xianyu-label {
     font-size: 13px;
     color: var(--color-meta);
 }
 
-.about-contact-xiaohongshu-link {
+.about-contact-xiaohongshu-link,
+.about-contact-xianyu-link {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -468,12 +465,15 @@
 }
 
 .about-contact-xiaohongshu-link:hover,
-.about-contact-xiaohongshu-link:focus-visible {
+.about-contact-xiaohongshu-link:focus-visible,
+.about-contact-xianyu-link:hover,
+.about-contact-xianyu-link:focus-visible {
     outline: none;
     border-bottom-color: var(--color-text-strong);
 }
 
-.about-contact-xiaohongshu-link-text {
+.about-contact-xiaohongshu-link-text,
+.about-contact-xianyu-link-text {
     border-bottom: none;
 }
 
@@ -487,7 +487,9 @@
 }
 
 .about-contact-xiaohongshu-link:hover .about-contact-external-icon,
-.about-contact-xiaohongshu-link:focus-visible .about-contact-external-icon {
+.about-contact-xiaohongshu-link:focus-visible .about-contact-external-icon,
+.about-contact-xianyu-link:hover .about-contact-external-icon,
+.about-contact-xianyu-link:focus-visible .about-contact-external-icon {
     stroke: var(--color-text-subtle);
 }
 
