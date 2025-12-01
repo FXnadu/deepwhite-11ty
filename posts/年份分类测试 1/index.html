@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     
-    <title>一篇来自去年的文章 - [DEEPWHITE]</title>
+    <title>欲望 - [DEEPWHITE]</title>
     <link rel="icon" href="/deepwhite-11ty/img/deepwhitelogo.png" type="image/png" sizes="192x192">
     
     <style>/* ==========================================================================
@@ -858,6 +858,123 @@ a:focus-visible {
     background-color: transparent;
     padding: 0;
     border: none;
+}
+.post-content .mermaid-zoomable,
+.page-content .mermaid-zoomable {
+    cursor: zoom-in;
+    position: relative;
+}
+.post-content .mermaid-zoomable::after,
+.page-content .mermaid-zoomable::after {
+    content: "点击放大查看";
+    position: absolute;
+    left: 50%;
+    bottom: 0.75rem;
+    transform: translate(-50%, 4px);
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.72);
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.post-content .mermaid-zoomable:hover,
+.page-content .mermaid-zoomable:hover,
+.post-content .mermaid-zoomable:focus-visible,
+.page-content .mermaid-zoomable:focus-visible {
+}
+.post-content .mermaid-zoomable:hover::after,
+.page-content .mermaid-zoomable:hover::after,
+.post-content .mermaid-zoomable:focus-visible::after,
+.page-content .mermaid-zoomable:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* Mermaid 放大浮层 */
+.mermaid-zoom-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+.mermaid-zoom-overlay.is-open {
+    display: block;
+    display: flex;
+}
+.mermaid-zoom-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 9, 11, 0.75);
+    backdrop-filter: blur(6px);
+}
+.mermaid-zoom-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0;
+    background: var(--color-background);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+.mermaid-zoom-close {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    border: none;
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--color-text-main);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease;
+}
+.mermaid-zoom-close:hover,
+.mermaid-zoom-close:focus-visible {
+    background: rgba(15, 23, 42, 0.12);
+    transform: translateY(-1px);
+}
+.mermaid-zoom-content {
+    margin-top: 0;
+    flex: 1 1 auto;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0;
+    scrollbar-width: none; /* Firefox */
+}
+.mermaid-zoom-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+.mermaid-zoom-content svg,
+.mermaid-zoom-content .mermaid {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+/* 展开浮层时锁定页面滚动，避免背景跟随滚动 */
+html.mermaid-zoom-open {
+    overflow: hidden;
 }
 .post-content ul, .page-content ul,
 .post-content ol, .page-content ol {
@@ -1751,7 +1868,7 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251130-3">
+    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251201-12">
     
     </head>
 <body data-show-floating="true"><div class="container">
@@ -1781,7 +1898,7 @@ pre[class*="language-"] {
             <article class="post">
     <header class="post-full-header">
     
-        <h1 class="post-full-title">一篇来自去年的文章</h1>
+        <h1 class="post-full-title">欲望</h1>
 
         
         <p class="post-full-meta">
@@ -1794,7 +1911,8 @@ pre[class*="language-"] {
     </header>
 
     <section class="post-content">
-        <p>这是文章的正文。我们用它来验证2024年的分组是否能正确显示在归档页面上。</p>
+        <p>你会拼命地考大学，要找好工作，要买车买房，要创业......人生中有无数个大大小小的“ 要”。 你为什么有这么多的要这要那?你为什么会只要这，不要那?就是因为你脑 子里储存着对应 的各种概念。这些概念就是你要去各种追求的原动力。<br>
+你要努力考好大学，那是因为“好大学=成功” 的概念驱动着你:你努力挣钱买房子，那是 因为“房子=成功/面子/归属感/社会尊重” 的概念在驱使你;你喜欢名牌、名包，那是因力 “ 名牌、名包=面子/成功/厉害”的概念在驱使你。</p>
 <hr>
 
     </section>
@@ -1837,13 +1955,13 @@ pre[class*="language-"] {
         
         
         
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251130-3" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251201-12" defer></script>
         
     
         
         
         
-<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251130-3" defer></script>
+<script type="module" src="/deepwhite-11ty/js/post-page.js?v=20251201-12" defer></script>
         
     
 

@@ -859,6 +859,123 @@ a:focus-visible {
     padding: 0;
     border: none;
 }
+.post-content .mermaid-zoomable,
+.page-content .mermaid-zoomable {
+    cursor: zoom-in;
+    position: relative;
+}
+.post-content .mermaid-zoomable::after,
+.page-content .mermaid-zoomable::after {
+    content: "点击放大查看";
+    position: absolute;
+    left: 50%;
+    bottom: 0.75rem;
+    transform: translate(-50%, 4px);
+    padding: 0.25rem 0.6rem;
+    font-size: 0.75rem;
+    line-height: 1.2;
+    border-radius: 999px;
+    background: rgba(0, 0, 0, 0.72);
+    color: #fff;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+.post-content .mermaid-zoomable:hover,
+.page-content .mermaid-zoomable:hover,
+.post-content .mermaid-zoomable:focus-visible,
+.page-content .mermaid-zoomable:focus-visible {
+}
+.post-content .mermaid-zoomable:hover::after,
+.page-content .mermaid-zoomable:hover::after,
+.post-content .mermaid-zoomable:focus-visible::after,
+.page-content .mermaid-zoomable:focus-visible::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+}
+
+/* Mermaid 放大浮层 */
+.mermaid-zoom-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 0;
+}
+.mermaid-zoom-overlay.is-open {
+    display: block;
+    display: flex;
+}
+.mermaid-zoom-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(9, 9, 11, 0.75);
+    backdrop-filter: blur(6px);
+}
+.mermaid-zoom-dialog {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 100vw;
+    max-height: 100vh;
+    margin: 0;
+    background: var(--color-background);
+    border-radius: 0;
+    box-shadow: none;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+.mermaid-zoom-close {
+    position: absolute;
+    top: 0.9rem;
+    right: 0.9rem;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 999px;
+    border: none;
+    background: rgba(15, 23, 42, 0.06);
+    color: var(--color-text-main);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background 0.18s ease, transform 0.18s ease;
+}
+.mermaid-zoom-close:hover,
+.mermaid-zoom-close:focus-visible {
+    background: rgba(15, 23, 42, 0.12);
+    transform: translateY(-1px);
+}
+.mermaid-zoom-content {
+    margin-top: 0;
+    flex: 1 1 auto;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 0;
+    scrollbar-width: none; /* Firefox */
+}
+.mermaid-zoom-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Edge */
+}
+.mermaid-zoom-content svg,
+.mermaid-zoom-content .mermaid {
+    max-width: 100%;
+    max-height: 100%;
+    width: auto;
+    height: auto;
+}
+
+/* 展开浮层时锁定页面滚动，避免背景跟随滚动 */
+html.mermaid-zoom-open {
+    overflow: hidden;
+}
 .post-content ul, .page-content ul,
 .post-content ol, .page-content ol {
     padding-left: 1.5em;
@@ -1751,11 +1868,11 @@ pre[class*="language-"] {
 </style>
     
     
-    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251130-3">
+    <link rel="stylesheet" href="/deepwhite-11ty/css/style.css?v=20251201-12">
     
     
     
-    <link rel="stylesheet" href="/deepwhite-11ty/css/special-archive.css?v=20251130-3">
+    <link rel="stylesheet" href="/deepwhite-11ty/css/special-archive.css?v=20251201-12">
     </head>
 <body data-show-floating="true"><div class="container">
         <header class="site-header">
@@ -1789,14 +1906,14 @@ pre[class*="language-"] {
             实验性非标页面集合
         </p>
 </header><ul class="special-archive-list"><li class="special-archive-card">
-            <div class="special-archive-meta"><time datetime="2025-12-01">2025年12月01日</time><span>Prototype</span></div>
+            <div class="special-archive-meta"><time datetime="2025-12-02">2025年12月02日</time><span>Prototype</span></div>
             <h2 class="special-archive-card-title">
                 <a href="/deepwhite-11ty/showcase/glitch-neon/">GLITCH NEON LAB</a>
             </h2><p class="special-archive-card-summary">纯前端生成的霓虹噪声画布，滚动即可触发现代主义海报的动态律动。</p><div class="special-archive-card-tags"><span class="special-archive-tag">canvas</span><span class="special-archive-tag">glitch</span><span class="special-archive-tag">experimental</span></div><div class="special-archive-card-cta">
                 <a class="special-archive-link" href="/deepwhite-11ty/showcase/glitch-neon/" aria-label="访问 GLITCH NEON LAB">进入页面</a>
             </div>
         </li><li class="special-archive-card">
-            <div class="special-archive-meta"><time datetime="2025-12-01">2025年12月01日</time><span>Lab Release</span></div>
+            <div class="special-archive-meta"><time datetime="2025-12-02">2025年12月02日</time><span>Lab Release</span></div>
             <h2 class="special-archive-card-title">
                 <a href="/deepwhite-11ty/showcase/sonic-ribbons/">SONIC RIBBONS</a>
             </h2><p class="special-archive-card-summary">基于多层贝塞尔丝带与音波震荡的视觉表演，指针与滚动都会重塑色带轨迹。</p><div class="special-archive-card-tags"><span class="special-archive-tag">svg</span><span class="special-archive-tag">motion</span><span class="special-archive-tag">immersive</span></div><div class="special-archive-card-cta">
@@ -1828,6 +1945,6 @@ pre[class*="language-"] {
     
     
     
-<script type="module" src="/deepwhite-11ty/js/site.js?v=20251130-3" defer></script>
+<script type="module" src="/deepwhite-11ty/js/site.js?v=20251201-12" defer></script>
     
 </html>
