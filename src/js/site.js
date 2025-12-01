@@ -7,6 +7,197 @@
     }
   };
 
+  const initMermaidZoomOverlay = () => {
+    // 单例浮层，避免重复创建节点
+    let overlay = document.getElementById("mermaid-zoom-overlay");
+    if (overlay) return overlay;
+
+    overlay = document.createElement("div");
+    overlay.id = "mermaid-zoom-overlay";
+    overlay.className = "mermaid-zoom-overlay";
+    overlay.setAttribute("aria-hidden", "true");
+
+    overlay.innerHTML = `
+      <div class="mermaid-zoom-backdrop" data-mermaid-zoom-close></div>
+      <div class="mermaid-zoom-dialog" role="dialog" aria-modal="true" aria-label="Mermaid 图放大预览">
+        <button type="button" class="mermaid-zoom-close" data-mermaid-zoom-close aria-label="关闭放大视图">
+          ✕
+        </button>
+        <div class="mermaid-zoom-content" id="mermaid-zoom-content"></div>
+      </div>
+    `;
+
+    document.body.appendChild(overlay);
+
+    // 缩放 / 平移状态，仅在浮层打开时启用
+    let activeTarget = null;
+    let currentScale = 1;
+    let translateX = 0;
+    let translateY = 0;
+    let isPanning = false;
+    let lastClientX = 0;
+    let lastClientY = 0;
+
+    const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
+
+    const applyTransform = () => {
+      if (!activeTarget) return;
+      activeTarget.style.transformOrigin = "center center";
+      activeTarget.style.transform = `translate(${translateX}px, ${translateY}px) scale(${currentScale})`;
+    };
+
+    const resetTransform = () => {
+      currentScale = 1;
+      translateX = 0;
+      translateY = 0;
+      applyTransform();
+    };
+
+    const content = overlay.querySelector("#mermaid-zoom-content");
+    if (content) {
+      // 鼠标滚轮缩放（桌面端）
+      content.addEventListener(
+        "wheel",
+        (event) => {
+          if (!activeTarget) return;
+          event.preventDefault();
+          const delta = event.deltaY || 0;
+          if (!delta) return;
+
+          const zoomFactor = delta < 0 ? 1.12 : 1 / 1.12;
+          const nextScale = clamp(currentScale * zoomFactor, 0.6, 4);
+          if (Math.abs(nextScale - currentScale) < 0.01) return;
+          currentScale = nextScale;
+          applyTransform();
+        },
+        { passive: false }
+      );
+
+      // 拖拽平移查看不同区域
+      const handlePointerDown = (event) => {
+        if (!activeTarget) return;
+        if (event.button !== 0) return; // 仅响应左键
+        isPanning = true;
+        lastClientX = event.clientX;
+        lastClientY = event.clientY;
+        content.classList.add("is-panning");
+        event.preventDefault();
+      };
+
+      const handlePointerMove = (event) => {
+        if (!isPanning || !activeTarget) return;
+        const dx = event.clientX - lastClientX;
+        const dy = event.clientY - lastClientY;
+        if (!dx && !dy) return;
+        lastClientX = event.clientX;
+        lastClientY = event.clientY;
+        translateX += dx;
+        translateY += dy;
+        applyTransform();
+        event.preventDefault();
+      };
+
+      const endPan = () => {
+        if (!isPanning) return;
+        isPanning = false;
+        content.classList.remove("is-panning");
+      };
+
+      content.addEventListener("mousedown", handlePointerDown);
+      window.addEventListener("mousemove", handlePointerMove);
+      window.addEventListener("mouseup", endPan);
+      content.addEventListener("mouseleave", endPan);
+    }
+
+    const close = () => {
+      overlay.classList.remove("is-open");
+      overlay.setAttribute("aria-hidden", "true");
+      const content = overlay.querySelector("#mermaid-zoom-content");
+      if (content) {
+        content.innerHTML = "";
+      }
+      document.documentElement.classList.remove("mermaid-zoom-open");
+      activeTarget = null;
+      resetTransform();
+    };
+
+    overlay.addEventListener("click", (event) => {
+      const target = event.target;
+      if (!(target instanceof Element)) return;
+      if (target.hasAttribute("data-mermaid-zoom-close")) {
+        close();
+      }
+    });
+
+    window.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && overlay.classList.contains("is-open")) {
+        close();
+      }
+    });
+
+    overlay._mermaidClose = close;
+    overlay._mermaidZoomApi = {
+      setActiveTarget(target) {
+        activeTarget = target || null;
+        resetTransform();
+      },
+    };
+    return overlay;
+  };
+
+  const bindMermaidZoom = () => {
+    const mermaidBlocks = document.querySelectorAll(
+      ".post-content .mermaid, .page-content .mermaid"
+    );
+    if (!mermaidBlocks.length) return;
+
+    const overlay = initMermaidZoomOverlay();
+    const content = overlay.querySelector("#mermaid-zoom-content");
+    if (!content) return;
+
+    const zoomApi = overlay._mermaidZoomApi;
+
+    const openWithSource = (sourceEl) => {
+      if (!sourceEl) return;
+      const svg = sourceEl.querySelector("svg");
+      const target = svg ? svg.cloneNode(true) : sourceEl.cloneNode(true);
+      content.innerHTML = "";
+      content.appendChild(target);
+      if (zoomApi && typeof zoomApi.setActiveTarget === "function") {
+        zoomApi.setActiveTarget(target);
+      }
+      overlay.classList.add("is-open");
+      overlay.setAttribute("aria-hidden", "false");
+      document.documentElement.classList.add("mermaid-zoom-open");
+    };
+
+    mermaidBlocks.forEach((block) => {
+      const el = block;
+      el.classList.add("mermaid-zoomable");
+      if (!el.hasAttribute("tabindex")) {
+        el.setAttribute("tabindex", "0");
+      }
+      if (!el.hasAttribute("role")) {
+        el.setAttribute("role", "button");
+      }
+      if (!el.hasAttribute("aria-label")) {
+        el.setAttribute("aria-label", "点击放大查看 Mermaid 图");
+      }
+
+      const handleActivate = (event) => {
+        if (event.type === "keydown") {
+          const keyboardEvent = event;
+          if (keyboardEvent.key !== "Enter" && keyboardEvent.key !== " ") return;
+          keyboardEvent.preventDefault();
+        }
+        openWithSource(el);
+      };
+
+      el.addEventListener("click", handleActivate);
+      el.addEventListener("keydown", handleActivate);
+    });
+  };
+
   const importMermaid = async () => {
     const mermaidBlocks = document.querySelectorAll("pre code.language-mermaid");
     if (!mermaidBlocks.length) return;
@@ -30,6 +221,7 @@
       });
 
       mermaid.run();
+      bindMermaidZoom();
     } catch (error) {
       console.warn("Mermaid 加载失败，已跳过渲染。", error);
     }
