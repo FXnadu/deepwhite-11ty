@@ -11,11 +11,23 @@ const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight");
 
 const toPlainText = (markdown = "") =>
   markdown
+    // 代码块与行内代码直接去掉，避免影响可读性
     .replace(/```[\s\S]*?```/g, " ")
     .replace(/`[^`]*`/g, " ")
+    // 图片与链接：保留链接目标，去掉 Markdown 语法
     .replace(/!\[[^\]]*]\([^)]*\)/g, " ")
     .replace(/\[[^\]]*]\(([^)]*)\)/g, "$1")
-    .replace(/[*_~>#-]/g, " ")
+    // GitHub Alerts 标记（[!NOTE] / [!TIP] 等）
+    .replace(/\[![^\]]*]/g, " ")
+    // ==高亮== 语法：只保留中间文本
+    .replace(/==([^=]+)==/g, "$1")
+    // 上标/下标 ^text^：保留中间文本
+    .replace(/\^([^ ^][^^]*)\^/g, "$1")
+    // 粗暴去掉 HTML 标签（如 <kbd>、<span> 等）
+    .replace(/<\/?[^>]+>/g, " ")
+    // 常见 Markdown 标记符号统一替换为空格（包括表格用的竖线）
+    .replace(/[*_~>#\-|]/g, " ")
+    // 换行与多余空白
     .replace(/\r?\n|\r/g, " ")
     .replace(/\s+/g, " ")
     .trim();
@@ -163,7 +175,10 @@ module.exports = async (eleventyConfig) => {
         const fileContent = fs.readFileSync(absolutePath, "utf8");
         const { content } = matter(fileContent);
         const plainText = toPlainText(content);
-        const excerpt = post.data.excerpt || plainText.substring(0, 200);
+        // 无论 excerpt 来自 front matter 还是正文首段，都统一做一次纯文本化，
+        // 避免在搜索结果中残留 Markdown 标记。
+        const rawExcerpt = post.data.excerpt || plainText.substring(0, 200);
+        const excerpt = toPlainText(rawExcerpt).substring(0, 200);
         return {
           title: post.data.title || "",
           url: post.url || "",
