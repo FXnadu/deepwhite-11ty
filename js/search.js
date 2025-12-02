@@ -195,7 +195,18 @@ class SimpleSearch {
     const resultsHTML = results
       .map((post) => {
         const title = this.highlightText(post.title, query);
-        const excerpt = this.highlightText(post.excerpt || "", query);
+
+        // 先对摘要尝试高亮；如果摘要中没有任何高亮，
+        // 再从 content 中截取一小段包含关键字的片段，用于展示。
+        const rawExcerpt = post.excerpt || "";
+        let excerpt = this.highlightText(rawExcerpt, query);
+
+        if (!excerpt.includes("<mark>") && post.content) {
+          const snippet = this.buildSnippet(post.content, query);
+          if (snippet) {
+            excerpt = this.highlightText(snippet, query);
+          }
+        }
         const date = post.date ? new Date(post.date).toLocaleDateString("zh-CN") : "";
 
         return `
@@ -218,6 +229,46 @@ class SimpleSearch {
     `;
 
     this.showResults();
+  }
+
+  // 从正文中截取一小段包含查询词的片段，便于在结果中高亮展示。
+  buildSnippet(text, query) {
+    if (!text || !query) return "";
+
+    const lowerText = text.toLowerCase();
+    const words = query
+      .toLowerCase()
+      .split(/\s+/)
+      .filter((w) => w.length > 0);
+
+    if (!words.length) return "";
+
+    let firstIndex = -1;
+    for (const word of words) {
+      const idx = lowerText.indexOf(word);
+      if (idx !== -1 && (firstIndex === -1 || idx < firstIndex)) {
+        firstIndex = idx;
+      }
+    }
+
+    if (firstIndex === -1) return "";
+
+    const SNIPPET_BEFORE = 40;
+    const SNIPPET_AFTER = 80;
+    const start = Math.max(0, firstIndex - SNIPPET_BEFORE);
+    const end = Math.min(text.length, firstIndex + SNIPPET_AFTER);
+
+    let snippet = text.slice(start, end).trim();
+    if (!snippet) return "";
+
+    if (start > 0) {
+      snippet = `… ${snippet}`;
+    }
+    if (end < text.length) {
+      snippet = `${snippet} …`;
+    }
+
+    return snippet;
   }
 
   highlightText(text, query) {
