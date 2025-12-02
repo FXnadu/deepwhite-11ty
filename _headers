@@ -1,14 +1,21 @@
-/css/*
-  Content-Type: text/css
-  Cache-Control: public, max-age=31536000, immutable
-
-/js/*
-  Content-Type: application/javascript
-  Cache-Control: public, max-age=31536000, immutable
+ /css/*
+   Content-Type: text/css
+   Cache-Control: public, max-age=31536000, immutable
+ 
+ # search.js 目前不能带查询参数（避免 404），因此不能使用一年期 immutable 缓存。
+ # 单独降低缓存时长，确保每次部署后浏览器能较快拿到新版本，避免搜索框“消失”。
+ /js/search.js
+   Content-Type: application/javascript
+   Cache-Control: public, max-age=300
+ 
+ /js/*
+   Content-Type: application/javascript
+   Cache-Control: public, max-age=31536000, immutable
 
 /img/*
   Cache-Control: public, max-age=31536000, immutable
 
 /search-index.json
   Content-Type: application/json
-  Cache-Control: public, max-age=3600
+  # 搜索索引需要在发新文章后较快更新，这里使用较短的缓存时间。
+  Cache-Control: public, max-age=300

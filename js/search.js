@@ -49,7 +49,9 @@ class SimpleSearch {
     this.showLoading();
 
     try {
-      const response = await fetch(this.options.indexUrl, { cache: "force-cache" });
+      // 让浏览器按响应头策略正常缓存，而不是强制复用旧缓存，
+      // 避免发布新内容后长时间读到旧的 search-index.json。
+      const response = await fetch(this.options.indexUrl);
       if (!response.ok) {
         throw new Error(`Failed to load search index: ${response.status}`);
       }
