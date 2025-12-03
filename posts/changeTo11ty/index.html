@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
     
-    <title>一篇来自去年的文章 - [DEEPWHITE]</title>
+    <title>折腾半年，最后从 Hexo 转到 11ty - [DEEPWHITE]</title>
     <link rel="icon" href="/deepwhite-11ty/img/deepwhitelogo.png" type="image/png" sizes="192x192">
     
     <style>/* ==========================================================================
@@ -1898,21 +1898,33 @@ pre[class*="language-"] {
             <article class="post">
     <header class="post-full-header">
     
-        <h1 class="post-full-title">一篇来自去年的文章</h1>
+        <h1 class="post-full-title">折腾半年，最后从 Hexo 转到 11ty</h1>
 
         
         <p class="post-full-meta">
-            发布于 2019年12月20日
+            发布于 2025年12月02日
             ·
             
-                约 1 分钟
+                约 3 分钟
             
         </p>
     </header>
 
     <section class="post-content">
-        <p>这是文章的正文。我们用它来验证2024年的分组是否能正确显示在归档页面上。</p>
-<hr>
+        <h2>契机</h2>
+<p>年初萌生了搭建个人网站的想法，初衷很简单：既能督促自己养成记录和写作的习惯，顺带也能练练前端手艺（虽然后来发现并非必须）。起初使用了 <strong>Hexo</strong> 框架配合 <strong>Butterfly</strong> 主题，但“别人的轮子”终究难以完美契合自己的需求，在“现成主题”与“个性化表达”之间始终找不到平衡点。最后动了自制主题的念头，却发现 Hexo 的框架机制让这件事变得过于麻烦。</p>
+<p>Hexo 官方把“主题”拆成了 5 个固定目录 + 若干命名约定。只要文件命名正确（比如最低限度的layout/layout.ejs和_config.yml），Hexo 启动时就会自动载入，跑起来确实不难。但要把主题做到可配置、可扩展，甚至接入现代前端工具链（如 Vite/Tailwind），这就得搞懂 Hexo 复杂的渲染管线、注入机制和配置合并规则。只改改颜色还好，想做出像Butterfly 这样通用且长效维护的主题，对我来说还是太麻烦了。</p>
+<p>我对定制化的自由度要求较高，起初并不知道还有这个东西，通过对话 AI 的推荐下（不得不说AI对于打破信息差还是有点用处的），接触并深入体验了 <strong>Eleventy (11ty)</strong> 后，最终决定全面迁移。</p>
+<h2>Hexo 与 11ty 差异对比</h2>
+<p><strong>Hexo 主题是“填空题”，11ty 主题是“命题作文”。</strong></p>
+<p>前者省事但天花板低，后者起步费劲（给你一张白纸），却几乎没有任何技术债务。既然 Hexo 做主题的成本也不低，那为何不一开始就使用 11ty 呢？良好的性能加上高自由度，完美契合我的需求，11ty 默认没有任何“主题”概念，自由度极大。做主题想跑起来其实比 Hexo 更简单——随便放一个 HTML 都能跑。唯一的“缺点”意味着自己要决定更多细节，官方不给标准答案；可以随意接入 Webpack、PostCSS，但也得自己写配置，这点有利有弊。</p>
+<p>这里让kimi做了一个 11ty 和 Hexo 框架的对比： <a href="https://www.kimi.com/preview/19ae2456-e332-8c74-8000-05b66dece484">kimi 深度研究：11ty 和 Hexo 对比 </a></p>
+<h2>如何进行选择？</h2>
+<p>对于“只想换个皮肤”的小白，我依然建议使用 Hexo。Hexo 的主题通过修改_config.yml变量来“剪枝”，显然更适合新手，hexo 教程资源比 11ty 多，社区活跃度也是更高的。但如果愿意稍微折腾一点，11ty 可能是更好的选择。Hexo 强行隔离了“主题”与“站点”，而 11ty 生态通常是将整个目录结构、构建脚本打包给你。</p>
+<p>那么只要自己的需求明确，选择也就不再困难了。<strong>只想要“默认皮肤 + 改改颜色”</strong>：选 <strong>Hexo</strong>。主题开箱即插，配置简单。11ty 则需要先把目录、布局、样式链自己拼一遍，前期工作量大。</p>
+<p>想要“随心所欲定制（混引擎/拉数据/做组件库/多语言）”：选 11ty。主题开发比 Hexo 轻松一个量级——因为没有硬编码的“主题规范”，<strong>也没有 Hexo 那种每次构建都要把所有数据加载到内存的沉重包袱</strong>。只要写常规前端代码就能跑，升级 Node 或换构建工具，都不会被 Hexo 那种“插件→核心→主题”的耦合链拖下水。</p>
+<p>至于为什么不选择hugo，原因也很简单，如果没有对性能的极致要求，又没接触过 go 语言，就没有很大的必要。</p>
+<p><a href="https://www.kimi.com/preview/19ae3bab-4922-80bc-8000-05b602fe7875"> 11ty与Hugo的对比</a></p>
 
     </section>
 </article>
