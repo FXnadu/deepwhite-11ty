@@ -1,6 +1,6 @@
 ---
 title: "一篇来自去年的文章"
-date: 2027-12-20
+date: 2025-12-20
 layout: "post.njk"
 excerpt: "这是为了测试不同年份分组功能而创建的一篇文章。"
 tags:
