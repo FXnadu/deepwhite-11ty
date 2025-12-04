@@ -9,7 +9,7 @@ module.exports = {
   islands: ["site", "archive", "search"],
   pagination: {
     data: "collections.post",
-    size: 10,
+    size: 20,
     alias: "archivePosts",
     before: (posts = []) => [...posts].reverse(),
   },

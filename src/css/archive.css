@@ -48,6 +48,8 @@
     font-size: 0.9em;
     opacity: 0.7;
     letter-spacing: 0.02em;
+    font-family: var(--font-family-mono);
+    font-variant-numeric: tabular-nums;
 }
 
 .archive-post-title {
