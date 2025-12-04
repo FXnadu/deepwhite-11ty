@@ -60,9 +60,4 @@ jobs:
           publish_dir: ./_site
           # 确保 .nojekyll 文件被部署（禁用 Jekyll 处理）
           keep_files: false
-          # 明确指定部署分支
-          cname: false
-          # 添加部署信息以便调试
-          user_name: 'github-actions[bot]'
-          user_email: 'github-actions[bot]@users.noreply.github.com'
 
