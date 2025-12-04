@@ -296,5 +296,111 @@ CSS 中的 `.site-title` 类设置了 `text-transform: lowercase;`，会将所�
 
 ---
 
-*最后更新：2025-11-27*
+## GitHub Pages 部署不生效问题（2025-12-05）
+
+### 问题描述
+
+**症状**：
+- 代码已提交并推送到 `main` 分支
+- GitHub Actions 显示运行成功（绿色 ✓）
+- 但线上网站没有更新，`gh-pages` 分支没有更新
+- 浏览器强制刷新后仍然看到旧内容
+
+### 根本原因分析
+
+#### 原因 1：GitHub Pages 部署方式混用
+- **问题**：GitHub Pages 有两种部署方式，如果混用会导致部署失败：
+  1. **旧方式**：使用 `gh-pages` 分支 + `peaceiris/actions-gh-pages@v3`
+  2. **新方式**：使用 GitHub Pages Actions (`actions/deploy-pages@v4`) + `actions/upload-pages-artifact@v3`
+- **触发条件**：如果 workflow 使用新方式，但 GitHub Pages 设置指向了 `gh-pages` 分支，部署会失败
+- **为什么 Actions 显示成功**：构建步骤成功了，但部署步骤可能因为配置不匹配而静默失败
+
+#### 原因 2：GitHub Pages 设置与 Workflow 不匹配
+- **问题**：GitHub Pages 的 Source 设置必须与 workflow 的部署方式匹配
+- **检查位置**：`https://github.com/用户名/仓库名/settings/pages`
+- **正确配置**：
+  - 如果使用 `peaceiris/actions-gh-pages`：Source 选择 "Deploy from a branch"，Branch 选择 `gh-pages`
+  - 如果使用 `actions/deploy-pages`：Source 选择 "GitHub Actions"
+
+#### 原因 3：权限问题
+- **问题**：`GITHUB_TOKEN` 可能没有足够的权限写入 `gh-pages` 分支
+- **解决方案**：确保 workflow 中有正确的 permissions：
+  ```yaml
+  permissions:
+    contents: write
+    pages: write
+    id-token: write
+  ```
+
+#### 原因 4：浏览器/CDN 缓存
+- **问题**：即使部署成功，浏览器或 CDN 可能缓存了旧文件
+- **解决方案**：
+  1. 更新 `ASSET_VERSION`（在 `src/_data/assets.js` 中）
+  2. 强制刷新浏览器（`Cmd+Shift+R` 或 `Ctrl+Shift+R`）
+  3. 等待 CDN 缓存过期（通常几分钟到几小时）
+
+### 解决方案
+
+#### 步骤 1：确认 GitHub Pages 设置
+1. 访问：`https://github.com/FXnadu/deepwhite-11ty/settings/pages`
+2. 检查 "Build and deployment" 部分：
+   - 如果使用 `peaceiris/actions-gh-pages`：选择 "Deploy from a branch"，Branch 选择 `gh-pages`，目录选择 `/ (root)`
+   - 如果使用 `actions/deploy-pages`：选择 "GitHub Actions"
+
+#### 步骤 2：验证 Workflow 配置
+- 确保 workflow 文件 `.github/workflows/deploy.yml` 中的部署方式与 GitHub Pages 设置匹配
+- 当前推荐使用 `peaceiris/actions-gh-pages@v3`（更稳定可靠）
+
+#### 步骤 3：检查部署日志
+1. 访问：`https://github.com/FXnadu/deepwhite-11ty/actions`
+2. 点击最新的 workflow 运行
+3. 展开 "Deploy to GitHub Pages" 步骤
+4. 查看是否有错误信息（即使整体显示成功）
+
+#### 步骤 4：验证部署结果
+```bash
+# 检查 gh-pages 分支是否更新
+git fetch origin gh-pages
+git log --oneline origin/gh-pages -5
+
+# 检查部署的文件内容
+git show origin/gh-pages:css/archive.css | grep "archive-post-date"
+```
+
+#### 步骤 5：更新资源版本号（如果样式不生效）
+- 修改 `src/_data/assets.js` 中的 `ASSET_VERSION`
+- 这会强制浏览器加载新的 CSS/JS 文件
+
+### 预防措施
+
+1. **统一部署方式**：
+   - 推荐使用 `peaceiris/actions-gh-pages@v3`（更稳定）
+   - 不要混用新旧两种部署方式
+
+2. **每次修改后验证**：
+   - 推送后等待 1-5 分钟
+   - 检查 GitHub Actions 日志
+   - 验证 `gh-pages` 分支是否更新
+   - 强制刷新浏览器查看效果
+
+3. **修改样式/脚本时**：
+   - **必须**更新 `ASSET_VERSION`
+   - 本地构建验证：`npm run build`
+   - 检查 `_site/` 目录中的文件是否正确
+
+4. **建立检查清单**：
+   - [ ] 代码已提交并推送
+   - [ ] GitHub Actions 运行成功
+   - [ ] `gh-pages` 分支已更新
+   - [ ] `ASSET_VERSION` 已更新（如果修改了 CSS/JS）
+   - [ ] 浏览器强制刷新后验证
+
+### 相关提交
+
+- `5c07be2` - chore: trigger deployment to update gh-pages branch
+- `813a65c` - add pages（包含归档日期样式优化）
+
+---
+
+*最后更新：2025-12-05*
 
